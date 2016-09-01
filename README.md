@@ -35,7 +35,7 @@ _Does not rely on any global dependencies._
 │   │   └── Quote.vue
 │   |── services
 │   |    └── quote
-|   |       └── index.js
+|   |       └── store.js
 │   ├── app.scss
 │   ├── index.html
 │   ├── main.js

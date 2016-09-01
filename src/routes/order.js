@@ -5,11 +5,11 @@ export default {
   component: resolve => require(['../views/order/index'], resolve),
   subRoutes: {
     '/fill': {
-      name: 'fillOrder',
+      name: 'order/fill',
       component: resolve => require(['../views/order/fill'], resolve)
     },
     '/modify': {
-      name: 'modifyOrder',
+      name: 'order/modify',
       component: resolve => require(['../views/order/modify'], resolve)
     }
   }

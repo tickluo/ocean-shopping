@@ -1,12 +1,10 @@
 <template>
   <div>
-    <div>this is template body</div>
+    <div>this is fill order</div>
   </div>
 </template>
 <style>
-  body {
-    background-color: #ff0000;
-  }
+
 </style>
 <script>
 

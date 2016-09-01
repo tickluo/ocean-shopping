@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div>this is template body</div>
+    <div>this is modify order</div>
   </div>
 </template>
 <style>
   body {
-    background-color: #ff0000;
+    background-color: yellow;
   }
 </style>
 <script>

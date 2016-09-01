@@ -1,11 +1,8 @@
-export default {
-  routes: {
-    /* '/': require('../views/app'),*/
-    '/order': require('./order'),
-    '/cart': require('./cart')
-  },
+import order from './order'
+import cart from './cart'
 
-  alias: {
-    // '/order/:orderId': '/order'
-  }
+export default {
+  /* '/': require('../views/app'),*/
+  '/order': order,
+  '/cart': cart
 }
