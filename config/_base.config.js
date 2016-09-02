@@ -2,7 +2,7 @@ const path=require('path');
 
 const config = {
     env: process.env.ENV || process.env.NODE_ENV || 'development',
-
+    url: '172.20.6.229:9889',
     // ----------------------------------
     // Project Structure
     // ----------------------------------

@@ -1,3 +1,5 @@
-/**
- * Created by Administrator on 2016/9/1.
- */
+import order from './modules/order'
+
+export default {
+  order: order.getters
+}

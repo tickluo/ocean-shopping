@@ -100,11 +100,11 @@ module.exports = {
       },
       {
         test: /\.css/,
-        loader: ExtractTextPlugin.extract("style", "css!postcss!less")
+        loader: ExtractTextPlugin.extract("style", "css")
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff2?|eot|otf|ttf)(\?.*)?$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 10000,
           name: 'images/[hash:16].[ext]?[name]'
