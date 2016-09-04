@@ -1,24 +1,23 @@
+import cart from './views/cart/cart.vue'
+import detail from './views/cart/detail.vue'
+
 export default router => {
   router.map({
     '/cart': {
       title: 'routes.cart',
       name: 'cart',
       auth: false,
-      component: reslove => {
-        return require(['./views/cart/cart.vue'], reslove)
-      }
+      component: cart
     },
     '/cart/detail/:type': {
       title: 'routes.cart.detail',
       name: 'detail',
       auth: false,
-      component: reslove => {
-        return require(['./views/cart/detail.vue'], reslove)
-      }
+      component: detail
     }
   })
 
-  router.afterEach(function () {
+  router.afterEach(() => {
     window.scrollTo(0, 0)
   })
 

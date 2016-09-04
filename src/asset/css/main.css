@@ -2,35 +2,45 @@
   margin: 0;
   padding: 0;
 }
+
 ul,
 li {
   list-style-type: none;
 }
+
 img {
   border: none;
 }
+
 a {
   text-decoration: none;
   color: inherit;
 }
+
 @font-face {
   font-family: PingFangSC-Light;
-  src: url("../font/PingFangSC-Light.ttf") /* TTF file for CSS3 browsers */;
+  src: url("../font/PingFangSC-Light.ttf") /* TTF file for CSS3 browsers */
+;
 }
+
 .dis_box {
   display: -moz-box;
   display: -webkit-box;
   display: box;
 }
+
 .border_bot_b {
   border-bottom: 1px solid #BBB;
 }
+
 .border_bot_d {
   border-bottom: 1px solid #ddd;
 }
+
 .border_ccc {
   border: 1px solid #ccc;
 }
+
 html,
 body {
   width: 100%;
@@ -38,11 +48,13 @@ body {
   font-size: 0;
   box-sizing: border-box;
 }
+
 html {
   font-size: 100px;
   font-family: "Microsoft Yahei", "微软雅黑", sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
+
 .message_num {
   display: inline-block;
   width: 0.2rem;
@@ -55,6 +67,7 @@ html {
   color: #fff;
   font-size: 0.14rem;
 }
+
 .nav_bar {
   color: #333;
   font-size: 0.16rem;
@@ -73,30 +86,36 @@ html {
   top: 0;
   background: #fff;
 }
+
 .nav_bar .to_fill_order {
   display: inline-block;
 }
+
 .nav_bar .logo_shopping {
   width: 0.21rem;
   height: auto;
   vertical-align: middle;
   margin-top: -2px;
 }
+
 .online_service {
   position: absolute;
   right: 0.1rem;
   top: 0;
 }
+
 .online_service .icon_online_sever {
   width: 0.16rem;
   height: auto;
   vertical-align: middle;
   margin-top: -2px;
 }
+
 .online_service .text_online {
   display: inline-block;
   line-height: 0.45rem;
 }
+
 .merch_wrap {
   width: 100%;
   overflow: hidden;
@@ -105,11 +124,13 @@ html {
   box-sizing: border-box;
   border-bottom: 1px solid #ddd;
 }
+
 .merch_wrap .merch_con {
   position: relative;
   width: 100%;
   box-sizing: border-box;
 }
+
 .merch_wrap .real_card_shopping {
   position: absolute;
   width: 1.1rem;
@@ -119,13 +140,16 @@ html {
   box-sizing: border-box;
   -webkit-text-size-adjust: none;
 }
+
 .merch_wrap .real_card_shopping img {
   width: 100%;
   height: auto;
 }
+
 .merch_wrap .shopping_text_con {
   margin-left: 1.2rem;
 }
+
 .merch_wrap .shopping_tit {
   color: #333;
   height: 0.4rem;
@@ -137,22 +161,26 @@ html {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
 .merch_wrap .shop_info_tit {
   color: #333;
   font-size: 0.13rem;
   border-bottom: 1px solid #ddd;
 }
+
 .merch_wrap .price_to_shop {
   height: 0.3rem;
   line-height: 0.3rem;
   overflow: hidden;
   position: relative;
 }
+
 .merch_wrap .merch_price {
   font-size: 0.16rem;
   text-align: left;
   display: block;
 }
+
 .merch_wrap .to_shop_detail {
   font-size: 0.16rem;
   text-align: right;
@@ -162,17 +190,20 @@ html {
   color: #0079FF;
   text-decoration: underline;
 }
+
 .shop_logo {
   width: 0.5rem;
   vertical-align: middle;
   height: auto;
 }
+
 .shopping_tips {
   color: #FF4D6b;
   font-size: 0.13rem;
   padding: 0.07rem 0.1rem 0.13rem;
   border-bottom: 1px solid #ddd;
 }
+
 .merch_attr_wrap {
   display: -moz-box;
   display: -webkit-box;
@@ -184,6 +215,7 @@ html {
   box-sizing: border-box;
   border-bottom: 1px solid #ddd;
 }
+
 .merch_attr_wrap .mrch_attr_tit {
   box-flex: 1;
   -webkit-box-flex: 1;
@@ -193,16 +225,20 @@ html {
   overflow: hidden;
   white-space: nowrap;
 }
+
 .merch_attr_wrap .merch_attr_detail {
   text-align: right;
 }
+
 .opear_num {
   padding: 0.1rem;
   line-height: 0.32rem;
 }
+
 .opear_num .merch_attr_detail {
   font-size: 0;
 }
+
 .opear_num .merch_attr_detail span {
   display: inline-block;
   width: 0.4rem;
@@ -210,12 +246,14 @@ html {
   vertical-align: middle;
   box-sizing: border-box;
 }
+
 .opear_num .merch_attr_detail span input[type='text'] {
   width: 100%;
   height: 0.30rem;
   border: none;
   text-align: center;
 }
+
 .button_reduce {
   border: 1px solid #a9d2ff;
   border-top-left-radius: 5px;
@@ -223,6 +261,7 @@ html {
   background: url(../images/icon_reduce@1.png) center no-repeat;
   background-size: 45% auto;
 }
+
 .button_add {
   border: 1px solid #0079FF;
   border-top-right-radius: 5px;
@@ -230,17 +269,21 @@ html {
   background: url(../images/icon_add@1.png) center no-repeat;
   background-size: 36% auto;
 }
+
 .select_attr_wrap {
   font-size: 0.14rem;
   border-bottom: 1px solid #ddd;
 }
+
 .select_attr_wrap_tit {
   width: 100%;
 }
+
 .select_attr_list {
   width: 100%;
   overflow: hidden;
 }
+
 .select_attr_list li {
   float: left;
   border: 1px solid #ddd;
@@ -251,17 +294,21 @@ html {
   min-width: 0.2rem;
   text-align: center;
 }
+
 .select_attr_list .chosed {
   background: #808080;
   color: #fff;
 }
+
 .promo_code_wrap {
   font-size: 0.14rem;
 }
+
 .faq {
   font-size: 0.14rem;
   margin-bottom: 0.6rem;
 }
+
 .shopping_footer {
   width: 100%;
   height: 0.5rem;
@@ -275,6 +322,7 @@ html {
   display: -webkit-box;
   display: box;
 }
+
 .shopping_footer .icon_shopping_cart_1 {
   box-flex: 1;
   -webkit-box-flex: 1;
@@ -282,10 +330,12 @@ html {
   width: .3rem;
   height: 0.5rem;
 }
+
 .shopping_footer .icon_shopping_cart_1 img {
   width: 0.3rem;
   height: auto;
 }
+
 .shopping_footer .into_cart_btn {
   width: 1rem;
   height: 0.3rem;
@@ -295,6 +345,7 @@ html {
   background: #FF4D6b;
   border-radius: 5px;
 }
+
 .shopping_footer .icon_into_shopping_cart {
   width: 0.2rem;
   height: auto;

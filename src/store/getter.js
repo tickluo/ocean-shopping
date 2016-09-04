@@ -1,5 +1,2 @@
-import order from './modules/order'
-
-export default {
-  order: order.getters
-}
+export const shopping = (store) => store.cart.shopping
+export const cartList = (store) => store.cartList !== ''

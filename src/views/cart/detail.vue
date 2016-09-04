@@ -11,9 +11,9 @@
 
 <script>
   import '../../asset/css/main.css'
-  import { ShoppingCost, OrderShoppingInfo, ExchangeRate, VHeader, ShoppingSku, ShoppingFooter } from '../../components'
-  import { getShopping } from '../../store/action'
-  import order from '../../store/getter'
+  import {ShoppingCost, OrderShoppingInfo, ExchangeRate, VHeader, ShoppingSku, ShoppingFooter} from '../../components'
+  import getShopping from '../../store/action'
+  import { shopping } from '../../store/getter'
   import store from '../../store/store'
 
   export default{
@@ -22,22 +22,24 @@
     },
     vuex: {
       getters: {
-        shopping: order.shopping
+        shopping
       },
       actions: {
         getShopping
       }
     },
-    route: {
-      data(transition) {
-        return this.getShopping(store, '').catch(res => {
-          console.log(res)
-          transition.abort()
-        })
-      },
-      waitForData: true
-    },
+    /*route: {
+     data(transition) {
+     debugger
+     return this.getShopping(store, '').catch(res => {
+     console.log(res)
+     transition.abort()
+     })
+     },
+     waitForData: true
+     },*/
     ready(){
+      this.getShopping(store, '')
     }
   }
 </script>

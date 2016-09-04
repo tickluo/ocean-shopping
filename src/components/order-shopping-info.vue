@@ -27,7 +27,7 @@
   export default{
     data(){
       return {
-        logo,shopping
+        logo, shopping
       }
     },
   }

@@ -6,8 +6,9 @@ import cart from './modules/cart'
 Vue.use(VueX)
 
 export default new VueX.Store({
-  module: {
-    order, cart
+  modules: {
+    order,
+    cart
   }
 })
 

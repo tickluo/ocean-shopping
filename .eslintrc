@@ -1,43 +1,23 @@
 {
-  "root": true,
   "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    },
-    "sourceType": "module"
-  },
-  "extends": "vue",
+  "extends": [
+    "airbnb/base",
+    "vue"
+  ],
   "plugins": [
     "babel",
     "html",
     "vue"
   ],
-  "env": {
-    "browser": true,
-    "es6": true,
-    "node": true
-  },
   "globals": {
-    "__DEV__"      : false,
-    "__PROD__"     : false,
-    "__DEBUG__"    : false,
-    "__DEBUG_NEW_WINDOW__" : false,
-    "__BASENAME__" : false
+    "__DEV__": false,
+    "__PROD__": false,
+    "__DEBUG__": false,
+    "__DEBUG_NEW_WINDOW__": false,
+    "__BASENAME__": false
   },
   "rules": {
-    "arrow-parens": 0,
-    "camelcase": 0,
-    "generator-star-spacing": 0,
-    "prefer-const": 2,
-
-    "babel/generator-star-spacing": 2,
-    "babel/new-cap": 2,
-    "babel/array-bracket-spacing": 2,
-    "babel/object-curly-spacing": [2, "always"],
-    "babel/object-shorthand": 2,
-    "babel/arrow-parens": [2, "as-needed"],
-    "babel/no-await-in-loop": 2
+    "no-param-reassign": ["error", { "props": false }],
+    "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}]
   }
 }

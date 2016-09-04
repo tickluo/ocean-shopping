@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Resource from 'vue-resource'
+import resource from 'vue-resource'
 import Router from 'vue-router'
 
 import App from './app.vue'
@@ -7,7 +7,7 @@ import routers from './routers'
 
 // Install plugins
 Vue.use(Router)
-Vue.use(Resource)
+Vue.use(resource)
 
 // Set up a new router
 const router = new Router({
