@@ -119,6 +119,9 @@ module.exports = {
 
     new webpack.optimize.OccurenceOrderPlugin(true),
 
+    new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    }),
     //new webpack.optimize.CommonsChunkPlugin({
     //  name: helpers.reverse(['polyfills', 'vendor'])
     //}),

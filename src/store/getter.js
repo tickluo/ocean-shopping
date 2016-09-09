@@ -1,2 +1,2 @@
 export const shopping = (store) => store.cart.shopping
-export const cartList = (store) => store.cartList !== ''
+export const sku = (store) => store.cart.shopping.skus

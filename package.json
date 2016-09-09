@@ -45,6 +45,7 @@
     "eslint-plugin-html": "^1.5.1",
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-vue": "0.1.1",
+    "exports-loader": "^0.6.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "gulp": "^3.9.0",
@@ -58,6 +59,7 @@
     "gulp-zip": "^3.2.0",
     "html-loader": "^0.4.0",
     "html-webpack-plugin": "^2.22.0",
+    "imports-loader": "^0.6.5",
     "inject-loader": "^2.0.1",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.22",
@@ -66,6 +68,7 @@
     "karma-webpack": "^1.7.0",
     "phantomjs-prebuilt": "^2.1.6",
     "portfinder": "^1.0.5",
+    "psl": "^1.1.13",
     "sass-loader": "^3.1.2",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.0",
@@ -83,9 +86,9 @@
     "eslint-config-airbnb": "^10.0.1",
     "foundation-sites": "^6.0.6",
     "vue": "^1.0.26",
-    "vue-resource": "^0.9.3",
     "vue-router": "^0.7.13",
-    "vuex": "^1.0.0-rc.2"
+    "vuex": "^0.8.2",
+    "whatwg-fetch": "^1.0.0"
   },
   "site_url": {
     "dev": "localhost",

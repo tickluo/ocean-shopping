@@ -16,7 +16,7 @@ const ENV = _base.env;
 const HMR = helpers.hasProcessFlag('hot');
 const CDN_HOST = process.env.CDN_HOST;
 const METADATA = webpackMerge(commonConfig.metadata, {
-  host: 'localhost',
+  host: '172.20.6.226',
   port: 3000,
   ENV: ENV,
   HMR: HMR,

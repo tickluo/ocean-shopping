@@ -1,30 +1,46 @@
 <template>
   <div>
     <section class="merch_attr_wrap">
-      <div class="mrch_attr_tit">商品单价</div>
-      <div class="merch_attr_detail">RMB 286.50</div>
+      <div class="mrch_attr_tit">商品单价:</div>
+      <div class="merch_attr_detail">{{currency_sign}} {{price}}</div>
     </section>
     <section class="merch_attr_wrap">
-      <div class="mrch_attr_tit">商家运费</div>
-      <div class="merch_attr_detail">RMB 0.00</div>
+      <div class="mrch_attr_tit">商家运费:</div>
+      <div class="merch_attr_detail">{{currency_sign}} {{freight}}</div>
     </section>
     <section class="merch_attr_wrap opear_num">
-      <div class="mrch_attr_tit">商品数量</div>
-      <div class="merch_attr_detail">
-        <span class="button_reduce"></span>
-        <span class="real_num">
-                <input type="text" value="1"/>
-            </span>
-        <span class="button_add"></span>
-      </div>
+      <div class="mrch_attr_tit">商品数量:</div>
+      <div class="merch_attr_detail"><span class="button_reduce" @click="reduceCount"></span> <span class="real_num">
+                <input type="text" :value="count"/>
+            </span> <span class="button_add" @click="addCount"></span></div>
     </section>
   </div>
 </template>
 
 <script>
+  import { cart } from '../store/action'
   export default{
+    props: ['price', 'currency_sign', 'freight'],
     data(){
-      return {}
+      return {
+        count: 1
+      }
+    },
+    vuex: {
+      getters: {},
+      actions: {
+        addShoppingCount: cart.addShoppingCount,
+        reduceShoppingCount: cart.reduceShoppingCount
+      }
+    },
+    methods: {
+      addCount () {
+        this.count++
+        this.addShoppingCount()
+      },
+      reduceCount () {
+        this.count === 1 || ( this.count-- && this.reduceShoppingCount())
+      }
     }
   }
 </script>

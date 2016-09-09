@@ -160,8 +160,8 @@ gulp.task('watch', function (cb) {
 
   portfinder.getPort({
     port: pkg.site_port.dev
-  }, function (err, port) {
-    server.listen(port, "localhost", function (err) {
+  }, function (err, port, host) {
+    server.listen(port, host, function (err) {
       if (err) throw new gutil.PluginError("webpack-dev-server", err);
       // Server listening
       gutil.log(gutil.colors.magenta("[webpack-dev-server]"),

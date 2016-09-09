@@ -3,13 +3,13 @@ import detail from './views/cart/detail.vue'
 
 export default router => {
   router.map({
-    '/cart': {
+    '/cart/:key': {
       title: 'routes.cart',
       name: 'cart',
       auth: false,
       component: cart
     },
-    '/cart/detail/:type': {
+    '/product/detail/:key': {
       title: 'routes.cart.detail',
       name: 'detail',
       auth: false,
@@ -23,7 +23,7 @@ export default router => {
 
 // If no route is matched redirect to default
   router.redirect({
-    '*': '/cart/detail/:type=fill'
+    '*': '/cart:key'
   })
 }
 

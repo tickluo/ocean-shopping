@@ -1,13 +1,8 @@
 <template>
   <div>
-    <header class="nav_bar">
-      <img class="logo_shopping" :src="logo2" alt="">
-      <a class="to_fill_order" href="#">{{title}}</a>
-      <div class="online_service">
-        <img class="icon_online_sever" :src="onlineServer2" alt="">
-        <span class="text_online">在线客服</span>
-        <span class="message_num">3</span>
-      </div>
+    <header class="nav_bar"><img class="logo_shopping" :src="logo2" alt=""> <a class="to_fill_order" href="#">填写代购单</a>
+      <div class="online_service"><img class="icon_online_sever" :src="onlineServer2" alt=""> <span class="text_online">在线客服</span>
+        <span class="message_num">3</span></div>
     </header>
   </div>
 </template>
