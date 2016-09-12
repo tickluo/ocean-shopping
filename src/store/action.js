@@ -14,12 +14,8 @@ const cart = {
         if (rate.List.length > 0) {
           return Promise.resolve(rate)
         }
-        else {
-          return api.getCountryRate('307480468f2bb43dd01b190a169c8084547b4403')
-        }
-      }).then(rate => {
-        return rate
-      })
+        return api.getCountryRate('307480468f2bb43dd01b190a169c8084547b4403')
+      }).then(rate => rate)
   },
   initShoppingDisplay ({ dispatch }, detail) {
     dispatch(types.INIT_SHOPPING_DISPLAY, detail)
@@ -27,7 +23,7 @@ const cart = {
   updateShoppingDisplay ({ dispatch }, detail) {
     dispatch(types.UPDATE_SHOPPING_DISPLAY, detail)
   },
-  getCartList ({ dispatch }, uid)  {
+  getCartList ({ dispatch }, uid) {
     /* dispatch(types.GET_CART_LIST, [{
      "Title": "taobao.com-黑人牙膏旗舰店",
      "StoreUrl": "https://item.taobao.com/item.htm?id=520655243307",
@@ -244,8 +240,8 @@ const cart = {
      }]
      }])*/
     return api.getCartList('307480468f2bb43dd01b190a169c8084547b4403')
-      .then(cart => {
-        dispatch(types.GET_CART_LIST, cart.List)
+      .then(cartInfo => {
+        return dispatch(types.GET_CART_LIST, cartInfo.List)
       })
   },
   selectAll ({ dispatch }, toggle) {
@@ -264,7 +260,6 @@ const cart = {
     dispatch(types.DECREASE_SHOPPING_COUNT)
   },
   addToCart (token, shopping) {
-    debugger
     return api.addToCart('307480468f2bb43dd01b190a169c8084547b4403', shopping)
       .then(res => {
         debugger

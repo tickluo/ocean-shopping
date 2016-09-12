@@ -53,8 +53,7 @@
     data () {
       let images = imageModule
       return {
-        images,
-        uid: '1'
+        images
       }
     },
     vuex: {
@@ -78,9 +77,10 @@
       CCheckbox
     },
     route: {
-      data(){
-        this.getCartList(this.uid)
-        this.selectAll(true)
+      data({ to: { params: { key } } }){
+        return this.getCartList(key).then(()=> {
+          this.selectAll(true)
+        })
       },
       waitForData: true
     }

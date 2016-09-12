@@ -37,7 +37,7 @@
     },
     computed: {
       toggle () {
-        return this.order.selected[this.shop_id].shopping.includes(this.item.Id)
+        return this.order.selected ? this.order.selected[this.shop_id].shopping.includes(this.item.Id) : true
       }
     },
     components: {

@@ -31,13 +31,18 @@
         <div class="web_promo_code">
           <div class="web_code">网站优惠码:</div>
           <div class="code_input_box">
-            <input class="no_fill" type="text" placeholder="如有优惠码请填写"/></div>
+            <input class="no_fill" type="text" :value="coupon" placeholder="如有优惠码请填写"/></div>
         </div>
         <div class="web_promo_code pad_10">
           <div class="web_code">★当优惠码不可使用时,
           </div>
-          <div class="code_input_box"><a class="do_order_disable" href="#">取消下单</a> <a
-            class="do_order_disable do_order_used" href="#">仍然下单</a></div>
+          <div class="code_input_box">
+            <a class="do_order_disable"
+               :class="{'do_order_used':!isBuy}"
+               @click="selectIfBuy(false)">取消下单</a>
+            <a class="do_order_disable"
+               :class="{'do_order_used':isBuy}"
+               @click="selectIfBuy(true)">仍然下单</a></div>
         </div>
         <p class="web_promo_code chajia">优惠码使用成功后，差价将在1个工作日内返还</p>
       </section>
@@ -81,7 +86,9 @@
     data(){
       return {
         images,
-        note: ''
+        note: '',
+        isBuy: true,
+        coupon: ''
       }
     },
     components: {
@@ -115,6 +122,9 @@
       genRate (price) {
         return parseFloat(this.display.rate.Rate * price).toFixed(2)
       },
+      selectIfBuy (isBuy) {
+        this.isBuy = isBuy
+      },
       genCartInfo () {
         let skuMsg = ''
         this.detail.SkuClasses.forEach((option, index) => {
@@ -144,7 +154,8 @@
           WebSiteId: this.display.rate.WebSiteId,
           Weight: this.detail.Weight || 0,
           Width: this.detail.Width || 0,
-
+          IsBuy: true,
+          Coupon: ''
         }
       },
       addToCart () {

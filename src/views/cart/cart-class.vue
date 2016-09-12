@@ -34,7 +34,7 @@
     },
     computed: {
       toggle () {
-        return this.order.selected[this.shop_id].selectShop
+        return this.order.selected ? this.order.selected[this.shop_id].selectShop : true
       }
     },
     components: {
