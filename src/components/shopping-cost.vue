@@ -11,7 +11,7 @@
     <section class="merch_attr_wrap opear_num">
       <div class="mrch_attr_tit">商品数量:</div>
       <div class="merch_attr_detail"><span class="button_reduce" @click="reduceCount"></span> <span class="real_num">
-                <input type="text" :value="count"/>
+                <input type="text" :value="defaultCount"/>
             </span> <span class="button_add" @click="addCount"></span></div>
     </section>
   </div>
@@ -20,10 +20,10 @@
 <script>
   import { cart } from '../store/action'
   export default{
-    props: ['price', 'currency_sign', 'freight'],
+    props: ['price', 'currency_sign', 'freight', 'count'],
     data(){
       return {
-        count: 1
+        defaultCount: this.count || 1
       }
     },
     vuex: {
@@ -35,11 +35,11 @@
     },
     methods: {
       addCount () {
-        this.count++
+        this.defaultCount++
         this.addShoppingCount()
       },
       reduceCount () {
-        this.count === 1 || ( this.count-- && this.reduceShoppingCount())
+        this.defaultCount === 1 || ( this.defaultCount-- && this.reduceShoppingCount())
       }
     }
   }
