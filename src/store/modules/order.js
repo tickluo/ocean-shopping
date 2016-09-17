@@ -1,14 +1,19 @@
 import {
-  SET_ORDER_LIST
+  SET_ORDER_LIST,
+  SET_DISPLAY_ORDER
 } from '../mutation-types'
 
 const state = {
-  orderList: []
+  orderList: [],
+  orderDetail: {}
 }
 
 const mutations = {
   [SET_ORDER_LIST] (state, list) {
     state.orderList = list
+  },
+  [SET_DISPLAY_ORDER] (state, data) {
+    state.orderDetail = data
   }
 }
 

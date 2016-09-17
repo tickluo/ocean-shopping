@@ -3,7 +3,7 @@
     <div class="margin_top_08">
 
       <article class="order_wrap" v-for="order in orderList">
-        <h4 class="order_number">
+        <h4 class="order_number" v-link="{name:'shopOrderDetail',params:{id:order.Id}}">
           <div class="real_number">
             订单:<span class="font-weight_6">{{order.OrderNo}}</span>
           </div>
@@ -13,9 +13,11 @@
           <display-shopping v-for="shopping in order.GrabAttrs"
                             :cover="shopping.Cover"
                             :name="shopping.Name"
-                            :price="afterRatePrice(shopping.WebSiteId,shopping.OriginalPrice"
+                            :price="shopping.OriginalPrice"
                             :quantity="shopping.Quantity"
-                            :sku="shopping.Sku">
+                            :sku="shopping.Sku"
+                            :coupon="shopping.Coupon"
+                            :is_buy="shopping.IsBuy">
           </display-shopping>
           <div class="order_static_wrap">
             <div class="order_static">
@@ -25,27 +27,8 @@
           </div>
         </section>
       </article>
-
     </div>
-    <footer class="shopping_footer pad_left_0">
-      <ul class="nav_bot_list">
-        <li class="cur_nav">
-          <a v-link="{name:'cart'}"> <img :src="images.iconCart" alt="" class="bot_nav_icon"> <span>
-                   购物车
-               </span> </a>
-        </li>
-        <li>
-          <a v-link="{name:'shopOrder'}"> <img :src="images.iconOrder" alt="" class="bot_nav_icon"> <span>
-                   我的订单
-               </span> </a>
-        </li>
-        <li>
-          <a href="#"> <img :src="images.iconUser" alt="" class="bot_nav_icon"> <span>
-                   个人中心
-               </span> </a>
-        </li>
-      </ul>
-    </footer>
+
   </div>
 </template>
 
@@ -73,11 +56,11 @@
     },
     route: {
       data ({ to: { params: { key } } }) {
-        this.getOrderList(key, { PageIndex: 1, PageSize: 6 })
+        return this.getOrderList(key, { PageIndex: 1, PageSize: 6 })
           .then(res => {
-
           })
-      }
+      },
+      waitForData: true
     }
   }
 </script>

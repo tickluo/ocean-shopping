@@ -9,6 +9,9 @@ import faq from './views/cart/faq.vue'
 import order from './views/order/order.vue'
 import shopOrder from './views/order/order-shopping.vue'
 import storeOrder from './views/order/order-store.vue'
+import shopOrderDetail from './views/order/order-shopping-detail.vue'
+import storeOrderAfter from './views/order/order-store-after.vue'
+import storeOrderBefore from './views/order/order-store-before.vue'
 
 export default router => {
   router.map({
@@ -70,13 +73,29 @@ export default router => {
         },
         '/store': {
           name: 'storeOrder',
-          component: storeOrder
+          component: storeOrder,
+          subRoutes: {
+            '/before': {
+              name: 'storeOrderBefore',
+              component: storeOrderBefore
+            },
+            '/after': {
+              name: 'storeOrderAfter',
+              component: storeOrderAfter
+            }
+          }
         },
         './transport': {
           name: 'tranOrder',
           component: storeOrder
         }
       }
+    },
+    'order/detail/:id/:key': {
+      title: '订单详情',
+      name: 'shopOrderDetail',
+      auth: false,
+      component: shopOrderDetail
     }
   })
 
