@@ -17,41 +17,40 @@
           <display-shopping v-for="shopping in orderDetail.GrabAttrs"
                             :cover="shopping.Cover"
                             :name="shopping.Name"
-                            :price="shopping.OriginalPrice"
+                            :price="shopping.Price"
                             :quantity="shopping.Quantity"
                             :sku="shopping.Sku"
                             :coupon="shopping.Coupon"
                             :is_buy="shopping.IsBuy"
-                            :note="shopping.Note">
+                            :note="shopping.Note"
+                            :state="shopping.ProductStauts"
+                            :state_name="shopping.ProductStautName"
+                            :express="shopping.ExpressNumber">
           </display-shopping>
-
-          <div class="order_static_wrap">
-            <div class="order_static">
-              <span class="icon_rect"></span>
-              <span class="font_size_25">到达转运仓库</span>
-            </div>
-          </div>
         </section>
       </article>
 
     </div>
-    <section class="summary_money">
+    <section class="summary_money fix_bot_16">
       <div class="summary_con">
-                            <span class="summary_left">
-                               订单总额
-                           </span>
-        <strong class="text_align_r">
-          RMB 1146.00
-        </strong>
+        <span class="summary_left">订单总额</span>
+        <strong class="text_align_r">RMB {{orderDetail.TotalAmount}}</strong>
       </div>
     </section>
 
+    <div class="order_money_change" v-if="orderDetail.Replenishment">
+      订单金额变动 +RMB {{orderDetail.Replenishment.Money}}
+    </div>
     <footer class="shopping_footer">
       <div class="icon_shopping_cart_1" v-link="{name:'shopOrder'}">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span>
       </div>
-
+      <div class="into_cart_btn"
+           v-if="orderDetail.OrderStatus === OrderStatus.OrderPending || orderDetail.Replenishment">
+        <img class="icon_into_shopping_cart" :src="images.iconOk">
+        <span class="dis_inline_block">去付款</span>
+      </div>
     </footer>
   </div>
 </template>
@@ -60,11 +59,13 @@
   import images from '../../asset/images'
   import displayShopping from '../layout/display-shopping.vue'
   import { orders } from '../../store/action'
+  import { OrderStatus } from '../../local/enum'
 
   export default{
     data(){
       return {
-        images
+        images,
+        OrderStatus
       }
     },
     vuex: {

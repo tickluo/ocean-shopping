@@ -1,17 +1,20 @@
 import cartApi from '../webServices/cart.wsvc'
-import appApi from '../webServices/app.wsvc'
 import orderApi from '../webServices/order.wsvc'
 import * as types from './mutation-types'
 
 const orderListData = require('../mock/order-list.json')
+const appCurrency = require('../mock/app-currency.json')
+const orderDetail = require('../mock/order-display.json')
+const packageList = require('../mock/package-list.json')
+const packageDetail = require('../mock/package-detail.json')
 
 const app = {
   setAppCurrency ({ dispatch }, token) {
-    return appApi.getAppCurrency('307480468f2bb43dd01b190a169c8084547b4403')
-      .then(data => {
-        if (data.Success) return dispatch(types.SET_APP_CURRENCY, data.Data)
-        return Promise.reject(data.Message)
-      })
+    dispatch(types.SET_APP_CURRENCY, appCurrency)
+    return Promise.resolve(appCurrency)
+  },
+  getRegion () {
+    return localRegion.List
   }
 }
 
@@ -92,36 +95,38 @@ const orders = {
     return orderApi.saveOrder(order)
   },
   getOrderList ({ dispatch }, token, page) {
-    orderApi.getOrderList({ key: '307480468f2bb43dd01b190a169c8084547b4403', Page: page })
-      .then(data => {
-        if (data.Success) {
-          dispatch(types.SET_ORDER_LIST, data.List)
-        }
-        return data
-      })
+    dispatch(types.SET_ORDER_LIST, orderListData.List)
+    return Promise.resolve(orderListData)
   },
   getOrderDetail ({ dispatch }, token, id) {
-    orderApi.getOrderDetail({ key: '307480468f2bb43dd01b190a169c8084547b4403', OrderId: id })
+    dispatch(types.SET_DISPLAY_ORDER, orderDetail.Data)
+    return Promise.resolve(orderDetail)
+  },
+  getPackageList ({ dispatch }, token, type) {
+    dispatch(types.SET_PACKAGE_LIST, type, packageList.List)
+    return Promise.resolve(packageList)
+  },
+  getStoreDetail ({ dispatch }, token, id) {
+    dispatch(types.SET_DISPLAY_PACKAGE, packageDetail.Data)
+    return Promise.resolve(packageDetail)
+  }
+}
+
+const user = {
+  getDefaultAddress ({ dispatch }, token) {
+    return userApi.getDefaultAddress({ key: '307480468f2bb43dd01b190a169c8084547b4403' })
       .then(data => {
         if (data.Success) {
-          dispatch(types.SET_DISPLAY_ORDER, data.Data)
+          dispatch(types.SET_DEFAULT_ADDRESS, data.Data)
         }
-        return data
+        return Promise.resolve(data)
       })
-  },
-  getPackageList ({ dispatch }, token) {
-    orderApi.getOrderList({ key: '307480468f2bb43dd01b190a169c8084547b4403' })
-      .then(data => {
-        if (data.Success) {
-          dispatch(types.SET_PACKAGE_LIST, data.List)
-        }
-        return data
-      })
-  },
+  }
 }
 
 export {
   app,
   cart,
+  user,
   orders
 }

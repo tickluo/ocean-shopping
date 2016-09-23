@@ -9,23 +9,23 @@
           </div>
         </h4>
 
-        <section class="order_list">
-          <display-shopping v-for="shopping in order.GrabAttrs"
-                            :cover="shopping.Cover"
-                            :name="shopping.Name"
-                            :price="shopping.OriginalPrice"
-                            :quantity="shopping.Quantity"
-                            :sku="shopping.Sku"
-                            :coupon="shopping.Coupon"
-                            :is_buy="shopping.IsBuy">
-          </display-shopping>
-          <div class="order_static_wrap">
-            <div class="order_static">
-              <span class="icon_rect"></span>
-              <span class="font_size_25">到达转运仓库</span>
-            </div>
+        <display-shopping v-for="shopping in order.GrabAttrs"
+                          :cover="shopping.Cover"
+                          :name="shopping.Name"
+                          :price="shopping.Price"
+                          :quantity="shopping.Quantity"
+                          :sku="shopping.Sku"
+                          :state="shopping.ProductStauts"
+                          :state_name="shopping.ProductStautName"
+                          :express="shopping.ExpressNumber">
+        </display-shopping>
+        <div class="pay_money_wrap" v-if="order.OrderStatus === OrderStatus.OrderPending || order.Replenishment">
+          <div class="font_28" v-if="order.Replenishment">{{order.Replenishment.Reason}}
+            <span class="font-weight_6">+RMB {{order.Replenishment.Money}}</span>
           </div>
-        </section>
+          <a class="font_size_30 cancel_order_btn" href="#">取消订单</a>
+          <a class="font_size_30" href="#">去付款</a>
+        </div>
       </article>
     </div>
 
@@ -36,11 +36,13 @@
   import images from '../../asset/images'
   import displayShopping from '../layout/display-shopping.vue'
   import { orders } from '../../store/action'
+  import { OrderStatus } from '../../local/enum'
 
   export default{
     data(){
       return {
-        images
+        images,
+        OrderStatus
       }
     },
     components: {

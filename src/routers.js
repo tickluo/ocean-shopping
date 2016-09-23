@@ -12,9 +12,23 @@ import storeOrder from './views/order/order-store.vue'
 import shopOrderDetail from './views/order/order-shopping-detail.vue'
 import storeOrderAfter from './views/order/order-store-after.vue'
 import storeOrderBefore from './views/order/order-store-before.vue'
+import addAddress from './views/user/add-address.vue'
+import selectAddress from './views/user/select-address.vue'
+import storeOrderDetail from './views/order/order-store-detail.vue'
+import submitTransport from './views/order/submit-transport.vue'
 
 export default router => {
   router.map({
+    '/user/address/add/:key': {
+      title: '添加收货地址',
+      name: 'addAddress',
+      component: addAddress
+    },
+    '/user/address/select/:key': {
+      title: '选择收货地址',
+      name: 'selectAddress',
+      component: selectAddress
+    },
     '/cart/:key': {
       title: '购物车',
       name: 'cart',
@@ -91,11 +105,22 @@ export default router => {
         }
       }
     },
-    'order/detail/:id/:key': {
+    '/order/detail/:id/:key': {
       title: '订单详情',
       name: 'shopOrderDetail',
       auth: false,
       component: shopOrderDetail
+    },
+    '/store/detail/:id/:key': {
+      title: '包裹详情',
+      name: 'storeOrderDetail',
+      auth: false,
+      component: storeOrderDetail
+    },
+    '/store/submit/:id/:key': {
+      title: '提交转运',
+      name: 'submitStore',
+      component: submitTransport
     }
   })
 

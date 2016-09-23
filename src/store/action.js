@@ -1,16 +1,21 @@
 import cartApi from '../webServices/cart.wsvc'
+import appApi from '../webServices/app.wsvc'
 import orderApi from '../webServices/order.wsvc'
+import userApi from '../webServices/user.wsvc'
 import * as types from './mutation-types'
 
-const orderListData = require('../mock/order-list.json')
-const appCurrency = require('../mock/app-currency.json')
-const orderDetail = require('../mock/order-display.json')
-const packageList = require('../mock/package-list.json')
+const localRegion = require('../local/region.json')
 
 const app = {
   setAppCurrency ({ dispatch }, token) {
-    dispatch(types.SET_APP_CURRENCY, appCurrency)
-    return Promise.resolve(appCurrency)
+    return appApi.getAppCurrency('307480468f2bb43dd01b190a169c8084547b4403')
+      .then(data => {
+        if (data.Success) return dispatch(types.SET_APP_CURRENCY, data.Data)
+        return Promise.reject(data.Message)
+      })
+  },
+  getRegion () {
+    return localRegion.List
   }
 }
 
@@ -91,21 +96,76 @@ const orders = {
     return orderApi.saveOrder(order)
   },
   getOrderList ({ dispatch }, token, page) {
-    dispatch(types.SET_ORDER_LIST, orderListData.List)
-    return Promise.resolve(orderListData)
+    return orderApi.getOrderList({ key: '307480468f2bb43dd01b190a169c8084547b4403', Page: page })
+      .then(data => {
+        if (data.Success) {
+          dispatch(types.SET_ORDER_LIST, data.List)
+        }
+        return Promise.resolve(data)
+      })
   },
   getOrderDetail ({ dispatch }, token, id) {
-    dispatch(types.SET_DISPLAY_ORDER, orderDetail.Data)
-    return Promise.resolve(orderDetail)
+    return orderApi.getOrderDetail({ key: '307480468f2bb43dd01b190a169c8084547b4403', OrderId: id })
+      .then(data => {
+        if (data.Success) {
+          dispatch(types.SET_DISPLAY_ORDER, data.Data)
+        }
+        return Promise.resolve(data)
+      })
   },
   getPackageList ({ dispatch }, token) {
-    dispatch(types.SET_PACKAGE_LIST, packageList.List)
-    return Promise.resolve(packageList)
+    return orderApi.getPackageList({ key: '307480468f2bb43dd01b190a169c8084547b4403', Type: 2 })
+      .then(data => {
+        if (data.Success) {
+          dispatch(types.SET_PACKAGE_LIST, data.List)
+        }
+        return Promise.resolve(data)
+      })
+  },
+  getStoreDetail ({ dispatch }, token, id) {
+    return orderApi.getPackageDetail({
+      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      PackageId: id
+    })
+      .then(data => {
+        if (data.Success) {
+          dispatch(types.SET_DISPLAY_PACKAGE, data.Data)
+        }
+        return Promise.resolve(data)
+      })
+  },
+  setPackageIds ({ dispatch }, ids) {
+    return dispatch(types.SET_PACKAGE_IDS, ids)
+  },
+  getPackageByShipId (token, id) {
+
+  },
+  getPackageByIds (token, ids) {
+
+  },
+  getShipWay (token, weight, id) {
+
+  },
+  getShipService (token, id) {
+
+  }
+}
+
+const user = {
+  getDefaultAddress ({ dispatch }, token) {
+    return userApi.getDefaultAddress({ key: '307480468f2bb43dd01b190a169c8084547b4403' })
+      .then(data => {
+        if (data.Success) {
+          dispatch(types.SET_DEFAULT_ADDRESS, data.Data)
+        }
+        return Promise.resolve(data)
+      })
   }
 }
 
 export {
   app,
+  user,
   cart,
   orders
 }

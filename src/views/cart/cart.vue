@@ -21,30 +21,13 @@
         结算
       </a></section>
 
-    <footer class="shopping_footer pad_left_0">
-      <ul class="nav_bot_list">
-        <li class="cur_nav">
-          <a v-link="{name:'cart'}"> <img :src="images.iconCart" alt="" class="bot_nav_icon">
-            <span>购物车</span>
-          </a>
-        </li>
-        <li>
-          <a href="#"> <img :src="images.iconOrder" alt="" class="bot_nav_icon">
-            <span>我的订单</span>
-          </a>
-        </li>
-        <li>
-          <a href="#"> <img :src="images.iconUser" alt="" class="bot_nav_icon">
-            <span>个人中心</span>
-          </a>
-        </li>
-      </ul>
-    </footer>
+    <v-footer></v-footer>
   </div>
 </template>
 <script>
   import imageModule from '../../asset/images'
   import cartClass from './cart-class.vue'
+  import VFooter from '../layout/v-order-footer.vue'
   import { CCheckbox } from '../../components'
   import { cart } from '../../store/action'
 
@@ -91,7 +74,8 @@
     },
     components: {
       cartClass,
-      CCheckbox
+      CCheckbox,
+      VFooter
     },
     route: {
       data({ to: { params: { key } } }){

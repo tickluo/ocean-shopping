@@ -2,10 +2,17 @@
   <div>
     <article class="about_address_wrap">
       <section class="change_address">
-        <div class="user_address_name">
+        <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
           <a href="#" class="wid_btn">
             <img :src="images.iconLocation" alt="" class="icon_location">
             <span class="dis_inline_block">填写收货地址(必填)</span></a>
+        </div>
+        <div class="user_address_name" v-if="hasAddress" v-link="{name:'selectAddress'}">
+          <div class="font_size_30">
+            <span class="font-weight_6">{{defaultAddress.RecipientName}}，{{defaultAddress.PhoneNumber}}</span>
+          </div>
+          <p> {{defaultAddress.StreetAddress1}}{{defaultAddress.StreetAddress2}}{{defaultAddress.StreetAddress3}} </p>
+          <a href="#" class="to_change_address">更换收货地址 ></a>
         </div>
       </section>
 
@@ -69,7 +76,7 @@
   import images from '../../asset/images'
   import { CAlert } from '../../components'
   import { matchCompanyShop } from '../../services/match.svc'
-  import { orders } from '../../store/action'
+  import { orders, user } from '../../store/action'
 
   export default{
     data(){
@@ -86,12 +93,19 @@
       getters: {
         totalPrice: state => state.cart.shoppingTotalPrice.toFixed(2),
         companySet: state => state.cart.company.companySet,
-        selectedShop: state => state.cart.order.selected
+        selectedShop: state => state.cart.order.selected,
+        defaultAddress: state => state.user.defaultAddress
+      },
+      actions: {
+        setDefaultAddress: user.getDefaultAddress
       }
     },
     computed: {
       faq () {
         return this.$route.name === 'submitFaq'
+      },
+      hasAddress () {
+        return this.defaultAddress && this.defaultAddress.Id > 0
       }
     },
     methods: {
@@ -120,6 +134,14 @@
             }
           })
       }
+    },
+    route: {
+      data ({ to: { params: { key } } }) {
+        return this.setDefaultAddress(key)
+          .then(res => {
+          })
+      },
+      waitForData: true
     }
   }
 </script>
