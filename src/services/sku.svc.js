@@ -1,4 +1,5 @@
 export const getDisableSku = (skuClass, currentSku, Skus) => {
+  if (skuClass.length === 0) return []
   const indexMax = skuClass.length
   const disableSkuArray = []
   // TODO:this gonna to be optimized

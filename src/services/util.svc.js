@@ -1,4 +1,4 @@
-const psl = require('../asset/libs/psl')
+const psl = require('psl')
 /**
  * hostname:l.hostname,pathname:l.pathname
  */

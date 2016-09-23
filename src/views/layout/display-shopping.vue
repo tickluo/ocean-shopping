@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="order_list">
     <div class="order_list_con">
       <div class="merch_main_img"><img :src="cover" alt=""></div>
       <div class="right_merch_text">
@@ -15,16 +15,26 @@
         <span class="font_size_25">（不可用时{{ifCoupon}}）</span>
       </div>
     </div>
-  </div>
-  <div class="user_other_claim" v-if="hasNote">
-    <div class="claim_con">
-      {{note}}
+    <div class="user_other_claim" v-if="hasNote">
+      <div class="claim_con">
+        {{note}}
+      </div>
     </div>
-  </div>
+    <div class="order_static_wrap" v-if="state > 0">
+      <div class="order_static">
+        <span class="icon_rect"></span>
+        <span class="font_size_25">{{state_name}}</span>
+      </div>
+      <a href="#" class="to_scan_shipment font_size_25" v-if="express">
+        查看物流
+      </a>
+    </div>
+  </section>
 </template>
 
 <script>
   import noPic from '../../asset/images/noimg.png'
+  import { OrderStatus } from '../../local/state.enum'
 
   export default{
     /* props: ['cover', 'name', 'price', 'quantity', 'sku'],*/
@@ -45,13 +55,27 @@
         required: true
       },
       is_buy: {
-        required: true
+        default: true
       },
       coupon: {
         default: ''
       },
       note: {
         default: ''
+      },
+      state: {
+        default: ''
+      },
+      state_name: {
+        default: ''
+      },
+      express: {
+        default: ''
+      }
+    },
+    data () {
+      return {
+        OrderStatus
       }
     },
     computed: {
@@ -60,6 +84,9 @@
       },
       hasNote () {
         return this.note !== ''
+      },
+      hasState () {
+        return this.state !== ''
       }
     }
   }

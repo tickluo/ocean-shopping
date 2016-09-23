@@ -111,6 +111,7 @@
     },
     computed: {
       skuSelect () {
+        if (!this.detail.Skus) return {}
         const findSelectedSku = this.detail.Skus.find(item => item.Selected)
         return findSelectedSku ? findSelectedSku :
           this.detail.Skus[0]

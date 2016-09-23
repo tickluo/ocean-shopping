@@ -23,6 +23,4 @@ export default {
   }).then(checkStatus)
     .then(parseJSON)
 }
-/* headers: {
- 'Content-Type': 'application/x-www-form-urlencoded'
- },*/
+

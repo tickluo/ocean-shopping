@@ -1,11 +1,19 @@
 <template>
   <div>
+  <div class="mar_bot_9">
     <article class="about_address_wrap">
       <section class="change_address">
-        <div class="user_address_name">
+        <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
           <a href="#" class="wid_btn">
             <img :src="images.iconLocation" alt="" class="icon_location">
             <span class="dis_inline_block">填写收货地址(必填)</span></a>
+        </div>
+        <div class="user_address_name" v-if="hasAddress">
+          <div class="font_size_30">
+            <span class="font-weight_6">{{defaultAddress.RecipientName}}，{{defaultAddress.PhoneNumber}}</span>
+          </div>
+          <p> {{defaultAddress.StreetAddress1}}{{defaultAddress.StreetAddress2}}{{defaultAddress.StreetAddress3}} </p>
+          <a v-link="{name:'selectAddress'}" class="to_change_address">更换收货地址 ></a>
         </div>
       </section>
 
@@ -30,17 +38,21 @@
     <article class="about_address_wrap">
       <ul class="toggle_nav_list">
         <li>
-          <a :class="{cur_item:!faq}" v-link="{name:'submitShopping'}">订单商品</a>
+          <a :class="{cur_item:!faq}" v-link="{name:'submitShopping'}">订单商品
+            <span class="bot_hr"></span>
+          </a>
         </li>
         <li>
-          <a :class="{cur_item:faq}" v-link="{name:'submitFaq'}">常见问题FAQ</a>
+          <a :class="{cur_item:faq}" v-link="{name:'submitFaq'}">常见问题FAQ
+            <span class="bot_hr"></span>
+          </a>
         </li>
       </ul>
       <router-view class="view" transition="slide-up" transition-mode="out-in" keep-alive>
       </router-view>
 
     </article>
-
+  </div>
     <section class="pay_way_wrap">
       <div class="pay_way_box">
         <img class="icon_alipay_wecheat" :src="images.iconAlipay" alt="">
@@ -69,7 +81,7 @@
   import images from '../../asset/images'
   import { CAlert } from '../../components'
   import { matchCompanyShop } from '../../services/match.svc'
-  import { orders } from '../../store/action'
+  import { orders, user, app } from '../../store/action'
 
   export default{
     data(){
@@ -86,12 +98,21 @@
       getters: {
         totalPrice: state => state.cart.shoppingTotalPrice.toFixed(2),
         companySet: state => state.cart.company.companySet,
-        selectedShop: state => state.cart.order.selected
+        selectedShop: state => state.cart.order.selected,
+        defaultAddress: state => state.user.defaultAddress
+      },
+      actions: {
+        setDefaultAddress: user.getDefaultAddress,
+        setPayOrder: user.setPayOrder,
+        genPay: app.genPay
       }
     },
     computed: {
       faq () {
         return this.$route.name === 'submitFaq'
+      },
+      hasAddress () {
+        return this.defaultAddress && this.defaultAddress.Id > 0
       }
     },
     methods: {
@@ -114,12 +135,26 @@
         postOrder.SaveGrab = matchCompanyShop(this.companySet, this.selectedShop)
         orders.saveOrder(postOrder)
           .then(res => {
-            debugger
             if (res.Success) {
-              this.$router.go({ name: 'shopOrder' })
+              this.setPayOrder({
+                paymentNo: res.Data.PaymentNo,
+                totalAmount: res.Data.TotalAmount,
+                returnUrl: '/#!/order/' + this.$route.params.key,
+                backUrl: '/#!/order/' + this.$route.params.key
+              })
+              this.genPay(true)
             }
           })
       }
+    },
+    route: {
+      data ({ to: { params: { key } } }) {
+        if (this.defaultAddress.Id) return {}
+        return this.setDefaultAddress(key)
+          .then(res => {
+          })
+      },
+      waitForData: true
     }
   }
 </script>

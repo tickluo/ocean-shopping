@@ -58,7 +58,7 @@ let pkg = require('./package.json'),
   config;
 
 function getOSSUrl(name, env, version) {
-  return isUseCDN ? `//carkey-cdn.oss-cn-hangzhou.aliyuncs.com/${name}/${env}/${version}` : '';
+  return isUseCDN ? `//xxx.aliyuncs.com/${name}/${env}/${version}` : '';
 }
 
 gulp.task('config', function () {
@@ -78,12 +78,12 @@ gulp.task('config', function () {
 
   process.env.HOST = pkg.site_url[env];
   process.env.PORT = pkg.site_port[env];
-  process.env.CDN_HOST = cdn_host;
+  //process.env.CDN_HOST = cdn_host;
 
   config = require('./build/webpack.prod.js');
 
   config.output.path = dest.app;
-  config.output.publicPath = process.env.CDN_HOST;
+  //config.output.publicPath = process.env.CDN_HOST;
 });
 
 
