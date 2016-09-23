@@ -1,0 +1,25 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb/base",
+    "vue"
+  ],
+  "plugins": [
+    "babel",
+    "html",
+    "vue"
+  ],
+  "globals": {
+    "fetch": true,
+    "__DEV__": false,
+    "__PROD__": false,
+    "__DEBUG__": false,
+    "__DEBUG_NEW_WINDOW__": false,
+    "__BASENAME__": false
+  },
+  "rules": {
+    "no-shadow": ["error", { "allow": ["state"] }],
+    "no-param-reassign": ["error", { "props": false }],
+    "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}]
+  }
+}
