@@ -4,7 +4,7 @@ import orderApi from '../webServices/order.wsvc'
 import userApi from '../webServices/user.wsvc'
 import * as types from './mutation-types'
 
-const localRegion = require('../local/region.json')
+/* const localRegion = require('../asset/json/region.json')*/
 
 const app = {
   setAppCurrency ({ dispatch }, token) {
@@ -15,7 +15,7 @@ const app = {
       })
   },
   getRegion () {
-    return localRegion.List
+    return appApi.getRegion('region.json')
   },
   genPay ({ dispatch }, toggle) {
     return dispatch(types.GEN_PAY, toggle)

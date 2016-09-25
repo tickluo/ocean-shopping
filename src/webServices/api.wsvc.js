@@ -13,14 +13,17 @@ const checkStatus = response => {
 const parseJSON = response => response.json()
 
 export default {
-  post: (params, model) => fetch(url + params, {
-    method: 'POST',
-    /* credentials: 'include',*/
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: JSON.stringify(model)
-  }).then(checkStatus)
+  post: (params, model) =>
+    fetch(url + params, {
+      method: 'POST',
+      /* credentials: 'include',*/
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: JSON.stringify(model)
+    }).then(checkStatus)
+      .then(parseJSON),
+  local: (fileName) => fetch(`../asset/json/${fileName}`)
+    .then(checkStatus)
     .then(parseJSON)
 }
-

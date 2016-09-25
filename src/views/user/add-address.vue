@@ -259,7 +259,7 @@
   }
 </style>
 <script>
-  import '../../services/LArea.min'
+  import '../../asset/libs/LArea.min'
   import 'lrz/dist/lrz.bundle'
   import images from '../../asset/images'
   import { app, user } from '../../store/action'
@@ -311,12 +311,14 @@
       }
     },
     ready () {
-      area.init({
-        'trigger': '#regionPicker',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
-        'valueTo': '#zipNumber',//选择完毕后id属性输出到该位置
-        'keys': { id: 'id', name: 'name' },//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
-        'type': 1,//数据源类型
-        'data': app.getRegion()//数据源
+      app.getRegion().then(data => {
+        area.init({
+          'trigger': '#regionPicker',//触发选择控件的文本框，同时选择完毕后name属性输出到该位置
+          'valueTo': '#zipNumber',//选择完毕后id属性输出到该位置
+          'keys': { id: 'id', name: 'name' },//绑定数据源相关字段 id对应valueTo的value属性输出 name对应trigger的value属性输出
+          'type': 1,//数据源类型
+          'data': data.List//数据源
+        })
       })
     },
     methods: {
