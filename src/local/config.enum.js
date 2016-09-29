@@ -8,7 +8,15 @@ const PayType = {
   AliPay: 30
 }
 
+const ExpensesType = {
+  NotFull: 2,
+  Must: 4,
+  NotMust: 8,
+  NoSet: 200
+}
+
 export {
   WayType,
-  PayType
+  PayType,
+  ExpensesType
 }

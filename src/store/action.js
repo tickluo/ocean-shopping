@@ -4,43 +4,60 @@ import orderApi from '../webServices/order.wsvc'
 import userApi from '../webServices/user.wsvc'
 import * as types from './mutation-types'
 
-/* const localRegion = require('../asset/json/region.json')*/
+/* const localRegion = require('../asset/json/region.txt')*/
 
 const app = {
   setAppCurrency ({ dispatch }, token) {
-    return appApi.getAppCurrency('307480468f2bb43dd01b190a169c8084547b4403')
+    return appApi.getAppCurrency(token)
       .then(data => {
         if (data.Success) return dispatch(types.SET_APP_CURRENCY, data.Data)
         return Promise.reject(data.Message)
       })
   },
   getRegion () {
-    return appApi.getRegion('region.json')
+    return appApi.getRegion('region.txt')
   },
   genPay ({ dispatch }, toggle) {
     return dispatch(types.GEN_PAY, toggle)
+  },
+  setLoading ({ dispatch }, toggle) {
+    return dispatch(types.SET_LOADING, toggle)
+  },
+  setSubmitLoading ({ dispatch }, toggle, msg) {
+    return dispatch(types.SET_SUBMIT_LOADING, toggle, msg)
+  },
+  showAlert ({ dispatch }, msg, lazyFunc) {
+    return dispatch(types.SHOW_ALERT, msg, lazyFunc)
+  },
+  showConfirm ({ dispatch }, data) {
+    return dispatch(types.SHOW_CONFIRM, data)
+  },
+  hideConfirm ({ dispatch }) {
+    return dispatch(types.HIDE_CONFIRM)
   }
 }
 
 const cart = {
   getShopping ({ dispatch }, token) {
-    return cartApi.getShopping('307480468f2bb43dd01b190a169c8084547b4403')
+    return cartApi.getShopping(token)
       .then(shopping => {
         dispatch(types.RECEIVE_SHOPPING_INFO, shopping.Data)
+        return Promise.resolve(shopping)
       })
   },
   getExchangeRate (token, domain) {
-    return cartApi.getShopRate('307480468f2bb43dd01b190a169c8084547b4403', domain)
-    /* .then(rate => {
-     if (rate.List.length > 0) {
-     return Promise.resolve(rate)
-     }
-     return cartApi.getCountryRate('307480468f2bb43dd01b190a169c8084547b4403')
-     }).then(rate => rate)*/
+    return cartApi.getShopRate(token, domain)
   },
   setShoppingRate ({ dispatch }, token, rateList) {
-    return cartApi.getCountryRate('307480468f2bb43dd01b190a169c8084547b4403')
-      .then((res) => dispatch(types.SAVE_COUNTRY_RATE, rateList, res.List))
+    return cartApi.getCountryRate(token)
+      .then((res) => {
+        dispatch(types.SAVE_SHOP_RATE, rateList)
+        return dispatch(types.SAVE_COUNTRY_RATE, res.List)
+      })
+  },
+  setCountryRate ({ dispatch }, token) {
+    return cartApi.getCountryRate(token)
+      .then((res) => dispatch(types.SAVE_COUNTRY_RATE, res.List))
   },
   initShoppingDisplay ({ dispatch }, detail) {
     dispatch(types.INIT_SHOPPING_DISPLAY, detail)
@@ -49,7 +66,7 @@ const cart = {
     dispatch(types.UPDATE_SHOPPING_DISPLAY, detail)
   },
   getCartList ({ dispatch }, token) {
-    return cartApi.getCartList('307480468f2bb43dd01b190a169c8084547b4403')
+    return cartApi.getCartList(token)
       .then(cartInfo => dispatch(types.GET_CART_LIST, cartInfo.List))
   },
   selectAll ({ dispatch }, toggle) {
@@ -68,29 +85,38 @@ const cart = {
     dispatch(types.DECREASE_SHOPPING_COUNT)
   },
   addToCart (token, shopping) {
-    return cartApi.addToCart('307480468f2bb43dd01b190a169c8084547b4403', shopping)
+    return cartApi.addToCart(token, shopping)
   },
   removeShopping ({ dispatch }, token, shopId, id) {
-    cartApi.removeShopping('307480468f2bb43dd01b190a169c8084547b4403', id)
+    return cartApi.removeShopping(token, id)
       .then(res => {
         if (res.Success) {
-          return dispatch(types.REMOVE_SHOPPING_BY_ID, shopId, id)
+          dispatch(types.REMOVE_SHOPPING_BY_ID, shopId, id)
+          return Promise.resolve(res)
         }
         return Promise.reject(res.Message)
       })
   },
   getDefaultCompany ({ dispatch }, token, countryIds) {
-    return cartApi.getDefaultCompany('307480468f2bb43dd01b190a169c8084547b4403', countryIds)
+    return cartApi.getDefaultCompany(token, countryIds)
       .then(res => {
         dispatch(types.SET_DEFAULT_COMPANY, res.List)
         return res.List
       })
   },
   getCompanyByCid (token, countryId) {
-    return cartApi.getCompanyByCid('307480468f2bb43dd01b190a169c8084547b4403', countryId)
+    return cartApi.getCompanyByCid(token, countryId)
   },
   setCompanyByCid ({ dispatch }, countryId, company) {
     dispatch(types.SET_COMPANY_BY_CID, countryId, company)
+  },
+  getFaq ({ dispatch }, token) {
+    return cartApi.getFaq(token)
+      .then(res => {
+        if (res.Success) {
+          dispatch(types.SET_FAQ, res.List)
+        }
+      })
   }
 }
 
@@ -99,7 +125,7 @@ const orders = {
     return orderApi.saveOrder(order)
   },
   getOrderList ({ dispatch }, token, page) {
-    return orderApi.getOrderList({ key: '307480468f2bb43dd01b190a169c8084547b4403', Page: page })
+    return orderApi.getOrderList({ key: token, Page: page })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_ORDER_LIST, data.List)
@@ -108,7 +134,7 @@ const orders = {
       })
   },
   getOrderDetail ({ dispatch }, token, id) {
-    return orderApi.getOrderDetail({ key: '307480468f2bb43dd01b190a169c8084547b4403', OrderId: id })
+    return orderApi.getOrderDetail({ key: token, OrderId: id })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_DISPLAY_ORDER, data.Data)
@@ -117,16 +143,17 @@ const orders = {
       })
   },
   cancelOrder ({ dispatch }, token, id) {
-    return orderApi.cancelOrder({ key: '307480468f2bb43dd01b190a169c8084547b4403', OrderId: id })
+    return orderApi.cancelOrder({ key: token, OrderId: id })
       .then(res => {
         if (res.Success) {
-          return dispatch(types.CANCEL_ORDER, id)
+          dispatch(types.CANCEL_ORDER, id)
+          return Promise.resolve(res)
         }
         return Promise.reject(res.Message)
       })
   },
   getPackageList ({ dispatch }, token) {
-    return orderApi.getPackageList({ key: '307480468f2bb43dd01b190a169c8084547b4403', Type: 2 })
+    return orderApi.getPackageList({ key: token, Type: 2 })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_PACKAGE_LIST, data.List)
@@ -136,7 +163,7 @@ const orders = {
   },
   setStoreDetail ({ dispatch }, token, id) {
     return orderApi.getPackageDetail({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       PackageId: id
     })
       .then(data => {
@@ -148,7 +175,7 @@ const orders = {
   },
   getStoreDetail (token, id) {
     return orderApi.getPackageDetail({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       PackageId: id
     })
   },
@@ -160,32 +187,32 @@ const orders = {
   },
   getPackageByShipId (token, id) {
     return orderApi.getPackageByShipId({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       ShippingCompanyId: id
     })
   },
   getPackageCount (token, id) {
     return orderApi.getPackageCount({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       ShippingCompanyId: id
     })
   },
   getPackageByIds (token, ids) {
     return orderApi.getPackageByIds({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       PackageIds: ids
     })
   },
   getShipWay (token, weight, id) {
     return orderApi.getShipWay({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       Weight: weight,
       ShippingCompanyId: id
     })
   },
   getShipService (token, id) {
     return orderApi.getShipService({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       ShippingCompanyId: id
     })
   },
@@ -209,7 +236,7 @@ const orders = {
   },
   getTranOrderList ({ dispatch }, token, page) {
     return orderApi.getTranOrderList({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       Page: page
     })
       .then(data => {
@@ -221,7 +248,7 @@ const orders = {
   },
   getTransportDetail (token, id) {
     return orderApi.getTranOrderDetail({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       ShippingId: id
     })
   },
@@ -232,7 +259,7 @@ const orders = {
 
 const user = {
   getDefaultAddress ({ dispatch }, token) {
-    return userApi.getDefaultAddress({ key: '307480468f2bb43dd01b190a169c8084547b4403' })
+    return userApi.getDefaultAddress({ key: token })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_DEFAULT_ADDRESS, data.Data)
@@ -247,17 +274,17 @@ const user = {
     return dispatch(types.SET_SELECT_ADDRESS, id)
   },
   getUserAddress (token) {
-    return userApi.getUserAddress({ key: '307480468f2bb43dd01b190a169c8084547b4403' })
+    return userApi.getUserAddress({ key: token })
   },
   uploadIdCard (token, file) {
     return userApi.uploadIdCard({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       IdCartImage: file
     })
   },
   saveAddress (token, address) {
     return userApi.saveAddress({
-      key: '307480468f2bb43dd01b190a169c8084547b4403',
+      key: token,
       Address: address
     })
   },

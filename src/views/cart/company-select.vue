@@ -5,10 +5,10 @@
         您有商品从<span class="font-weight_6">{{countryInfo.Name}}</span>发货，请选择转运公司
       </h3>
       <company-detail v-if="ShippingCompanyId" v-for="item in companyList"
-                      :is_default="false"
-                      :is_selected="item.ShippingWayDefault.ShippingCompanyId === ShippingCompanyId"
-                      :ship_Way="item.ShippingWayDefault"
-                      :ship_company="item">
+                      :is-default="false"
+                      :is-selected="item.ShippingWayDefault.ShippingCompanyId === ShippingCompanyId"
+                      :ship-way="item.ShippingWayDefault"
+                      :ship-company="item">
       </company-detail>
     </article>
 
@@ -64,11 +64,11 @@
       },
       confirmCompany () {
         this.setCompanyByCid(parseInt(this.countryId), {
-            CountryId: parseInt(this.countryId),
-            ShippingCompany: this.companyList
-              .find(item => item.ShippingWayDefault.ShippingCompanyId === this.ShippingCompanyId)
-          }
-        )
+          CountryId: parseInt(this.countryId),
+          ShippingCompanyCount:this.companyList.length,
+          ShippingCompany: this.companyList
+            .find(item => item.ShippingWayDefault.ShippingCompanyId === this.ShippingCompanyId)
+      })
         this.$router.go({ name: 'company' })
       }
     },

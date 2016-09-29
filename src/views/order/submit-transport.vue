@@ -17,7 +17,7 @@
           </div>
         </section>
         <section class="fill_other">
-          <input class="fill_other_input" v-model="note" type="text" placeholder="如用其他要求，请在此填写"></section>
+          <input class="fill_other_input" v-model="note" type="text" placeholder="如有其他要求，请在此填写"></section>
         <section class="shentong">
           <div class="need_times">
             <span class="flex_width font_size_30">由<strong>&nbsp;{{shipInfo.shipName}}&nbsp;</strong>负责转运</span>
@@ -132,7 +132,7 @@
 
 <script>
   import images from '../../asset/images'
-  import { orders, user } from '../../store/action'
+  import { orders, user, app } from '../../store/action'
   import displayShopping from '../layout/display-shopping.vue'
   import { WayType, PayType } from '../../local/config.enum'
 
@@ -180,7 +180,10 @@
         setBox: orders.setBox,
         setPackageIds: orders.setPackageIds,
         setPayOrder: user.setPayOrder,
-        genPay: app.genPay
+        genPay: app.genPay,
+        showAlert: app.showAlert,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     components: {
@@ -265,6 +268,9 @@
         else alert('没有这种运输算法')
       },
       saveTranOrder () {
+        if (!this.defaultAddress && !this.defaultAddress.Id) {
+          return this.showAlert('请填写收货地址')
+        }
         let submitOrder = Object.assign({}, this.order)
         submitOrder.PackageIds.push(this.defaultPid)
         submitOrder.PaymentType = PayType.AliPay
@@ -274,19 +280,28 @@
         submitOrder.Coupon = ''
         submitOrder.AddressId = this.defaultAddress.Id
         submitOrder.Note = this.note
-        submitOrder.key = '307480468f2bb43dd01b190a169c8084547b4403'
-        orders.saveTranOrder(submitOrder)
-          .then(res => {
-            if (res.Success) {
-              this.setPayOrder({
-                paymentNo: res.Data.PaymentNo,
-                totalAmount: res.Data.TotalAmount,
-                returnUrl: `/#!/order/${this.$route.params.key}/store/after`,
-                backUrl: `/#!/order/${this.$route.params.key}/store/after`
+        submitOrder.key = this.$route.params.key
+        this.showConfirm({
+          tip: '是否支付运单？',
+          button: '支付',
+          action: '运单已生成',
+          handle: () => {
+            this.setSubmitLoading(true, '正在生成运单...')
+            return orders.saveTranOrder(submitOrder)
+              .then(res => {
+                if (res.Success) {
+                  this.setPayOrder({
+                    paymentNo: res.Data.PaymentNo,
+                    totalAmount: res.Data.TotalAmount,
+                    returnUrl: `/#!/order/${this.$route.params.key}/store/after`,
+                    backUrl: `/#!/order/${this.$route.params.key}/store/after`
+                  })
+                  this.genPay(true)
+                }
+                return Promise.resolve(res)
               })
-              this.genPay(true)
-            }
-          })
+          }
+        })
       }
     },
     route: {

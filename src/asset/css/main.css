@@ -122,7 +122,6 @@ html,
 body {
   width: 100%;
   box-sizing: border-box;
-  padding-bottom: 0.92rem;
 }
 #app {
   height: 100%;
@@ -136,6 +135,7 @@ html {
 body {
   font-size: 0;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   color: #333;
 }
 .message_num {
@@ -465,8 +465,9 @@ body {
   color: #aaa;
 }
 .do_order_used {
-  color: #333;
-  border: 1px solid #979797;
+  background: #444;
+  color: #fff;
+  border: 1px solid #222;
 }
 .do_order_fill {
   background: #444;
@@ -527,7 +528,6 @@ body {
   background: #fff;
 }
 .faq_text {
-  display: inline-block;
   font-size: 0.28rem;
   padding: 0.06rem 0rem 0.08rem;
   line-height: 0.4rem;
@@ -1357,7 +1357,14 @@ body {
   display: inline-block;
   line-height: 0.42rem;
 }
+.err_input {
+  border: 1px solid #ff6276 !important;
+}
+.err_input::-webkit-input-placeholder {
+  color: #F43459 !important;
+}
 .change_address {
+  background: #fff;
   border-top: 1px solid #ccc;
   padding: 0.2rem;
   box-sizing: border-box;
@@ -1543,9 +1550,10 @@ body {
   padding: 0.12rem;
   left: 50%;
   color: #fff;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.5);
   margin-left: -2.12rem;
-  top: 2rem;
+  top: 50%;
+  margin-top: -2.2rem;
 }
 .pop_wrap_phone .real_pop {
   padding-top: 0.4rem;
@@ -1553,7 +1561,7 @@ body {
   text-align: center;
   width: 4rem;
   height: 2.1rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
 }
 .pop_wrap_address {
   position: fixed;
@@ -1561,9 +1569,10 @@ body {
   padding: 0.12rem;
   left: 50%;
   color: #fff;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.5);
   margin-left: -2.62rem;
-  top: 2rem;
+  top: 50%;
+  margin-top: -2.2rem;
 }
 .pop_wrap_address .real_pop_address {
   padding-top: 0.4rem;
@@ -1571,7 +1580,7 @@ body {
   text-align: center;
   width: 5rem;
   padding-bottom: 0.4rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
 }
 .pop_wrap_address .cancel_ok_wrap {
   width: 4.2rem;
@@ -1647,6 +1656,7 @@ textarea.buyer_name {
   color: #F43459;
 }
 .address_tips {
+  background: #f4f4f4;
   padding: 0.1rem 0.2rem;
   color: #666;
   -webkit-text-size-adjust: none;
@@ -1837,6 +1847,7 @@ textarea.buyer_name {
   border-top: 1px solid #ccc;
 }
 .user_addresses_wrap .user_address_box {
+  background: #fff;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1979,6 +1990,13 @@ textarea.buyer_name {
 }
 .order_wrap .huozhi .real_number {
   font-size: 0.26rem;
+}
+.order_wrap .pay_money_wrap .font_28 {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: flex-end;
 }
 .order_list {
   padding: 0.15rem 0.2rem;
@@ -2311,13 +2329,16 @@ textarea.buyer_name {
   line-height: 0.4rem;
 }
 .mar_bot_9 {
-  margin-bottom: 0.92rem;
+  margin-bottom: 0.1rem;
+}
+.mar_bot_10 {
+  margin-bottom: 1.07rem;
 }
 .mar_bot_15 {
   margin-bottom: 1.5rem;
 }
 .mar_bot_15_5 {
-  margin-bottom: 1.55rem;
+  margin-bottom: 1.6rem;
 }
 .mar_bot_20 {
   margin-bottom: 1.9rem;
@@ -2554,7 +2575,7 @@ textarea.buyer_name {
   overflow: hidden;
 }
 .err_con {
-  margin-top: 50%;
+  margin-top: 4rem;
   text-align: center;
 }
 .err_con .font_size_30 {
@@ -2573,7 +2594,7 @@ textarea.buyer_name {
   line-height: 0.7rem;
 }
 .loading_wrap {
-  margin-top: 50%;
+  margin-top: 4rem;
   text-align: center;
 }
 .loading_wrap .load_txt {
@@ -2635,4 +2656,19 @@ textarea.buyer_name {
 .the_card_block .card_img_box img {
   width: 100%;
   height: auto;
+}
+.wid_100 {
+  width: 100%;
+}
+.bot_ccc {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.roate_load_img {
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: -0.03rem;
+  -webkit-animation: rotate_load 0.8 infinite linear ;
+  -moz-animation: rotate_load 0.8 infinite linear ;
+  animation: rotate_load 0.8s infinite linear ;
 }

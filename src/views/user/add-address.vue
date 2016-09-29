@@ -1,66 +1,120 @@
-<template>
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-el="http://www.w3.org/1999/xhtml">
   <div>
-    <article class="base_info">
-      <input type="text" class="buyer_name" v-model="address.RecipientName" placeholder="收件人">
-      <div class="address_tips">
-        收件人姓名需与身份证姓名一致，否则影响清关
-      </div>
-      <input type="text" class="buyer_name" v-model="address.PhoneNumber" placeholder="联系电话">
-      <div class="address_tips pad_top_30">
-        <div class="font_size_30">
-          收件人身份证信息
+    <validator name="addressValidation">
+      <article class="base_info">
+        <input type="text"
+               :class="{'err_input':
+                     $addressValidation.name &&
+                     $addressValidation.name.modified &&
+                     $addressValidation.name.invalid}"
+               v-validate:name="{
+                     required: { rule: true, message: '请输入收件人姓名' }
+                     }"
+               class="buyer_name"
+               v-model="address.RecipientName"
+               placeholder="收件人">
+        <div class="address_tips">
+          收件人姓名需与身份证姓名一致，否则影响清关
         </div>
-        <div>所有身份信息将被严格保密，仅用于清关</div>
-      </div>
-      <input type="text" class="buyer_name" v-model="address.IdCard" placeholder="身份证号">
-      <div class="address_tips pos_r">
-        <div>
-          ★身份证照片必须清晰、无水印、死角边框齐<br/>
-          全，且身份证未过期。否则包裹将无法清关。
+        <input type="text"
+               :class="{'err_input':
+                     $addressValidation.phone &&
+                     $addressValidation.phone.modified &&
+                     $addressValidation.phone.invalid}"
+               v-validate:phone="{
+                     required: { rule: true, message: '请输入收件人手机号' },
+                     telephone:{ rule: true, message: '请输入正确的手机号' }
+                     }"
+               class="buyer_name"
+               v-model="address.PhoneNumber"
+               placeholder="联系电话">
+        <div class="address_tips pad_top_30">
+          <div class="font_size_30">
+            收件人身份证信息
+          </div>
+          <div>所有身份信息将被严格保密，仅用于清关</div>
         </div>
-        <a href="#" class="scan_example">查看示例</a>
-      </div>
-      <div class="upfile_card_wrap">
-        <ul class="upfile_card_list">
-          <li>
-            <input id="filePositive" type="file" @change="uploadImg('positive')" accept="image/*"/>
-            <div class="id_card">
+        <input type="text"
+               :class="{'err_input':
+                     $addressValidation.idcard &&
+                     $addressValidation.idcard.modified &&
+                     $addressValidation.idcard.invalid}"
+               v-validate:idcard="{
+                     required: { rule: true, message: '请输入身份证号' },
+                     idcard: { rule: true, message: '请输入正确的身份证号' }
+                     }"
+               class="buyer_name"
+               v-model="address.IdCard"
+               placeholder="身份证号">
+        <div class="address_tips pos_r">
+          <div>
+            ★身份证照片必须清晰、无水印、死角边框齐<br/>
+            全，且身份证未过期。否则包裹将无法清关。
+          </div>
+          <a href="#" class="scan_example">查看示例</a>
+        </div>
+        <div class="upfile_card_wrap">
+          <ul class="upfile_card_list">
+            <li>
+              <input id="filePositive" type="file" @change="uploadImg('positive')" accept="image/*"/>
+              <div class="id_card">
               <span class="del_btn" v-if="hasPoImg" @click="deleteImg('positive')"><img :src="images.iconX"
                                                                                         alt=""></span>
-              <img v-if="hasPoImg" class="icon_camera" :src="positiveImg" alt="">
-            </div>
-            <div class="up_side">身份证正面</div>
-          </li>
-          <li>
-            <input id="fileOpposite" type="file" @change="uploadImg('opposite')" accept="image/*"/>
-            <div class="id_card">
+                <img v-if="hasPoImg" class="icon_camera" :src="positiveImg" alt="">
+              </div>
+              <div class="up_side">身份证正面</div>
+            </li>
+            <li>
+              <input id="fileOpposite" type="file" @change="uploadImg('opposite')" accept="image/*"/>
+              <div class="id_card">
               <span class="del_btn" v-if="hasOpImg" @click="deleteImg('opposite')"><img :src="images.iconX"
                                                                                         alt=""></span>
-              <img v-if="hasOpImg" class="icon_camera" :src="oppositeImg" alt="">
-            </div>
-            <div class="up_side">身份证反面</div>
-          </li>
-        </ul>
-      </div>
-    </article>
-
-    <article class="base_info">
-      <div class="selct_area">
-        <input type="text" id="regionPicker" v-el:region readonly="true" class="buyer_name" placeholder="选择所在区域">
-        <img :src="images.iconR" alt="" class="icon_right">
-      </div>
-      <textarea class="buyer_name no_top_bor" v-model="address.StreetAddress1" placeholder="详细地址..."></textarea>
-      <input type="text" id="zipNumber" v-el:zip class="buyer_name no_top_bor" placeholder="邮政编码">
-    </article>
-
-    <article class="base_info" @click="setDefault">
-      <div class="sel_other_company area_live" :class="{'open_static' : address.IsDefault}">
-        <span class="flex_width corlor_33">设置为默认地址</span>
-        <div class="on_off_btn">
-          <span class="on_off_circle"></span>
+                <img v-if="hasOpImg" class="icon_camera" :src="oppositeImg" alt="">
+              </div>
+              <div class="up_side">身份证反面</div>
+            </li>
+          </ul>
         </div>
-      </div>
-    </article>
+      </article>
+
+      <article class="base_info">
+        <div class="selct_area">
+          <input type="text"
+                 :class="{'err_input':
+                     $addressValidation.region &&
+                     $addressValidation.region.modified &&
+                     $addressValidation.region.invalid}"
+                 v-validate:region="{
+                     required: { rule: true, message: '请选择地区' }
+                     }"
+                 id="regionPicker"
+                 v-el:region readonly="true"
+                 class="buyer_name"
+                 placeholder="选择所在区域">
+          <img :src="images.iconR" alt="" class="icon_right">
+        </div>
+        <textarea class="buyer_name no_top_bor"
+                  v-model="address.StreetAddress1"
+                  :class="{'err_input':
+                     $addressValidation.location &&
+                     $addressValidation.location.modified &&
+                     $addressValidation.location.invalid}"
+                  v-validate:location="{
+                     required: { rule: true, message: '请填写详细地址' }
+                     }"
+                  placeholder="详细地址..."></textarea>
+        <input type="text" id="zipNumber" v-el:zip class="buyer_name no_top_bor" placeholder="邮政编码">
+      </article>
+
+      <article class="base_info" @click="setDefault">
+        <div class="sel_other_company area_live" :class="{'open_static' : address.IsDefault}">
+          <span class="flex_width corlor_33">设置为默认地址</span>
+          <div class="on_off_btn">
+            <span class="on_off_circle"></span>
+          </div>
+        </div>
+      </article>
+    </validator>
 
     <footer class="shopping_footer">
       <div class="icon_shopping_cart_1" @click="returnBack">
@@ -310,6 +364,11 @@
         return this.oppositeImg !== ''
       }
     },
+    vuex: {
+      actions: {
+        showAlert: app.showAlert
+      }
+    },
     ready () {
       app.getRegion().then(data => {
         area.init({
@@ -332,6 +391,7 @@
             user.uploadIdCard(this.$route.params.key, data.base64.replace("data:" + data.file.type + ";base64,", ""))
               .then(res => {
                 if (res.Success) {
+                  this.showAlert('身份证上传成功')
                   if (type === 'positive') {
                     this.positiveImg = data.base64
                     this.address.IdCardPositive = res.Data.FilePath
@@ -341,6 +401,7 @@
                     this.address.IdCardOpposite = res.Data.FilePath
                   }
                 }
+                else return  this.showAlert('身份证上传失败')
               })
           })
       },
@@ -358,6 +419,13 @@
         this.address.IsDefault = !this.address.IsDefault
       },
       saveAddress () {
+        if (this.$addressValidation.invalid) {
+          this.$addressValidation.errors.forEach(item => {
+            this.$addressValidation[item.field].modified = true
+
+          })
+          return this.showAlert(this.$addressValidation.errors[0].message)
+        }
         let addressInfo = Object.assign({}, this.address)
         addressInfo.Province = this.region.Province
         addressInfo.City = this.region.City
@@ -366,7 +434,7 @@
         user.saveAddress(this.$route.params.key, addressInfo)
           .then(res => {
             if (res.Success) {
-              alert('保存成功')
+              this.showAlert('保存成功')
               this.returnBack
             }
           })

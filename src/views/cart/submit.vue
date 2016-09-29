@@ -1,58 +1,70 @@
-<template>
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
   <div>
-  <div class="mar_bot_9">
-    <article class="about_address_wrap">
-      <section class="change_address">
-        <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
-          <a href="#" class="wid_btn">
-            <img :src="images.iconLocation" alt="" class="icon_location">
-            <span class="dis_inline_block">填写收货地址(必填)</span></a>
-        </div>
-        <div class="user_address_name" v-if="hasAddress">
-          <div class="font_size_30">
-            <span class="font-weight_6">{{defaultAddress.RecipientName}}，{{defaultAddress.PhoneNumber}}</span>
+    <div class="mar_bot_10">
+      <article class="about_address_wrap">
+        <section class="change_address">
+          <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
+            <a href="#" class="wid_btn">
+              <img :src="images.iconLocation" alt="" class="icon_location">
+              <span class="dis_inline_block">填写收货地址(必填)</span></a>
           </div>
-          <p> {{defaultAddress.StreetAddress1}}{{defaultAddress.StreetAddress2}}{{defaultAddress.StreetAddress3}} </p>
-          <a v-link="{name:'selectAddress'}" class="to_change_address">更换收货地址 ></a>
-        </div>
-      </section>
+          <div class="user_address_name" v-if="hasAddress">
+            <div class="font_size_30">
+              <span class="font-weight_6">{{defaultAddress.RecipientName}}，{{defaultAddress.PhoneNumber}}</span>
+            </div>
+            <p> {{defaultAddress.StreetAddress1}}{{defaultAddress.StreetAddress2}}{{defaultAddress.StreetAddress3}} </p>
+            <a v-link="{name:'selectAddress'}" class="to_change_address">更换收货地址 ></a>
+          </div>
+        </section>
 
-      <section class="change_address pad_bot_30">
-        <div class="user_address_name">
-          <div class="font_size_30">订单金额：<span class="font-weight_6">RMB {{totalPrice}}</span></div>
-          <p><span>★</span>不包含国际运费，国际运费将在您提交转运时支付 </p> <a class="to_shop_detail" href="#">国际运费说明</a></div>
-      </section>
-      <section class="change_address pad_bot_30">
-        <div class="user_address_name">
-          <div class="font_size_28">若订单出现意外情况，我们希望第一时间联系到您</div>
-          <input class="fill_other_input" type="text" v-model="phone" placeholder="您的手机号(必填)">
-        </div>
-      </section>
-      <a href="#" class="sel_other_company"> <span href="#" class="flex_width">
+        <section class="change_address pad_bot_30">
+          <div class="user_address_name">
+            <div class="font_size_30">订单金额：<span class="font-weight_6">RMB {{totalPrice}}</span></div>
+            <p><span>★</span>不包含国际运费，国际运费将在您提交转运时支付 </p> <a class="to_shop_detail" href="#">国际运费说明</a></div>
+        </section>
+        <section class="change_address pad_bot_30">
+          <div class="user_address_name">
+            <div class="font_size_28">若订单出现意外情况，我们希望第一时间联系到您</div>
+            <validator name="phoneValidation">
+              <input id="phone" class="fill_other_input"
+                     :class="{'no_phone':
+                     $phoneValidation.phone &&
+                     $phoneValidation.phone.modified &&
+                     $phoneValidation.phone.invalid}"
+                     v-validate:phone="{
+                     required: { rule: true, message: '请输入手机号' },
+                     telephone:{ rule: true, message: '请输入正确的手机号' }
+                     }"
+                     type="tel"
+                     v-model="phone"
+                     placeholder="您的手机号(必填)">
+            </validator>
+          </div>
+        </section>
+        <a href="#" class="sel_other_company"> <span href="#" class="flex_width">
         <img class="icon_page" :src="images.iconPage" alt="">
-        6City全球购服务免费声明，下单即为同意</span>
-        <img :src="images.iconR" alt="" class="icon_right">
-      </a>
-    </article>
+        6City全球购服务免责声明，下单即为同意</span>
+          <img :src="images.iconR" alt="" class="icon_right">
+        </a>
+      </article>
 
-    <article class="about_address_wrap">
-      <ul class="toggle_nav_list">
-        <li>
-          <a :class="{cur_item:!faq}" v-link="{name:'submitShopping'}">订单商品
-            <span class="bot_hr"></span>
-          </a>
-        </li>
-        <li>
-          <a :class="{cur_item:faq}" v-link="{name:'submitFaq'}">常见问题FAQ
-            <span class="bot_hr"></span>
-          </a>
-        </li>
-      </ul>
-      <router-view class="view" transition="slide-up" transition-mode="out-in" keep-alive>
-      </router-view>
-
-    </article>
-  </div>
+      <article class="about_address_wrap">
+        <ul class="toggle_nav_list">
+          <li>
+            <a :class="{cur_item:!faq}" v-link="{name:'submitShopping'}">订单商品
+              <span class="bot_hr"></span>
+            </a>
+          </li>
+          <li>
+            <a :class="{cur_item:faq}" v-link="{name:'submitFaq'}">常见问题FAQ
+              <span class="bot_hr"></span>
+            </a>
+          </li>
+        </ul>
+        <router-view class="view" transition="slide-up" transition-mode="out-in" keep-alive>
+        </router-view>
+      </article>
+    </div>
     <section class="pay_way_wrap">
       <div class="pay_way_box">
         <img class="icon_alipay_wecheat" :src="images.iconAlipay" alt="">
@@ -64,7 +76,6 @@
         </div>
       </div>
     </section>
-    <c-alert :visible.sync="alertVisible"></c-alert>
     <footer class="shopping_footer">
       <div class="icon_shopping_cart_1" @click.prevent="returnBack">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
@@ -87,7 +98,6 @@
     data(){
       return {
         images,
-        alertVisible: false,
         phone: ''
       }
     },
@@ -104,7 +114,10 @@
       actions: {
         setDefaultAddress: user.getDefaultAddress,
         setPayOrder: user.setPayOrder,
-        genPay: app.genPay
+        genPay: app.genPay,
+        showAlert: app.showAlert,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     computed: {
@@ -120,31 +133,38 @@
         this.$router.go({ name: 'company' })
       },
       saveOrder () {
-        if (!this.phone) {
-          this.alertVisible = true
-          return setTimeout(() => {
-            this.alertVisible = false
-          }, 1000)
+        if (this.$phoneValidation.phone.invalid) {
+          this.$phoneValidation.phone.modified = true
+          return this.showAlert(this.$phoneValidation.phone.errors[0].message)
         }
         let postOrder = {
           TotalAmount: this.totalPrice,
           PaymentType: 30,
           Phone: this.phone,
-          key: '307480468f2bb43dd01b190a169c8084547b4403'
+          key: this.$route.params.key
         }
         postOrder.SaveGrab = matchCompanyShop(this.companySet, this.selectedShop)
-        orders.saveOrder(postOrder)
-          .then(res => {
-            if (res.Success) {
-              this.setPayOrder({
-                paymentNo: res.Data.PaymentNo,
-                totalAmount: res.Data.TotalAmount,
-                returnUrl: '/#!/order/' + this.$route.params.key,
-                backUrl: '/#!/order/' + this.$route.params.key
+        this.showConfirm({
+          tip: '是否支付订单？',
+          button: '支付',
+          action: '订单已生成',
+          handle: () => {
+            this.setSubmitLoading(true, '正在生产订单...')
+            return orders.saveOrder(postOrder)
+              .then(res => {
+                if (res.Success) {
+                  this.setPayOrder({
+                    paymentNo: res.Data.PaymentNo,
+                    totalAmount: res.Data.TotalAmount,
+                    returnUrl: '/#!/order/' + this.$route.params.key,
+                    backUrl: '/#!/order/' + this.$route.params.key
+                  })
+                  this.genPay(true)
+                }
+                return Promise.resolve(res)
               })
-              this.genPay(true)
-            }
-          })
+          }
+        })
       }
     },
     route: {

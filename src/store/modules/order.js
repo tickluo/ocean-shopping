@@ -14,7 +14,7 @@ import {
   SET_TRAN_ORDER_DETAIL,
   CANCEL_ORDER
 } from '../mutation-types'
-import { PackageStatus } from '../../local/state.enum'
+import { PackageStatus, OrderStatus, ProductStatus } from '../../local/state.enum'
 
 const state = {
   orderList: [],
@@ -42,8 +42,12 @@ const mutations = {
   },
   [CANCEL_ORDER] (state, id) {
     const removedOrder = Object.assign({}, state.orderList.find(item => item.Id === id))
-    removedOrder.ProductStauts = PackageStatus.ProductCancelled
-    removedOrder.ProductStautName = '已取消'
+    removedOrder.OrderStatus = OrderStatus.OrderCancelled
+    removedOrder.OrderStatusName = '已取消'
+    removedOrder.GrabAttrs.forEach(item => {
+      item.ProductStautName = '已取消'
+      item.ProductStauts = ProductStatus.ProductCancelled
+    })
     state.orderList.splice(state.orderList.findIndex(item => item.Id === id), 1, removedOrder)
   },
   [SET_PACKAGE_LIST] (state, list) {

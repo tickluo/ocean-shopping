@@ -1,5 +1,5 @@
 <template>
-  <section class="shopping_con_box">
+  <section class="shopping_con_box" v-if="list.length !== 0">
     <h3 class="shopping_cart_tit">
       <c-checkbox :selected="toggle" @click="changeToggle">
       </c-checkbox>

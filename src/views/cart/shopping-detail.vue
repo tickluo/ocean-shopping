@@ -17,10 +17,10 @@
         </div>
       </section>
       <section class="shopping_tips">
-        <p class="font_28">{{OriginalCurrency}}:{{Currency}}=
+        <p class="font_28">{{OriginalCurrency}}&nbsp;:&nbsp;{{Currency}}=
           <span class="font-weight_6">1:{{display.rate && display.rate.Rate}}</span>
         </p>
-        <p>★{{display.rate && display.rate.RateDescription}}</p>
+        <p class="wid_100" v-if="display.rate && display.rate.RateDescription">★{{display.rate.RateDescription}}</p>
       </section>
       <shopping-cost :price="afterRatePrice"
                      :currency_sign="currency.CurrencySign"
@@ -33,7 +33,7 @@
         <div class="web_promo_code">
           <div class="web_code">网站优惠码:</div>
           <div class="code_input_box">
-            <input class="no_fill" type="text" :value="coupon" placeholder="如有优惠码请填写"/></div>
+            <input class="no_fill" type="text" v-model="coupon" placeholder="如有优惠码请填写"/></div>
         </div>
         <div class="web_promo_code pad_10">
           <div class="web_code">★当优惠码不可使用时,
@@ -80,7 +80,7 @@
 <script>
   import '../../asset/css/main.css'
   import { ShoppingCost, ShoppingSku } from '../../components'
-  import { cart } from '../../store/action'
+  import { cart, app } from '../../store/action'
   import { getDisableSku } from '../../services/sku.svc'
   import { parseDomain, getCurrency } from '../../services/util.svc'
   import images from '../../asset/images'
@@ -106,6 +106,7 @@
       },
       actions: {
         getShopping: cart.getShopping,
+        showAlert: app.showAlert,
         initShoppingDisplay: cart.initShoppingDisplay
       }
     },
@@ -164,23 +165,29 @@
           UnitPrice: this.display.skuSelect.ListPrice,
           Url: this.display.skuSelect.Url,
           WebSiteId: this.display.rate.WebSiteId,
+          CId: this.detail.CId || '',
+          OriginalUrl: this.detail.OriginalUrl || '',
+          RebateUrl: this.detail.RebateUrl || '',
           Weight: this.detail.Weight || 0,
           Width: this.detail.Width || 0,
           IsBuy: this.isBuy,
-          Coupon: this.Coupon
+          Coupon: this.coupon
         }
       },
       addToCart () {
         return cart.addToCart(this.$route.params.key, this.genCartInfo())
           .then(res => {
-            //TODO:show result like 添加成功
+            if (res.Success) {
+              this.showAlert('添加成功')
+              this.$router.go({ name: 'cart' })
+            }
           })
       }
     },
     route: {
       data({ to: { params: { key } } }) {
         return this.getShopping(key)
-          .then(()=>this.getExchangeRate(key, parseDomain(this.detail.Shop.Url)))
+          .then(() => this.getExchangeRate(key, parseDomain(this.detail.Shop.Url)))
           .then(data => {
             this.OriginalCurrencyCode = data.List[0]
             let disableSkuArray = getDisableSku(this.detail.SkuClasses, this.skuSelect, this.detail.Skus)

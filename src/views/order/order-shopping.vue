@@ -56,7 +56,10 @@
         getOrderList: orders.getOrderList,
         setPayOrder: user.setPayOrder,
         genPay: app.genPay,
-        cancelOrder: orders.cancelOrder
+        showConfirm: app.showConfirm,
+        showAlert: app.showAlert,
+        cancelOrder: orders.cancelOrder,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     methods: {
@@ -81,13 +84,22 @@
         this.genPay(true)
       },
       removeOrder(id) {
-        this.cancelOrder(this.$route.params.key, id)
+        this.showConfirm({
+          tip: '是否取消订单？',
+          button: '取消订单',
+          action: '订单已取消',
+          handle: () => {
+            this.setSubmitLoading(true, '正在取消订单...')
+            return this.cancelOrder(this.$route.params.key, id)
+          }
+        })
       }
     },
     route: {
       data ({ to: { params: { key } } }) {
         return this.getOrderList(key, { PageIndex: 1, PageSize: 6 })
           .then(res => {
+
           })
       },
       waitForData: true

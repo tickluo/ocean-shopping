@@ -237,7 +237,6 @@ html,
 body {
     width: 100%;
     box-sizing: border-box;
-    padding-bottom: 0.92rem;
     //   height: 100%;
 
 }
@@ -256,6 +255,8 @@ html {
 body {
     font-size: 0;
     padding-top: 1rem;
+        padding-bottom: 1rem;
+
     color: @color_333;
 }
 
@@ -581,6 +582,7 @@ body {
         top: 0.2rem;
         left: 0.2rem;
     }
+
     .code_input_box {
         .pos(a);
         top: 0.2rem;
@@ -590,7 +592,9 @@ body {
         .no_fill {
             width: 100%;
         }
+
     }
+
 }
 
 .no_fill {
@@ -619,10 +623,15 @@ body {
     color: #aaa;
 }
 
+
+
 .do_order_used {
-    color: @color_333;
-    .bor_bot_97;
+  background: #444;
+  color: #fff;
+  border: 1px solid #222;
 }
+
+
 
 .do_order_fill {
     background: #444;
@@ -690,7 +699,7 @@ body {
 
 .faq_text {
     //    .dis_flex;
-    display: inline-block;
+    //display: inline-block;
     font-size: 0.28rem;
     padding: 0.06rem 0rem 0.08rem;
     line-height: 0.4rem;
@@ -1561,7 +1570,16 @@ body {
     }
 }
 
+.err_input {
+  border: 1px solid @color_pink_ff62 !important;
+  &::-webkit-input-placeholder {
+    color: @color_pink_f3 !important;
+  }
+}
+
+
 .change_address {
+  background:#fff;
     border-top: 1px solid #ccc;
     padding: 0.2rem;
     box-sizing: border-box;
@@ -1763,16 +1781,17 @@ body {
     padding: 0.12rem;
     left: 50%;
     color: #fff;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.5);
     margin-left: -2.12rem;
-    top: 2rem;
+    top: 50%;
+    margin-top: -2.2rem;
     .real_pop {
         padding-top: 0.4rem;
         box-sizing: border-box;
         text-align: center;
         width: 4rem;
         height: 2.1rem;
-        background: rgba(0, 0, 0, 0.3rem)
+        background: rgba(0, 0, 0, 0.5)
     }
 }
 
@@ -1782,9 +1801,10 @@ body {
     padding: 0.12rem;
     left: 50%;
     color: #fff;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.5);
     margin-left: -2.62rem;
-    top: 2rem;
+    top:50%;
+    margin-top: -2.2rem;
     .real_pop_address {
         padding-top: 0.4rem;
         box-sizing: border-box;
@@ -1792,7 +1812,7 @@ body {
         width: 5rem;
         //        height: 3.02rem;
         padding-bottom: 0.4rem;
-        background: rgba(0, 0, 0, 0.3rem)
+        background: rgba(0, 0, 0, 0.5)
     }
     .cancel_ok_wrap {
         width: 4.2rem;
@@ -1880,6 +1900,7 @@ textarea.buyer_name {
 }
 
 .address_tips {
+    background: #f4f4f4;
     padding: 0.1rem 0.2rem;
     color: #666;
     -webkit-text-size-adjust: none;
@@ -2096,6 +2117,7 @@ textarea.buyer_name {
 .user_addresses_wrap {
     border-top: 1px solid #ccc;
     .user_address_box {
+        background: #fff;
         .dis_flex;
         align-items: center;
         padding: 0.2rem;
@@ -2245,6 +2267,12 @@ textarea.buyer_name {
             font-size: 0.26rem;
         }
     }
+  .pay_money_wrap{
+    .font_28{
+      .dis_flex;
+      justify-content: flex-end;
+    }
+  }
 }
 
 .order_list {
@@ -2582,14 +2610,17 @@ textarea.buyer_name {
 }
 
 .mar_bot_9 {
-    margin-bottom: 0.92rem;
+    margin-bottom: 0.1rem;
+}
+.mar_bot_10 {
+  margin-bottom: 1.07rem;
 }
 
 .mar_bot_15 {
     margin-bottom: 1.5rem;
 }
 .mar_bot_15_5 {
-  margin-bottom: 1.55rem;
+  margin-bottom: 1.6rem;
 }
 .mar_bot_20 {
     margin-bottom: 1.9rem;
@@ -2841,7 +2872,7 @@ textarea.buyer_name {
 }
 
 .err_con {
-    margin-top: 50%;
+    margin-top: 4rem;
     text-align: center;
     .font_size_30 {
         line-height: 0.42rem;
@@ -2858,7 +2889,7 @@ textarea.buyer_name {
 }
 
 .loading_wrap {
-    margin-top: 50%;
+    margin-top: 4rem;
     text-align: center;
     .load_txt {
         margin-top: 0.22rem;
@@ -2935,4 +2966,19 @@ textarea.buyer_name {
             height: auto;
         }
     }
+}
+.wid_100{
+  width: 100%;
+}
+.bot_ccc{
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+}
+.roate_load_img{
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: -0.03rem;
+        -webkit-animation:rotate_load 0.8 infinite linear ;
+        -moz-animation:rotate_load 0.8 infinite linear ;
+       animation:rotate_load 0.8s infinite linear ;
 }

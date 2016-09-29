@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueValidator from 'vue-validator'
 
 import App from './app.vue'
 import routers from './routers'
+import regValidator from './services/valid.svc'
 
 // Install plugins
+Vue.use(VueValidator)
 Vue.use(Router)
+
+// register validator
+regValidator(Vue)
 
 // Set up a new router
 const router = new Router({

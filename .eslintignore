@@ -8,3 +8,4 @@ node_modules/
 # src/main.js
 config/_base.config.js
 src/asset/libs/*
+src/services/valid.svc.js

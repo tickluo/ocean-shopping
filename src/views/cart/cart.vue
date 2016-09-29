@@ -20,8 +20,8 @@
       </div>
       <a @click.prevent="nextStep" class="calc_btn" :class="{calc_btn_disabled:hasSelected}">
         结算
-      </a></section>
-
+      </a>
+    </section>
     <v-footer></v-footer>
   </div>
 </template>
@@ -29,7 +29,6 @@
   import imageModule from '../../asset/images'
   import cartClass from './cart-class.vue'
   import VFooter from '../layout/v-order-footer.vue'
-  import VLoading from '../../components/v-loading.vue'
   import { CCheckbox } from '../../components'
   import { cart } from '../../store/action'
 
@@ -77,18 +76,13 @@
     components: {
       cartClass,
       CCheckbox,
-      VFooter,
-      VLoading
+      VFooter
     },
     route: {
       data({ to: { params: { key } } }){
         return this.getCartList(key)
-          .then(()=> {
-            return this.getExchangeRate(key, '')
-          })
-          .then((data)=> {
-            return this.setShoppingRate(key, data.List)
-          })
+          .then(() => this.getExchangeRate(key, ''))
+          .then((data) => this.setShoppingRate(key, data.List))
           .then(()=> {
             this.selectAll(true)
           })

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bot_ccc">
     <div v-if="!$loadingRouteData">
       <section class="merch_wrap">
         <div class="merch_con">
@@ -17,10 +17,10 @@
         </div>
       </section>
       <section class="shopping_tips">
-        <p class="font_28">{{OriginalCurrency}}:{{Currency}}=
+        <p class="font_28">{{OriginalCurrency}}&nbsp;:&nbsp;{{Currency}}=
           <span class="font-weight_6">1:{{display.rate && display.rate.Rate}}</span>
         </p>
-        <p>★{{display.rate && display.rate.RateDescription}}</p>
+        <p class="wid_100" v-if="display.rate && display.rate.RateDescription">★{{display.rate.RateDescription}}</p>
       </section>
       <shopping-cost :price="afterRatePrice"
                      :currency_sign="currency.CurrencySign"
@@ -34,7 +34,7 @@
         <div class="web_promo_code">
           <div class="web_code">网站优惠码:</div>
           <div class="code_input_box">
-            <input class="no_fill" type="text" :value="modifyShopping.Coupon" placeholder="如有优惠码请填写"/></div>
+            <input class="no_fill" type="text" v-model="modifyShopping.Coupon" placeholder="如有优惠码请填写"/></div>
         </div>
         <div class="web_promo_code pad_10">
           <div class="web_code">★当优惠码不可使用时,
@@ -55,19 +55,8 @@
         <h3 class="tit1">
           常见问题FAQ
         </h3>
-        <div class="faq_con">
-          <h4 class="tit2">
-            1.我下单后我下单后我下单后我下单后我下单后
-          </h4>
-          <p class="faq_text"> A:
-            大量的运用到了rem的单位值，深深的感觉到rem这个单位的强大，所以在这里推荐一篇淘宝的文章给大家了解下rem的一些基本用法。后续我还会出一篇关于rem更多的使用方法的文章分享给大家。 </p>
-        </div>
-        <h4 class="tit2">
-          2.个标题而已标题标题标题
-        </h4>
-        <p class="faq_text"> A: 好啊好魔性哈好啊好魔性哈好啊好魔性哈好啊 </p>
+        <faq></faq>
       </section>
-
       <footer class="shopping_footer">
         <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
           <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1" alt="">
@@ -85,7 +74,8 @@
 <script>
   import '../../asset/css/main.css'
   import { ShoppingCost, ShoppingSku } from '../../components'
-  import { cart } from '../../store/action'
+  import Faq from '../layout/faq.vue'
+  import { cart, app } from '../../store/action'
   import { getDisableSku } from '../../services/sku.svc'
   import { parseDomain, getCurrency } from '../../services/util.svc'
   import images from '../../asset/images'
@@ -98,7 +88,9 @@
       }
     },
     components: {
-      ShoppingSku, ShoppingCost
+      ShoppingSku,
+      ShoppingCost,
+      Faq
     },
     vuex: {
       getters: {
@@ -109,6 +101,7 @@
       },
       actions: {
         getShopping: cart.getShopping,
+        showAlert: app.showAlert,
         initShoppingDisplay: cart.initShoppingDisplay
       }
     },
@@ -168,6 +161,9 @@
           UnitPrice: this.display.skuSelect.ListPrice,
           Url: this.display.skuSelect.Url,
           WebSiteId: this.display.rate.WebSiteId,
+          CId: this.detail.CId || '',
+          OriginalUrl: this.detail.OriginalUrl || '',
+          RebateUrl: this.detail.RebateUrl || '',
           Weight: this.detail.Weight || 0,
           Width: this.detail.Width || 0,
           IsBuy: this.modifyShopping.IsBuy,
@@ -178,7 +174,7 @@
         return cart.addToCart(this.$route.params.key, this.genCartInfo())
           .then(res => {
             if (res.Success) {
-              //TODO:show result like 修改成功
+              this.showAlert('修改成功')
               this.$router.go({ name: 'cart' })
             }
           })

@@ -6,7 +6,7 @@
       <div class="shopping_cart_list_img"><img :src="item.Cover" alt=""></div>
       <div class="shopping_text_con cart_brand_text_con">
         <h3 class="shopping_tit">{{item.Name}} </h3>
-        <div class="font-weight_6">RMB {{afterRatePrice}}x{{item.Quantity}}</div>
+        <div class="font-weight_6">RMB {{afterRatePrice}}&nbsp;x&nbsp;{{item.Quantity}}</div>
         <p class="brand_attr"> {{item.Sku}} </p>
       </div>
     </div>
@@ -20,7 +20,7 @@
 
 <script>
   import { CCheckbox } from '../../components'
-  import { cart } from '../../store/action'
+  import { cart, app } from '../../store/action'
 
   export default{
     props: ['item', 'shop_id'],
@@ -34,7 +34,9 @@
       },
       actions: {
         selectShopping: cart.selectShopping,
-        removeShopping: cart.removeShopping
+        removeShopping: cart.removeShopping,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     computed: {
@@ -42,7 +44,7 @@
         return this.order.selected ? this.order.selected[this.shop_id].shopping.includes(this.item.Id) : true
       },
       afterRatePrice () {
-        const rate = this.rates.find(item => item.WebSiteId === this.item.WebSiteId) || 1
+        const rate = this.rates.find(item => item.WebSiteId === this.item.WebSiteId) || { Rate: 1 }
         return parseFloat(this.item.OriginalPrice * rate.Rate).toFixed(2)
       }
     },
@@ -54,7 +56,15 @@
         this.selectShopping(!this.toggle, this.shop_id, this.item.Id)
       },
       removeFromCart () {
-        this.removeShopping(this.$route.params.key, this.shop_id, this.item.Id)
+        this.showConfirm({
+          tip: '是否删除该商品',
+          button: '删除',
+          action: '商品已删除',
+          handle: () => {
+            this.setSubmitLoading(true, '正在删除商品...')
+            return this.removeShopping(this.$route.params.key, this.shop_id, this.item.Id)
+          }
+        })
       }
     }
   }

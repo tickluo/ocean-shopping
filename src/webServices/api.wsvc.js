@@ -1,5 +1,7 @@
 import 'whatwg-fetch'
 import config from '../../config/_base.config'
+import store from '../store/store'
+import { app } from '../store/action'
 
 const url = config.url
 
@@ -13,16 +15,25 @@ const checkStatus = response => {
 const parseJSON = response => response.json()
 
 export default {
-  post: (params, model) =>
-    fetch(url + params, {
+  post: (params, model, needLoading = false) => {
+    if (needLoading) app.setLoading(store, needLoading)
+    return fetch(url + params, {
       method: 'POST',
       /* credentials: 'include',*/
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: JSON.stringify(model)
-    }).then(checkStatus)
-      .then(parseJSON),
+    }).then(res => {
+      if (needLoading) {
+        app.setLoading(store, false)
+        app.setSubmitLoading(store, false, '')
+      }
+      return Promise.resolve(res)
+    })
+      .then(checkStatus)
+      .then(parseJSON)
+  },
   local: (fileName) => fetch(`../asset/json/${fileName}`)
     .then(checkStatus)
     .then(parseJSON)

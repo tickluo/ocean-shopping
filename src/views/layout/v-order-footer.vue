@@ -1,11 +1,11 @@
 <template>
   <footer class="shopping_footer pad_left_0">
     <ul class="nav_bot_list">
-      <li class="cur_nav">
+      <li :class="{'cur_nav':routeName === 'cart'}">
         <a v-link="{name:'cart'}"> <img :src="images.iconCart" alt="" class="bot_nav_icon">
           <span>购物车</span> </a>
       </li>
-      <li>
+      <li :class="{'cur_nav':routeTitle === '我的订单'}">
         <a v-link="{name:'shopOrder'}"> <img :src="images.iconOrder" alt="" class="bot_nav_icon">
           <span>我的订单</span> </a>
       </li>
@@ -24,6 +24,14 @@
     data(){
       return {
         images
+      }
+    },
+    computed: {
+      routeName () {
+        return this.$route.name
+      },
+      routeTitle () {
+        return this.$route.title
       }
     }
   }

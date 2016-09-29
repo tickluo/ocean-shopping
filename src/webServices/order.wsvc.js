@@ -1,20 +1,20 @@
 import api from '../webServices/api.wsvc'
 
 export default {
-  saveOrder: model => api.post('/order/save', model),
-  getOrderList: model => api.post('/order/list', model),
-  getOrderDetail: model => api.post('/order/detail', model),
-  cancelOrder: model => api.post('/order/cancel', model),
-  getPackageList: model => api.post('/package/list', model),
-  getPackageDetail: model => api.post('/package/detail', model),
-  getPackageByShipId: model => api.post('/package/list/company', model),
+  saveOrder: model => api.post('/order/save', model, true),
+  getOrderList: model => api.post('/order/list', model, true),
+  getOrderDetail: model => api.post('/order/detail', model, true),
+  cancelOrder: model => api.post('/order/cancel', model, true),
+  getPackageList: model => api.post('/package/list', model, true),
+  getPackageDetail: model => api.post('/package/detail', model, true),
+  getPackageByShipId: model => api.post('/package/list/company', model, true),
   getPackageCount: model => api.post('/package/count/company', model),
-  getPackageByIds: model => api.post('/package/list/ids', model),
-  getShipWay: model => api.post('/way/list', model),
-  getShipService: model => api.post('/company/service', model),
-  saveTranOrder: model => api.post('/shipping/create', model),
-  getTranOrderList: model => api.post('/shipping/list', model),
-  getTranOrderDetail: model => api.post('/shipping/detail', model),
+  getPackageByIds: model => api.post('/package/list/ids', model, true),
+  getShipWay: model => api.post('/way/list', model, true),
+  getShipService: model => api.post('/company/service', model, true),
+  saveTranOrder: model => api.post('/shipping/create', model, true),
+  getTranOrderList: model => api.post('/shipping/list', model, true),
+  getTranOrderDetail: model => api.post('/shipping/detail', model, true),
   receiptGoods: model => api.post('/shipping/confirm', model)
 }
 
