@@ -43,9 +43,9 @@
         this.confirm.handle()
           .then(res => {
             if (res.Success) {
-              return this.showAlert(`${resMsg}成功`)
+              return this.showAlert(resMsg)
             }
-            return this.showAlert(`${resMsg}失败`)
+            return this.showAlert(resMsg)
           })
       }
     }

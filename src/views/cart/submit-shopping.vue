@@ -44,7 +44,7 @@
         }
         let list = []
         this.order.selected.forEach((item, index) => {
-          if (!item.selectShop) {
+          if (!item.selectShop && item.shopping.length !== 0) {
             list.push({
               GrabAttrs: []
             })
@@ -53,7 +53,12 @@
               list[list.length - 1].GrabAttrs
                 .push(this.cartList[index].GrabAttrs.find(cartShopping => cartShopping.Id === shopping))
             })
-          } else {
+          }
+          if (item.selectShop) {
+            list.push({
+              GrabAttrs: []
+            })
+            list[list.length - 1].Title = this.cartList[index].Title
             list[list.length - 1].GrabAttrs = this.cartList[index].GrabAttrs
           }
         })

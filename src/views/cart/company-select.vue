@@ -2,7 +2,7 @@
   <div>
     <article class="post_country_company">
       <h3 class="tit4">
-        您有商品从<span class="font-weight_6">{{countryInfo.Name}}</span>发货，请选择转运公司
+        您有商品从<span class="font-weight_6">{{countryInfo &&　countryInfo.Name}}</span>发货，请选择转运公司
       </h3>
       <company-detail v-if="ShippingCompanyId" v-for="item in companyList"
                       :is-default="false"
@@ -33,7 +33,6 @@
     data(){
       return {
         companyList: [],
-        countryId: this.$route.params.countryId,
         images,
         ShippingCompanyId: 0
       }
@@ -51,7 +50,7 @@
     },
     computed: {
       countryInfo () {
-        return this.countries.find(item => item.Id === parseInt(this.countryId)
+        return this.countries.find(item => item.Id === parseInt(this.$route.params.countryId)
         )
       }
     },
@@ -63,8 +62,8 @@
         this.ShippingCompanyId = ShippingCompanyId
       },
       confirmCompany () {
-        this.setCompanyByCid(parseInt(this.countryId), {
-          CountryId: parseInt(this.countryId),
+        this.setCompanyByCid(parseInt(this.$route.params.countryId), {
+          CountryId: parseInt(this.$route.params.countryId),
           ShippingCompanyCount:this.companyList.length,
           ShippingCompany: this.companyList
             .find(item => item.ShippingWayDefault.ShippingCompanyId === this.ShippingCompanyId)
@@ -79,7 +78,7 @@
       data({ to: { params: { key, countryId } } }){
         return cart.getCompanyByCid(key, countryId)
           .then(data => {
-            this.companyList.$remove(this.companyList[0])
+            this.companyList = []
             data.List.forEach((item, index) => {
               this.companyList.$set(index, item)
             })

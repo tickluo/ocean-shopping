@@ -29,7 +29,7 @@
     },
     vuex: {
       getters: {
-        selectedShop: state => state.cart.order.selected,
+        selectedShop: state => state.cart.order.selected.filter(item => item.selectShop),
         cartList: state => state.cart.cartList,
         companySet: state => state.cart.company.companySet
       },
@@ -40,20 +40,19 @@
     computed: {
       countries () {
         return this.selectedShop ?
-          this.selectedShop.map((item, index) => this.cartList[index].GrabAttrs[0].CountryId) :
-          []
+          this.selectedShop.map(item => item.CountryId) : []
       }
     },
     components: {
       companyCountry
     },
     route: {
-      data({ to: { params: { key } } }){
-        if (this.companySet.length === 0)
+      data({ to: { params: { key } }, from: { name,title } }){
+        if (name !== 'selectCompany' && title !== '提交订单') {
           return this.getDefaultCompany(key, this.countries)
-            .then((data)=> {
-              console.log(data)
+            .then(data => {
             })
+        }
         return {}
       },
       waitForData: true

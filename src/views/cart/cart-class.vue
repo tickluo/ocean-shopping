@@ -21,7 +21,7 @@
     props: ['title', 'list', 'rule', 'shop_id'],
     data(){
       return {
-        imageModule,
+        imageModule
       }
     },
     vuex: {

@@ -1,6 +1,5 @@
 <template>
   <div class="mar_bot_13 bg_e6">
-
     <article class="shopping_list_wrap">
       <cart-class v-for="item in cartList"
                   :title="item.Title"

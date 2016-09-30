@@ -3,8 +3,8 @@ const path = require('path');
 const config = {
   env: process.env.ENV || process.env.NODE_ENV || 'development',
   url: 'http://172.20.6.229:9889',
-/*  url: 'http://120.55.189.228:10030',*/
   localhost: 'http://172.20.6.226:3000',
+  /* localhost: 'http://120.55.189.228:10030',*/
   custom_service_url: 'http://kefu.easemob.com/webim/im.html?tenantId=3305',
   tenantId: 3305,
   // ----------------------------------

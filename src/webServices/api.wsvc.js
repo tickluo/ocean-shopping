@@ -19,10 +19,16 @@ export default {
     if (needLoading) app.setLoading(store, needLoading)
     return fetch(url + params, {
       method: 'POST',
-      /* credentials: 'include',*/
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
+      /* method: 'POST',
+       /!* credentials: 'include',*!/
+       credentials: 'same-origin',
+       headers: {
+       Accept: 'application/json',
+       'Content-Type': 'application/json'
+       },*/
       body: JSON.stringify(model)
     }).then(res => {
       if (needLoading) {

@@ -8,7 +8,8 @@
                     :ship-way="shipDefaultWay"
                     :ship-company="company.ShippingCompany">
     </company-detail>
-    <div class="sel_other_company"><span class="flex_width">共有{{company.ShippingCompanyCount}}家可选</span>
+    <div class="sel_other_company" v-if="company.ShippingCompanyCount !== 1">
+      <span class="flex_width">共有{{company.ShippingCompanyCount}}家可选</span>
       <a v-link="{name:'selectCompany',params:{countryId:company.CountryId}}" class="sel_other_company_btn">选择其他转运公司 >
       </a>
     </div>

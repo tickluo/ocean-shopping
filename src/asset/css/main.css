@@ -240,11 +240,11 @@ body {
   font-weight: 600;
 }
 .merch_wrap .to_shop_detail {
-  font-size: 0.32rem;
+  font-size: 0.30rem;
   text-align: right;
   position: absolute;
   right: 0.4rem;
-  top: 0;
+  top: 1px;
   color: #0079ff;
   text-decoration: underline;
 }
@@ -254,7 +254,7 @@ body {
   right: -0.6rem;
   width: 0;
   height: 0;
-  top: 56%;
+  top: 59%;
   margin-top: -0.13rem;
   border-color: transparent transparent transparent #0079ff;
   border-width: 0.11rem 0.2rem;
