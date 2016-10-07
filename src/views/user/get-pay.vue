@@ -15,10 +15,15 @@
         payOrder: state => state.user.payOrder
       }
     },
+    computed: {
+      key () {
+        return this.$route.params.key
+      }
+    },
     ready () {
       document.getElementById('payOrderForm').innerHTML =
-        `<form id="aliShopForm" action="${config.url + payWay.AliPay}" method="post">
-            <input type="hidden" name="key" value="307480468f2bb43dd01b190a169c8084547b4403">
+        `<form id="aliShopForm" action="${payWay.AliPay}" method="post">
+            <input type="hidden" name="key" value="${this.key}">
             <input type="hidden" name="BusinessId" value="${this.payOrder.id || 0}">
             <input type="hidden" name="BusinessNo" value="${this.payOrder.orderNo || ''}">
             <input type="hidden" name="PaymentNo" value="${this.payOrder.paymentNo || ''}">

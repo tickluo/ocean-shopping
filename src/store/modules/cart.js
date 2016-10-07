@@ -22,6 +22,7 @@ const state = {
   detail: {},
   display: {},
   cartList: [],
+  removeList: [],
   order: {},
   company: {
     companySet: []
@@ -232,9 +233,8 @@ const mutations = {
     const index = state.company.companySet.findIndex(item => item.CountryId === countryId)
     state.company.companySet.splice(index, 1, company)
   },
-  [REMOVE_SHOPPING_BY_ID] (state, shopId, id) {
-    state.cartList[shopId].GrabAttrs
-      .splice(state.cartList[shopId].GrabAttrs.findIndex(item => item.Id === id), 1)
+  [REMOVE_SHOPPING_BY_ID] (state, id) {
+    state.removeList.push(id)
   },
   [SET_FAQ] (state, list) {
     state.faqList = list

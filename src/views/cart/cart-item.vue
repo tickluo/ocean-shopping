@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping_list_block">
+  <div class="shopping_list_block" v-if="show">
     <div class="shopping_real_con cart_real_con">
       <c-checkbox :selected="toggle" @click="changeToggle">
       </c-checkbox>
@@ -30,7 +30,8 @@
     vuex: {
       getters: {
         order: state => state.cart.order,
-        rates: state => state.cart.rates
+        rates: state => state.cart.rates,
+        removeList: state => state.cart.removeList
       },
       actions: {
         selectShopping: cart.selectShopping,
@@ -42,6 +43,9 @@
     computed: {
       toggle () {
         return this.order.selected ? this.order.selected[this.shop_id].shopping.includes(this.item.Id) : true
+      },
+      show () {
+        return !this.removeList.includes(this.item.Id)
       },
       afterRatePrice () {
         const rate = this.rates.find(item => item.WebSiteId === this.item.WebSiteId) || { Rate: 1 }
@@ -62,7 +66,13 @@
           action: '商品已删除',
           handle: () => {
             this.setSubmitLoading(true, '正在删除商品...')
-            return this.removeShopping(this.$route.params.key, this.shop_id, this.item.Id)
+            return this.removeShopping(this.$route.params.key, this.item.Id)
+              .then(res => {
+                if (res.Success && this.toggle) {
+                  this.selectShopping(false, this.shop_id, this.item.Id)
+                }
+                return Promise.resolve(res)
+              })
           }
         })
       }

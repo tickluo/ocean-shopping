@@ -1,5 +1,5 @@
 <template>
-  <section class="shopping_con_box" v-if="list.length !== 0">
+  <section class="shopping_con_box" v-if="list.length !== removeList.length">
     <h3 class="shopping_cart_tit">
       <c-checkbox :selected="toggle" @click="changeToggle">
       </c-checkbox>
@@ -26,7 +26,8 @@
     },
     vuex: {
       getters: {
-        order: state => state.cart.order
+        order: state => state.cart.order,
+        removeList: state => state.cart.removeList
       },
       actions: {
         selectShop: cart.selectShop
