@@ -4,7 +4,7 @@
       <article class="about_address_wrap">
         <section class="change_address">
           <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
-            <a href="#" class="wid_btn">
+            <a class="wid_btn">
               <img :src="images.iconLocation" alt="" class="icon_location">
               <span class="dis_inline_block">填写收货地址(必填)</span></a>
           </div>
@@ -135,6 +135,7 @@
   import { orders, user, app } from '../../store/action'
   import displayShopping from '../layout/display-shopping.vue'
   import { WayType, PayType } from '../../local/config.enum'
+  import { rangeAlgo, mathAlgo } from '../../services/ship.svc'
 
   const getInitData = () => ({
     images,
@@ -148,14 +149,6 @@
     doBox: false,
     note: ''
   })
-
-  const rangeAlgo = (weight, range, rate) =>
-    (range.find(item => item.BeginRange <= weight && item.EndRange >= weight).Price * rate ).toFixed(2)
-
-  const mathAlgo = (weight, fw, fwp, cw, cwp) => {
-    if (weight < fw) return fwp
-    return fwp + Math.ceil((weight - fw) / cw) * cwp
-  }
 
   export default{
     data(){
@@ -208,12 +201,12 @@
       },
       finalPrice () {
         let services = this.shipService
-          .filter(item => this.selectShipService.includes(item.Id))
+          .filter(item => this.selectShipService.includes(item.Id)).map(item => item.Fee)
         let servicePrice = 0
         if (services.length === 1)
-          servicePrice = services[0].Fee
+          servicePrice = services[0]
         if (services.length > 1)
-          servicePrice = services.reduce((pre, cur) => pre.Fee + cur.Fee)
+          servicePrice = services.reduce((pre, cur) => pre + cur)
         return parseFloat(
           this.genMath(this.selectShipWay) * 1 +
           this.boxPrice * (this.doBox ? 1 : 0) +
@@ -284,7 +277,8 @@
         this.showConfirm({
           tip: '是否支付运单？',
           button: '支付',
-          action: '运单已生成',
+          success: '运单已生成',
+          fail: '运单生成失败',
           handle: () => {
             this.setSubmitLoading(true, '正在生成运单...')
             return orders.saveTranOrder(submitOrder)

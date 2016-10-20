@@ -1,6 +1,7 @@
 <template>
   <div>
-    <article class="order_wrap" v-for="pac in packageList">
+    <article class="order_wrap" v-for="pac in packageList"
+             v-link="{name:'storeOrderDetail',params:{id:pac.Id}}">
       <h4 class="order_number">
         <div class="real_number">
           包裹: <span class="font-weight_6">{{pac.PackageNo}}</span>
@@ -14,12 +15,12 @@
                         :quantity="shopping.Quantity"
                         :sku="shopping.Sku">
       </display-shopping>
-      <div class="total_merch_num" v-link="{name:'storeOrderDetail',params:{id:pac.Id}}">
-        <a href="#">共 <strong>{{pac.GrabAttributeCount}}</strong> 个商品，查看全部</a>
+      <div class="total_merch_num">
+        <a>共 <strong>{{pac.GrabAttributeCount}}</strong> 个商品，查看全部</a>
       </div>
       <div class="pay_money_wrap"
            v-if="pac.ReplenishmentStatus !== 2"
-           @click="submit(pac.Id,pac.ShippingCompanyId)">
+           @click.stop="submit(pac.Id,pac.ShippingCompanyId)">
         <div class="font_28">已入库,可提交转运</div>
         <a class="font_size_30">提交转运</a>
       </div>
@@ -27,7 +28,7 @@
         <div class="font_28">{{pac.Replenishment.Reason}}
           <span class="font-weight_6">+RMB {{pac.Replenishment.Money}}</span>
         </div>
-        <a class="font_size_30" href="#">去付款</a>
+        <a class="font_size_30">去付款</a>
       </div>
     </article>
   </div>

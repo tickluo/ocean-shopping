@@ -19,6 +19,7 @@
 <script>
   import images from '../../asset/images'
   import companyCountry from './company-country.vue'
+  import { numberUnique } from '../../services/util.svc'
   import { cart } from '../../store/action'
 
   export default{
@@ -29,7 +30,7 @@
     },
     vuex: {
       getters: {
-        selectedShop: state => state.cart.order.selected.filter(item => item.selectShop),
+        selectedShop: state => state.cart.order.selected.filter(item => item.shopping.length > 0),
         cartList: state => state.cart.cartList,
         companySet: state => state.cart.company.companySet
       },
@@ -40,14 +41,14 @@
     computed: {
       countries () {
         return this.selectedShop ?
-          this.selectedShop.map(item => item.CountryId) : []
+          numberUnique(this.selectedShop.map(item => item.CountryId)) : []
       }
     },
     components: {
       companyCountry
     },
     route: {
-      data({ to: { params: { key } }, from: { name,title } }){
+      data({ to: { params: { key } }, from: { name, title } }){
         if (name !== 'selectCompany' && title !== '提交订单') {
           return this.getDefaultCompany(key, this.countries)
             .then(data => {

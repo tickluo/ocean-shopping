@@ -4,7 +4,7 @@
       <article class="about_address_wrap">
         <section class="change_address">
           <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
-            <a href="#" class="wid_btn">
+            <a class="wid_btn">
               <img :src="images.iconLocation" alt="" class="icon_location">
               <span class="dis_inline_block">填写收货地址(必填)</span></a>
           </div>
@@ -20,7 +20,9 @@
         <section class="change_address pad_bot_30">
           <div class="user_address_name">
             <div class="font_size_30">订单金额：<span class="font-weight_6">RMB {{totalPrice}}</span></div>
-            <p><span>★</span>不包含国际运费，国际运费将在您提交转运时支付 </p> <a class="to_shop_detail" href="#">国际运费说明</a></div>
+            <p><span>★</span>不包含国际运费，国际运费将在您提交转运时支付 </p>
+            <a v-link="{name:'freight'}" class="to_shop_detail">国际运费说明</a>
+          </div>
         </section>
         <section class="change_address pad_bot_30">
           <div class="user_address_name">
@@ -41,7 +43,7 @@
             </validator>
           </div>
         </section>
-        <a href="#" class="sel_other_company"> <span href="#" class="flex_width">
+        <a class="sel_other_company"> <span class="flex_width">
         <img class="icon_page" :src="images.iconPage" alt="">
         6City全球购服务免责声明，下单即为同意</span>
           <img :src="images.iconR" alt="" class="icon_right">
@@ -147,9 +149,10 @@
         this.showConfirm({
           tip: '是否支付订单？',
           button: '支付',
-          action: '订单已生成',
+          success: '订单已生成',
+          fail: '订单生成失败',
           handle: () => {
-            this.setSubmitLoading(true, '正在生产订单...')
+            this.setSubmitLoading(true, '正在生成订单...')
             return orders.saveOrder(postOrder)
               .then(res => {
                 if (res.Success) {

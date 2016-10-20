@@ -12,9 +12,12 @@ import {
   SET_SHIP_BOX,
   SET_TRAN_ORDER_LIST,
   SET_TRAN_ORDER_DETAIL,
-  CANCEL_ORDER
+  CANCEL_ORDER,
+  RECEIPT_GOODS,
+  SET_EXPRESS_DETAIL,
+  SET_EXPRESS_SITE
 } from '../mutation-types'
-import { PackageStatus, OrderStatus, ProductStatus } from '../../local/state.enum'
+import { PackageStatus, OrderStatus, ProductStatus, ShipStatus } from '../../local/state.enum'
 
 const state = {
   orderList: [],
@@ -30,7 +33,9 @@ const state = {
     ShippingWayId: 0,
     ExtraServiceIds: []
   },
-  box: {}
+  box: {},
+  expressInfo: [],
+  expressSite: {}
 }
 
 const mutations = {
@@ -88,6 +93,23 @@ const mutations = {
   },
   [SET_TRAN_ORDER_DETAIL] (state, order) {
     state.tranOrderDetail = order
+  },
+  [RECEIPT_GOODS] (state, id) {
+    const removedOrder = Object.assign({}, state.tranOrderList.find(item => item.Id === id))
+    removedOrder.ShippingStatus = ShipStatus.Complete
+    removedOrder.ShippingStatuName = '已收货'
+    removedOrder.GrabAttributes.forEach(item => {
+      item.ProductStautName = '已收货'
+      item.ProductStauts = ProductStatus.ProductComplete
+    })
+    state.tranOrderList.splice(state.tranOrderList
+      .findIndex(item => item.Id === id), 1, removedOrder)
+  },
+  [SET_EXPRESS_DETAIL] (state, detail) {
+    state.expressInfo = detail
+  },
+  [SET_EXPRESS_SITE] (state, site) {
+    state.expressSite = site
   }
 }
 

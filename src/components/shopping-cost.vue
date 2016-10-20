@@ -10,9 +10,11 @@
     </section>
     <section class="merch_attr_wrap opear_num">
       <div class="mrch_attr_tit">商品数量:</div>
-      <div class="merch_attr_detail"><span class="button_reduce" @click="reduceCount"></span> <span class="real_num">
-                <input type="text" :value="defaultCount"/>
-            </span> <span class="button_add" @click="addCount"></span></div>
+      <div class="merch_attr_detail">
+        <span class="button_reduce" @click="reduceCount"></span>
+        <span class="real_num"><input type="text" :value="defaultCount"/></span>
+        <span class="button_add" @click="addCount"></span>
+      </div>
     </section>
   </div>
 </template>
@@ -21,7 +23,7 @@
   import { cart } from '../store/action'
   export default{
     props: ['price', 'currency_sign', 'freight', 'count'],
-    data(){
+    data () {
       return {
         defaultCount: this.count || 1
       }

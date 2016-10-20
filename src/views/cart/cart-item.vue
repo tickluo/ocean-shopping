@@ -11,7 +11,7 @@
       </div>
     </div>
     <ul class="cart_opera_list">
-      <li><a v-link="{name:'detailModify',params:{Id:item.Id,shopId:shop_id}}">修改代购单</a></li>
+      <li><a v-link="{name:'detail',params:{Id:item.Id,shopId:shop_id}}">修改代购单</a></li>
       <li><a :href="item.Url">直达官网</a></li>
       <li><a @click.prevent="removeFromCart">删除商品</a></li>
     </ul>
@@ -21,17 +21,18 @@
 <script>
   import { CCheckbox } from '../../components'
   import { cart, app } from '../../store/action'
+  import { toFloatFixed } from '../../services/util.svc'
 
   export default{
-    props: ['item', 'shop_id'],
+    props: ['item', 'shop_id', 'rate'],
     data () {
       return {}
     },
     vuex: {
       getters: {
         order: state => state.cart.order,
-        rates: state => state.cart.rates,
-        removeList: state => state.cart.removeList
+        removeList: state => state.cart.removeList,
+        currency: state => state.app.Currency
       },
       actions: {
         selectShopping: cart.selectShopping,
@@ -47,9 +48,17 @@
       show () {
         return !this.removeList.includes(this.item.Id)
       },
+      serviceRate (){
+        return this.currency.ServiceCoefficient || 0
+      },
       afterRatePrice () {
-        const rate = this.rates.find(item => item.WebSiteId === this.item.WebSiteId) || { Rate: 1 }
-        return parseFloat(this.item.OriginalPrice * rate.Rate).toFixed(2)
+        return toFloatFixed(
+          toFloatFixed(
+            parseFloat(this.item.OriginalPrice * this.rate),
+            2
+          ) * (1 + this.serviceRate),
+          2
+        )
       }
     },
     components: {
@@ -57,19 +66,20 @@
     },
     methods: {
       changeToggle () {
-        this.selectShopping(!this.toggle, this.shop_id, this.item.Id)
+        this.selectShopping(!this.toggle, this.shop_id, this.item.Id, this.serviceRate)
       },
       removeFromCart () {
         this.showConfirm({
           tip: '是否删除该商品',
           button: '删除',
-          action: '商品已删除',
+          success: '商品已删除',
+          fail: '商品删除失败',
           handle: () => {
             this.setSubmitLoading(true, '正在删除商品...')
             return this.removeShopping(this.$route.params.key, this.item.Id)
               .then(res => {
                 if (res.Success && this.toggle) {
-                  this.selectShopping(false, this.shop_id, this.item.Id)
+                  this.selectShopping(false, this.shop_id, this.item.Id, this.serviceRate)
                 }
                 return Promise.resolve(res)
               })

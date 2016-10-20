@@ -119,6 +119,7 @@ textarea {
 }
 
 .dis_flex {
+    display: -webkit-box;
     display: -webkit-flex;
     display: -moz-flex;
     display: -ms-flex;
@@ -169,6 +170,7 @@ textarea {
     box-flex: 1;
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
+    -ms-flex: 1;
 }
 
 .pop_wrap(@w, @h, @bg, @bor) {
@@ -237,8 +239,7 @@ html,
 body {
     width: 100%;
     box-sizing: border-box;
-    //   height: 100%;
-
+    //       min-height: 100%;
 }
 
 #app {
@@ -250,13 +251,13 @@ html {
     font-family: PingFangSC-Light, "Microsoft Yahei", "微软雅黑", sans-serif;
     -webkit-tap-highlight-color: transparent;
     background: #e6e6e6;
+    //    height: 100%;
 }
 
 body {
     font-size: 0;
     padding-top: 1rem;
-        padding-bottom: 1rem;
-
+    padding-bottom: 1rem;
     color: @color_333;
 }
 
@@ -582,7 +583,6 @@ body {
         top: 0.2rem;
         left: 0.2rem;
     }
-
     .code_input_box {
         .pos(a);
         top: 0.2rem;
@@ -592,9 +592,7 @@ body {
         .no_fill {
             width: 100%;
         }
-
     }
-
 }
 
 .no_fill {
@@ -623,15 +621,11 @@ body {
     color: #aaa;
 }
 
-
-
 .do_order_used {
-  background: #444;
-  color: #fff;
-  border: 1px solid #222;
+    background: #444;
+    color: #fff;
+    border: 1px solid #222;
 }
-
-
 
 .do_order_fill {
     background: #444;
@@ -692,7 +686,7 @@ body {
 
 .faq {
     color: @color_333;
-    padding:0 0.2rem 0.1rem 0.2rem;
+    padding: 0 0.2rem 0.1rem 0.2rem;
     color: @color_333;
     background: #fff;
 }
@@ -728,6 +722,7 @@ body {
 
 .align_items_cen {
     align-items: center;
+    -webkit-box-align: center;
 }
 
 .shopping_footer {
@@ -882,6 +877,7 @@ body {
         height: 0.7rem;
         width: auto;
         margin-right: 0.1rem;
+        vertical-align: middle;
     }
 }
 
@@ -980,6 +976,8 @@ body {
 
 .shop_brand_name {
     font-size: 0.28rem;
+    display: block;
+    vertical-align: middle;
 }
 
 .cart_opera_list {
@@ -1148,7 +1146,8 @@ body {
         overflow: hidden;
         li {
             float: left;
-            width: 1.52rem;
+            //width: 1.52rem;
+            width: 22%;
             height: 1rem;
             padding-top: 0.15rem;
             box-sizing: border-box;
@@ -1172,7 +1171,7 @@ body {
         }
         li:nth-child(2n) {
             .pos(r);
-            width: 0.34rem;
+            width: 4%;
             overflow: hidden;
             &:after {
                 content: "";
@@ -1206,7 +1205,7 @@ body {
 .budget_shipment {
     padding: 0.2rem;
     box-sizing: border-box;
-    .border_bot_c;
+    //.border_bot_c;
 }
 
 .country_list {
@@ -1257,7 +1256,6 @@ body {
     background: @bg_f8;
     border-radius: 5px;
     box-sizing: border-box;
-    //    flex: 1;
     width: 2.4rem;
 }
 
@@ -1433,6 +1431,7 @@ body {
     }
     .post_special {
         font-size: 0.26rem;
+        line-height: 0.4rem;
         dl {
             margin-bottom: 0.3rem;
             line-height: 0.42rem;
@@ -1446,6 +1445,9 @@ body {
             display: inline-block;
             line-height: 0.37rem;
         }
+    }
+    p {
+        min-height: 16px;
     }
 }
 
@@ -1481,6 +1483,10 @@ body {
 
 .flex_width {
     flex: 1;
+    box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
 }
 
 .sel_other_company {
@@ -1571,15 +1577,14 @@ body {
 }
 
 .err_input {
-  border: 1px solid @color_pink_ff62 !important;
-  &::-webkit-input-placeholder {
-    color: @color_pink_f3 !important;
-  }
+    border: 1px solid @color_pink_ff62 !important;
+    &::-webkit-input-placeholder {
+        color: @color_pink_f3 !important;
+    }
 }
 
-
 .change_address {
-  background:#fff;
+    background: #fff;
     border-top: 1px solid #ccc;
     padding: 0.2rem;
     box-sizing: border-box;
@@ -1729,7 +1734,7 @@ body {
     .alipay {
         font-size: 0.3rem;
         //    line-height: 0.8rem;
-        flex: 1;
+        .flex_width;
     }
 }
 
@@ -1758,7 +1763,7 @@ body {
 
 .way_for_transport_item {
     font-size: 0.3rem;
-    flex: 1;
+    .flex_width;
     line-height: 0.42rem;
 }
 
@@ -1803,7 +1808,7 @@ body {
     color: #fff;
     background: rgba(0, 0, 0, 0.5);
     margin-left: -2.62rem;
-    top:50%;
+    top: 50%;
     margin-top: -2.2rem;
     .real_pop_address {
         padding-top: 0.4rem;
@@ -2132,7 +2137,7 @@ textarea.buyer_name {
 
 .user_address_con {
     font-size: 0.28rem;
-    flex: 1;
+    .flex_width;
     h4 .dis_inline_block {
         line-height: 0.42rem;
         margin-right: 0.15rem;
@@ -2215,7 +2220,7 @@ textarea.buyer_name {
     line-height: 0.4rem;
     .real_number {
         font-size: 0.3rem;
-        flex: 1;
+        .flex_width;
         text-overflow: ellipsis;
         //        word-wrap: normal;
         overflow: hidden;
@@ -2267,12 +2272,12 @@ textarea.buyer_name {
             font-size: 0.26rem;
         }
     }
-  .pay_money_wrap{
-    .font_28{
-      .dis_flex;
-      justify-content: flex-end;
+    .pay_money_wrap {
+        .font_28 {
+            .dis_flex;
+            justify-content: flex-end;
+        }
     }
-  }
 }
 
 .order_list {
@@ -2285,6 +2290,7 @@ textarea.buyer_name {
 }
 
 .merch_main_img {
+//    .flex_width;
     width: 1.7rem;
     height: 1.7rem;
     .border_ccc;
@@ -2304,7 +2310,7 @@ textarea.buyer_name {
 }
 
 .right_merch_text {
-    flex: 1;
+    .flex_width;
     .font-weight_6 {
         margin: 0.08rem 0;
         font-size: 0.30rem;
@@ -2327,7 +2333,7 @@ textarea.buyer_name {
     background: #f6f6f6;
     .dis_flex;
     .order_static {
-        flex: 1;
+        .flex_width;
         .font_size_25 {
             display: inline-block;
             vertical-align: middle;
@@ -2390,6 +2396,7 @@ textarea.buyer_name {
 .shopping_list_wrap {
     .shopping_con_box {
         border-bottom: none;
+        margin-bottom: 0.14rem;
     }
     .shopping_con_box:first-child .shopping_cart_tit {
         border-top: 1px solid #ccc;
@@ -2559,7 +2566,7 @@ textarea.buyer_name {
         color: @color_pink_f3;
         font-size: 0.26rem;
         padding: 0.06rem 0.2rem;
-        flex: 1;
+        .flex_width;
         word-break: keep-all;
     }
     .coupon_left {
@@ -2604,7 +2611,7 @@ textarea.buyer_name {
         padding: 0.2rem;
     }
     .summary_left {
-        flex: 1;
+        .flex_width;
         line-height: 0.4rem;
     }
 }
@@ -2612,16 +2619,19 @@ textarea.buyer_name {
 .mar_bot_9 {
     margin-bottom: 0.1rem;
 }
+
 .mar_bot_10 {
-  margin-bottom: 1.07rem;
+    margin-bottom: 1.07rem;
 }
 
 .mar_bot_15 {
     margin-bottom: 1.5rem;
 }
+
 .mar_bot_15_5 {
-  margin-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
 }
+
 .mar_bot_20 {
     margin-bottom: 1.9rem;
 }
@@ -2660,7 +2670,7 @@ textarea.buyer_name {
     align-items: center;
     label {
         font-size: 0.30rem;
-        flex: 1;
+        .flex_width;
     }
     .text_align_r {
         font-size: 0.26rem;
@@ -2692,7 +2702,7 @@ textarea.buyer_name {
         margin-bottom: 0.1rem;
     }
     .flex_width {
-        flex: 1;
+        .flex_width;
     }
     .triangle_left {
         line-height: 0.4rem;
@@ -2799,7 +2809,7 @@ textarea.buyer_name {
         border-top: 1px solid #ddd;
     }
     .track_list_con {
-        flex: 1;
+        .flex_width;
     }
     time {
         font-size: 0.24rem;
@@ -2849,7 +2859,7 @@ textarea.buyer_name {
     background: #f3f3f3;
     align-items: center;
     .font_27 {
-        flex: 1;
+        .flex_width;
     }
     .text_align_r {
         width: 0.1rem;
@@ -2897,88 +2907,268 @@ textarea.buyer_name {
         line-height: 0.42rem;
     }
     .roate_icon_load {
-//        text-align: center;
-//        margin: 0 auto;
-
-
-//        transition: all 0.3s ease;
-//        transform: rotate(180deg);
-
+        //        text-align: center;
+        //        margin: 0 auto;
+        //        transition: all 0.3s ease;
+        //        transform: rotate(180deg);
         .load_img {
             width: 1.15rem;
             height: 1.15rem;
-              -webkit-animation:rotate_load 0.8 infinite linear ;
-        -moz-animation:rotate_load 0.8 infinite linear ;
-       animation:rotate_load 0.8s infinite linear ;
-
+            -webkit-animation: rotate_load 0.8 infinite linear;
+            -moz-animation: rotate_load 0.8 infinite linear;
+            animation: rotate_load 0.8s infinite linear;
         }
     }
 }
 
 @-webkit-keyframes rotate_load {
-    0%{
-
+    0% {
         -webkit-transform: rotate(0deg);
-
     }
-    50%{
+    50% {
         -webkit-transform: rotate(180deg);
     }
-    100%{
+    100% {
         -webkit-transform: rotate(360deg);
     }
-
 }
-.card_wrap{
+
+.card_wrap {
     padding: 0.2rem 0.45rem;
     background: #fff;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
-.card_tips{
+
+.card_tips {
     color: @color_pink_f3;
     line-height: 0.4rem;
     font-size: 0.28rem;
 }
-.the_card_block{
-    .front_side_card{
+
+.the_card_block {
+    .front_side_card {
         font-size: 0.3rem;
         line-height: 0.42rem;
         font-weight: normal;
         margin-top: 0.2rem;
         margin-bottom: 0.1rem;
         .pos(r);
-        &:after{
-
+        &:after {
             content: "";
             .pos(a);
-            left:1.6rem;
-            top:30%;
+            left: 1.6rem;
+            top: 30%;
             width: 0;
             height: 0;
-            .triangle(down, 0.2rem 0.12rem, #333)
+            .triangle(down,
+            0.2rem 0.12rem,
+            #333)
         }
     }
-    .card_img_box{
-        border:1px solid #999;
+    .card_img_box {
+        border: 1px solid #999;
         padding: 0.1rem;
         box-sizing: border-box;
-        img{
+        max-width: 720px;
+        img {
             width: 100%;
             height: auto;
         }
     }
 }
-.wid_100{
-  width: 100%;
+
+.wid_100 {
+    width: 100%;
 }
-.bot_ccc{
-  border-top:1px solid #ccc;
-  border-bottom:1px solid #ccc;
+
+.bot_ccc {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
-.roate_load_img{
+
+.roate_load_img {
     width: 0.8rem;
     height: 0.8rem;
     margin-top: -0.03rem;
-        -webkit-animation:rotate_load 0.8 infinite linear ;
-        -moz-animation:rotate_load 0.8 infinite linear ;
-       animation:rotate_load 0.8s infinite linear ;
+    -webkit-animation: rotate_load 0.8 infinite linear;
+    -moz-animation: rotate_load 0.8 infinite linear;
+    animation: rotate_load 0.8s infinite linear;
+}
+
+.bg_fff {
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+//UserLogin css
+.user_top_nav {
+    background: #fbfbfb;
+    li {
+        width: 50%;
+        a {
+            line-height: 0.9rem;
+            font-size: 0.3rem;
+        }
+    }
+}
+
+.pos_height_190 {
+    background: #fff;
+    .pos(a);
+    top: 1.9rem;
+    left: 0;
+    height: 80%;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+.pos_height_100 {
+    background: #fff;
+    .pos(a);
+    top: 1.0rem;
+    left: 0;
+    height: 85%;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+
+.user_login_wrap {
+    background: #fff;
+    padding: 0.5rem;
+    .login_input {
+        margin-bottom: 0.3rem;
+        .dis_flex;
+        .fill_veri_code {
+            .flex_width;
+        }
+        .veri_img {
+            width: 2.1rem;
+            height: 0.7rem;
+            margin-left: 0.2rem;
+        }
+        .send_again {
+            width: 3.4rem;
+            margin-left: 0.2rem;
+            background: @color_pink_ff62;
+            font-size: 0.3rem;
+            color: #fff;
+            text-align: center;
+            //            line-height: 0.7rem;
+            padding: 0.14rem 0rem;
+            border-radius: 5px;
+        }
+    }
+    .forget_pas_link {
+        display: block;
+        text-align: right;
+        font-size: 0.3rem;
+        text-decoration: underline;
+        color: @color_light_blue;
+    }
+    .login_btn {
+        background: rgba(51, 51, 51, 1);
+        color: #fff;
+        margin-top: 0.4rem;
+        font-size: 0.31rem;
+    }
+    .register_btn {
+        margin-top: 0.5rem;
+    }
+    .disabled_btn {
+        background: rgba(51, 51, 51, 0.6);
+    }
+}
+
+//roate loade more
+.roate_fade_wrap {
+    text-align: center;
+}
+
+.roate_fade {
+    //display:block;
+    margin: 0 auto;
+    width: 0.7rem;
+    height: 0.7rem;
+    -webkit-animation: rotate_load 0.8 infinite linear;
+    -moz-animation: rotate_load 0.8 infinite linear;
+    animation: rotate_load 0.8s infinite linear;
+}
+
+.example-title {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 20px;
+    background-color: #dddddd;
+}
+
+.example-list {
+    padding: 4px 4px 0;
+    list-style: none;
+}
+
+.example-listitem {
+    height: 50px;
+    line-height: 50px;
+    border: solid 1px #999;
+    border-radius: 2px;
+    margin-bottom: 4px;
+    text-align: center;
+    font-size: 0.26rem;
+}
+
+.example-listitem:last-child {
+    margin-bottom: 0;
+}
+
+.example-wrapper {
+    //height: 300px;
+    overflow: scroll;
+}
+
+.mint-loadmore-top span {
+    display: inline-block;
+    transition: .2s linear;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+.mint-loadmore-top,
+.mint-loadmore-bottom {
+    font-size: 0.26rem;
+}
+
+@component-namespace mint {
+    @component loadmore {
+        overflow: hidden;
+        @descendent content {
+            @when dropped {
+                transition: .2s;
+            }
+        }
+        @descendent top,
+        bottom {
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+        }
+        @descendent top {
+            margin-top: -50px;
+        }
+        @descendent bottom {
+            margin-bottom: -50px;
+        }
+        @descendent spinner {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        @descendent text {
+            vertical-align: middle;
+        }
+    }
 }

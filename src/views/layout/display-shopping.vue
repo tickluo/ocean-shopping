@@ -25,7 +25,9 @@
         <span class="icon_rect"></span>
         <span class="font_size_25">{{state_name}}</span>
       </div>
-      <a href="#" class="to_scan_shipment font_size_25" v-if="express">
+      <a class="to_scan_shipment font_size_25"
+         v-if="express"
+         @click.stop="expressCheck">
         查看物流
       </a>
     </div>
@@ -35,9 +37,9 @@
 <script>
   import noPic from '../../asset/images/noimg.png'
   import { OrderStatus } from '../../local/state.enum'
+  import { orders } from '../../store/action'
 
   export default{
-    /* props: ['cover', 'name', 'price', 'quantity', 'sku'],*/
     props: {
       cover: {
         default: noPic
@@ -71,11 +73,19 @@
       },
       express: {
         default: ''
+      },
+      express_name: {
+        default: ''
       }
     },
     data () {
       return {
         OrderStatus
+      }
+    },
+    vuex: {
+      actions: {
+        setExpressSite: orders.setExpressSite
       }
     },
     computed: {
@@ -87,6 +97,15 @@
       },
       hasState () {
         return this.state !== ''
+      }
+    },
+    methods: {
+      expressCheck () {
+        this.setExpressSite({
+          name: this.express_name,
+          number: this.express
+        })
+        return this.$router.go({ name: 'expressSite' })
       }
     }
   }

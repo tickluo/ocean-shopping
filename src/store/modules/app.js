@@ -62,12 +62,13 @@ const mutations = {
       state.alert.show = false
       state.alert.alertMsg = ''
       if (lazyFunc) lazyFunc()
-    }, 2000)
+    }, 1500)
   },
   [SHOW_CONFIRM] (state, data) {
     state.confirm.show = true
     state.confirm.checkMsg = data.tip
-    state.confirm.actionMsg = data.action
+    state.confirm.successMsg = data.success
+    state.confirm.failMsg = data.fail
     state.confirm.handleMsg = data.button
     state.confirm.handle = data.handle
   },

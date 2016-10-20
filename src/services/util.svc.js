@@ -8,9 +8,33 @@ export const getLocation = href => {
   return l
 }
 
+export const getLocalURL = () => {
+  const location = getLocation(window.location.href)
+  return `${location.protocol}//${location.hostname}${location.port ? `:${location.port}` : ''}`
+}
+
+export const toFloatFixed = (num, s) => {
+  const times = Math.pow(10, s)
+  let des = (num * times) + 0.5
+  des = parseInt(des, 10) / times
+  return `${des}`
+}
+
 export const parseDomain = (str) => {
   const hostname = getLocation(str).hostname
   return psl.parse(hostname).domain
+}
+
+export const numberUnique = arr => {
+  const u = {}
+  const a = []
+  for (let i = 0, l = arr.length; i < l; ++i) {
+    if (!{}.hasOwnProperty.call(u, arr[i])) {
+      a.push(arr[i])
+      u[arr[i]] = 1
+    }
+  }
+  return a
 }
 
 export const getCurrency = abbr => {

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import './asset/css/main.css'
   import store from './store/store'
   import { VHeader, CAlert, CConfirm } from './components'
   import { app } from './store/action'

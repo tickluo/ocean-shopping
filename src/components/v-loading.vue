@@ -1,12 +1,14 @@
 <template>
-  <div class="top_leave_wrap" v-if="loading">
-    <div class="loading_wrap" v-if="!submitLoading.loading">
-      <div class="roate_icon_load">
-        <img class="load_img" :src="images.loadingImage" alt="">
+  <div v-if="loading">
+    <div class="top_leave_wrap" v-if="!submitLoading.loading">
+      <div class="loading_wrap">
+        <div class="roate_icon_load">
+          <img class="load_img" :src="images.loadingImage" alt="">
+        </div>
+        <p class="load_txt">
+          加载中，请稍后...
+        </p>
       </div>
-      <p class="load_txt">
-        加载中，请稍后...
-      </p>
     </div>
     <section class="pop_wrap_phone" v-if="submitLoading.loading">
       <div class="real_pop">
@@ -17,6 +19,7 @@
       </div>
     </section>
   </div>
+
 </template>
 
 <script>
@@ -30,7 +33,7 @@
     },
     vuex: {
       getters: {
-        loading: state=>state.app.loading,
+        loading: state => state.app.loading,
         submitLoading: state => state.app.submitLoading
       }
     }

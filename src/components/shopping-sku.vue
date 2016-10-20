@@ -1,5 +1,5 @@
 <template>
-  <section class="select_attr_wrap">
+  <section class="select_attr_wrap" v-if="skuSelect">
     <h4 class="select_attr_wrap_tit">
       {{title}} <span class="font-weight_6">{{CurrrentDisplayOption}}</span>
     </h4>
@@ -18,11 +18,9 @@
   import { getDisableSku } from '../services/sku.svc'
 
   export default{
-    props: ['title', 'list', 'id'],
+    props: ['title', 'list', 'id', 'sku', 'skuclasses'],
     vuex: {
       getters: {
-        sku: state => state.cart.detail.Skus,
-        SkuClasses: state => state.cart.detail.SkuClasses,
         skuSelect: state => state.cart.display.skuSelect,
         disableSku: state => state.cart.display.disableSku
       },
@@ -58,7 +56,7 @@
         /**
          * get disabled SKU options
          */
-        let disableSkuArray = getDisableSku(context.SkuClasses, currentSku, context.Skus)
+        let disableSkuArray = getDisableSku(context.skuclasses, currentSku, context.Skus)
         let pic = context.SelectOption(PropId).Picture
 
         context.updateShoppingDisplay({

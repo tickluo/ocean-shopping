@@ -15,6 +15,6 @@ export default {
   saveTranOrder: model => api.post('/shipping/create', model, true),
   getTranOrderList: model => api.post('/shipping/list', model, true),
   getTranOrderDetail: model => api.post('/shipping/detail', model, true),
-  receiptGoods: model => api.post('/shipping/confirm', model)
+  receiptGoods: model => api.post('/shipping/confirm', model, true),
+  getExpressDetail: model => api.post('/catelog/express/details', model)
 }
-

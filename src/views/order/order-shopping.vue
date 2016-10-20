@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="margin_top_08">
-      <article class="order_wrap" v-for="order in orderList">
-        <h4 class="order_number" v-link="{name:'shopOrderDetail',params:{id:order.Id}}">
+      <article class="order_wrap" v-for="order in orderList"
+               v-link="{name:'shopOrderDetail',params:{id:order.Id}}">
+        <h4 class="order_number">
           <div class="real_number">
             订单:<span class="font-weight_6">{{order.OrderNo}}</span>
           </div>
@@ -15,16 +16,17 @@
                           :quantity="shopping.Quantity"
                           :sku="shopping.Sku"
                           :state="shopping.ProductStauts"
-                          :state_name="shopping.ProductStautName"
-                          :express="shopping.ExpressNumber">
+                          :state_name="getStateText(shopping.ProductStautName,order.OrderCancelReasonName)"
+                          :express="shopping.ExpressNumber"
+                          :express_name="shopping.ExpressCompanyName">
         </display-shopping>
         <div class="pay_money_wrap"
              v-if="order.OrderStatus === OrderStatus.OrderPending || order.Replenishment">
           <div class="font_28" v-if="order.Replenishment">{{order.Replenishment.Reason}}
             <span class="font-weight_6">+RMB {{order.Replenishment.Money}}</span>
           </div>
-          <a class="font_size_30 cancel_order_btn" @click="removeOrder(order.Id)">取消订单</a>
-          <a class="font_size_30" @click="payOrder(order.Id)">去付款</a>
+          <a class="font_size_30 cancel_order_btn" @click.stop="removeOrder(order.Id)">取消订单</a>
+          <a class="font_size_30" @click.stop="payOrder(order.Id)">去付款</a>
         </div>
       </article>
     </div>
@@ -63,6 +65,12 @@
       }
     },
     methods: {
+      getStateText (state, text) {
+        if (text) {
+          return `${state}：${text}`
+        }
+        return `${state}`
+      },
       payOrder (id) {
         let submitOrder = this.orderList.find(item => item.Id === id)
         let tempType = OrderType.Order
@@ -87,7 +95,8 @@
         this.showConfirm({
           tip: '是否取消订单？',
           button: '取消订单',
-          action: '订单已取消',
+          success: '订单已取消',
+          fail: '取消订单失败',
           handle: () => {
             this.setSubmitLoading(true, '正在取消订单...')
             return this.cancelOrder(this.$route.params.key, id)
@@ -97,7 +106,7 @@
     },
     route: {
       data ({ to: { params: { key } } }) {
-        return this.getOrderList(key, { PageIndex: 1, PageSize: 6 })
+        return this.getOrderList(key, 1)
           .then(res => {
 
           })

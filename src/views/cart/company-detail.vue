@@ -8,13 +8,19 @@
         <input type="radio" name="onof_company" value="shipWay.ShippingCompanyId">
       </div>
       <div class="shopping_cart_list_img"><img :src="shipCompany.Logo" alt=""></div>
-      <div class="shopping_text_con">
+      <div class="shopping_text_con" v-if="shipWay.WayType === 2">
         <p>{{shipCompany.Name}}</p>
         <p class="font_28"><span class="font-weight_6">RMB</span>
           {{shipWay.FirstWeightPrice}}/首{{shipWay.FirstWeight}}克
         </p>
         <p class="font_28"><span class="font-weight_6">RMB</span>
           {{shipWay.ContinuedWeightPrice}}/续{{shipWay.ContinuedWeight}}克
+        </p>
+      </div>
+      <div class="shopping_text_con" v-if="shipWay.WayType === 4">
+        <p>{{shipCompany.Name}}</p>
+        <p class="font_28"><span class="font-weight_6">RMB</span>
+          {{shipWay.Price}}/首{{shipWay.Weight}}克
         </p>
       </div>
     </div>
@@ -29,6 +35,8 @@
 </template>
 
 <script>
+  import { WayType } from '../../local/config.enum'
+
   export default{
     props: ['shipWay', 'shipCompany', 'isDefault', 'isSelected'],
     data(){

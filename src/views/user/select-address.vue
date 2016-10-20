@@ -26,8 +26,8 @@
                 </span>
         </section>
         <ul class="cart_opera_list">
-          <li><a href="#">修改地址</a></li>
-          <li><a href="#">删除地址</a></li>
+          <li><a @click.prevent="modifyAddress(address.Id)">修改地址</a></li>
+          <li><a @click.prevent="deleteAddress(address.Id)">删除地址</a></li>
         </ul>
       </div>
     </article>
@@ -45,7 +45,7 @@
 
 <script>
   import images from '../../asset/images'
-  import { user } from '../../store/action'
+  import { user, app } from '../../store/action'
 
   export default{
     data(){
@@ -60,7 +60,10 @@
       },
       actions: {
         setSelectAddress: user.setSelectAddress,
-        setDefaultAddress: user.setDefaultAddress
+        setDefaultAddress: user.setDefaultAddress,
+        setModifyAddress: user.setModifyAddress,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     computed: {
@@ -80,6 +83,31 @@
       saveChangeAddress () {
         this.setDefaultAddress(this.addresses.find(item => item.Id === this.selectId))
         this.returnBack()
+      },
+      modifyAddress (addressId) {
+        this.setModifyAddress(this.addresses.find(item => item.Id === addressId))
+        this.$router.go({ name: 'addAddress' })
+      },
+      deleteAddress (addressId) {
+        //get next addressId
+        const index = this.addresses.findIndex(item => item.Id === addressId)
+        const nextId = this.addresses.length > (index + 1) ? this.addresses[index + 1].Id : 0
+        this.showConfirm({
+          tip: '是否删除该地址',
+          button: '删除',
+          success: '地址已删除',
+          fail: '地址删除失败',
+          handle: () => {
+            this.setSubmitLoading(true, '正在删除地址...')
+            return user.deleteAddress(this.$route.params.key, addressId, nextId)
+              .then(res => {
+                if (res.Success) {
+                  this.addresses.splice(index, 1)
+                }
+                return Promise.resolve(res)
+              })
+          }
+        })
       }
     },
     route: {

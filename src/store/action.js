@@ -3,6 +3,7 @@ import appApi from '../webServices/app.wsvc'
 import orderApi from '../webServices/order.wsvc'
 import userApi from '../webServices/user.wsvc'
 import * as types from './mutation-types'
+import { PageSize } from '../local/config.enum'
 
 const app = {
   setAppCurrency ({ dispatch }, token) {
@@ -36,12 +37,18 @@ const app = {
 }
 
 const cart = {
-  getShopping ({ dispatch }, token) {
-    return cartApi.getShopping(token)
-      .then(shopping => {
-        dispatch(types.RECEIVE_SHOPPING_INFO, shopping.Data)
-        return Promise.resolve(shopping)
-      })
+  getShopping (token, url) {
+    return cartApi.getShopping({ key: token, Url: url })
+    /* .then(shopping => {
+     dispatch(types.RECEIVE_SHOPPING_INFO, shopping.Data)
+     return Promise.resolve(shopping)
+     })*/
+  },
+  setShopping ({ dispatch }, shopping) {
+    return dispatch(types.RECEIVE_SHOPPING_INFO, shopping)
+  },
+  getCartCount (token) {
+    return cartApi.getCartCount({ key: token })
   },
   getExchangeRate (token, domain) {
     return cartApi.getShopRate(token, domain)
@@ -55,7 +62,10 @@ const cart = {
   },
   setCountryRate ({ dispatch }, token) {
     return cartApi.getCountryRate(token)
-      .then((res) => dispatch(types.SAVE_COUNTRY_RATE, res.List))
+      .then((res) => {
+        dispatch(types.SAVE_COUNTRY_RATE, res.List)
+        return Promise.resolve(res)
+      })
   },
   initShoppingDisplay ({ dispatch }, detail) {
     dispatch(types.INIT_SHOPPING_DISPLAY, detail)
@@ -67,14 +77,14 @@ const cart = {
     return cartApi.getCartList(token)
       .then(cartInfo => dispatch(types.GET_CART_LIST, cartInfo.List))
   },
-  selectAll ({ dispatch }, toggle) {
-    dispatch(types.SELECT_ALL_SHOPPING, toggle)
+  selectAll ({ dispatch }, toggle, rate) {
+    dispatch(types.SELECT_ALL_SHOPPING, toggle, rate)
   },
-  selectShop ({ dispatch }, toggle, shopId) {
-    dispatch(types.SELECT_SHOP_SHOPPING, toggle, shopId)
+  selectShop ({ dispatch }, toggle, shopId, rate) {
+    dispatch(types.SELECT_SHOP_SHOPPING, toggle, shopId, rate)
   },
-  selectShopping ({ dispatch }, toggle, shopId, id) {
-    dispatch(types.SELECT_SHOPPING, toggle, shopId, id)
+  selectShopping ({ dispatch }, toggle, shopId, id, rate) {
+    dispatch(types.SELECT_SHOPPING, toggle, shopId, id, rate)
   },
   addShoppingCount ({ dispatch }) {
     dispatch(types.INCREASE_SHOPPING_COUNT)
@@ -108,12 +118,22 @@ const cart = {
   setCompanyByCid ({ dispatch }, countryId, company) {
     dispatch(types.SET_COMPANY_BY_CID, countryId, company)
   },
-  getFaq ({ dispatch }, token) {
-    return cartApi.getFaq(token)
+  getCompanyAndWay (token, countryId) {
+    return cartApi.getCompanyAndWay(token, countryId)
+  },
+  setCompanyAndWay ({ dispatch }, countryId, company) {
+    dispatch(types.SET_COMPANY_AND_WAY, countryId, company)
+  },
+  getFaq ({ dispatch }, token, index) {
+    return cartApi.getFaq({
+      key: token,
+      Page: { PageIndex: index, PageSize }
+    })
       .then(res => {
         if (res.Success) {
-          dispatch(types.SET_FAQ, res.List)
+          dispatch(types.SET_FAQ, res.List, index)
         }
+        return Promise.resolve(res)
       })
   }
 }
@@ -122,8 +142,11 @@ const orders = {
   saveOrder (order) {
     return orderApi.saveOrder(order)
   },
-  getOrderList ({ dispatch }, token, page) {
-    return orderApi.getOrderList({ key: token, Page: page })
+  getOrderList ({ dispatch }, token, index) {
+    return orderApi.getOrderList({
+      key: token,
+      Page: { PageIndex: index, PageSize }
+    })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_ORDER_LIST, data.List)
@@ -232,6 +255,16 @@ const orders = {
   saveTranOrder (order) {
     return orderApi.saveTranOrder(order)
   },
+  receiptGoods ({ dispatch }, token, id) {
+    return orderApi.receiptGoods({ key: token, ShippingId: id })
+      .then(res => {
+        if (res.Success) {
+          dispatch(types.RECEIPT_GOODS, id)
+          return Promise.resolve(res)
+        }
+        return Promise.reject(res.Message)
+      })
+  },
   getTranOrderList ({ dispatch }, token, page) {
     return orderApi.getTranOrderList({
       key: token,
@@ -252,6 +285,19 @@ const orders = {
   },
   setTransportDetail ({ dispatch }, order) {
     return dispatch(types.SET_TRAN_ORDER_DETAIL, order)
+  },
+  getExpressDetail (token, code, expressNo) {
+    return orderApi.getExpressDetail({
+      key: token,
+      Code: code,
+      ExpressNo: expressNo
+    })
+  },
+  setExpressDetail ({ dispatch }, detail) {
+    return dispatch(types.SET_EXPRESS_DETAIL, detail)
+  },
+  setExpressSite ({ dispatch }, express) {
+    return dispatch(types.SET_EXPRESS_SITE, express)
   }
 }
 
@@ -267,6 +313,9 @@ const user = {
   },
   setDefaultAddress ({ dispatch }, address) {
     return dispatch(types.SET_DEFAULT_ADDRESS, address)
+  },
+  setModifyAddress ({ dispatch }, address) {
+    return dispatch(types.SET_MODIFY_ADDRESS, address)
   },
   setSelectAddress ({ dispatch }, id) {
     return dispatch(types.SET_SELECT_ADDRESS, id)
@@ -284,6 +333,13 @@ const user = {
     return userApi.saveAddress({
       key: token,
       Address: address
+    })
+  },
+  deleteAddress (token, addressId, setId) {
+    return userApi.deleteAddress({
+      key: token,
+      AddressId: addressId,
+      SetId: setId
     })
   },
   setPayOrder ({ dispatch }, pay) {

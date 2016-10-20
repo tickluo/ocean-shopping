@@ -7,15 +7,15 @@
             转运: <span class="font-weight_6">{{tranOrderDetail.ShippingNo}}</span>
           </div>
         </h4>
-        <h3 class="shopping_cart_tit height_08">
-          <a href="#" class="shop_brand_name flex_width">物流跟踪：已到达中国，海关清关中</a>
-          <img :src="images.iconR" alt="" class="icon_right">
+        <h3 class="shopping_cart_tit height_08" v-link="{name:expressRoute}">
+          <a class="shop_brand_name flex_width">物流跟踪：{{expressMsg}}</a>
+          <img :src="images.iconR" v-if="expressRoute !== ''" alt="" class="icon_right">
         </h3>
         <section class="port_detail">
           <p><label>转运公司：</label>{{tranOrderDetail.ShippingCompanyName}}</p>
           <p><label>转运线路：</label>{{tranOrderDetail.ShippingWayName}}</p>
           <p><label>提交转运时间：</label>{{tranOrderDetail.SubmitTime}}</p>
-          <p><label>物流单号：</label><strong>{{tranOrderDetail.b}}</strong></p>
+          <p><label>物流单号：</label><strong>{{tranOrderDetail.TrackingNumber}}</strong></p>
           <p><label>转运重量：</label><strong>{{tranOrderDetail.Weight}}g</strong></p>
         </section>
         <section class="port_detail">
@@ -71,11 +71,19 @@
         <span class="goback_cart">返回</span>
       </div>
       <div class="fot_order_static">
-        已收货
+        {{tranOrderDetail.ShippingStatuName}}
       </div>
-      <div class="into_cart_btn" @click="payOrder">
+      <div class="into_cart_btn"
+           @click="payOrder"
+           v-if="needPay(tranOrderDetail.ShippingStatus,tranOrderDetail.Replenishment)">
         <img class="icon_into_shopping_cart" :src="images.iconNext"/>
         <span class="dis_inline_block">去付款</span>
+      </div>
+      <div class="into_cart_btn"
+           v-if="!tranOrderDetail.Replenishment && tranOrderDetail.ShippingStatus === 4"
+           @click.stop="confirmGoods(tranOrderDetail.Id)">
+        <img class="icon_into_shopping_cart" :src="images.iconOk"/>
+        <span class="dis_inline_block">确认收货</span>
       </div>
     </footer>
   </div>
@@ -85,12 +93,14 @@
   import images from '../../asset/images'
   import displayShopping from '../layout/display-shopping.vue'
   import { orders, user, app } from '../../store/action'
-  import { OrderType } from '../../local/state.enum'
+  import { ShipStatus, OrderType } from '../../local/state.enum'
 
   export default{
     data(){
       return {
-        images
+        images,
+        expressMsg: '',
+        expressRoute: ''
       }
     },
     components: {
@@ -103,12 +113,20 @@
       actions: {
         setTransportDetail: orders.setTransportDetail,
         setPayOrder: user.setPayOrder,
-        genPay: app.genPay
+        genPay: app.genPay,
+        receiptGoods: orders.receiptGoods,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading,
+        showAlert: app.showAlert,
+        setExpressDetail: orders.setExpressDetail
       }
     },
     methods: {
       returnBack () {
         this.$router.go({ name: 'tranOrder' })
+      },
+      needPay (statusId, hasReplenishment) {
+        return statusId === ShipStatus.ShipPending || hasReplenishment
       },
       payOrder () {
         let tempType = OrderType.Order
@@ -128,6 +146,24 @@
           backUrl: `/#!/transport/detail/${this.$route.params.id}/${this.$route.params.key}`
         })
         this.genPay(true)
+      },
+      confirmGoods (id) {
+        this.showConfirm({
+          tip: '是否已收到包裹？',
+          button: '确认收货',
+          success: '确认收货成功',
+          fail: '确认收货失败',
+          handle: () => {
+            this.setSubmitLoading(true, '正在确认收货...')
+            return this.receiptGoods(this.$route.params.key, id)
+              .then(res => {
+                if (res.Success) {
+                  this.returnBack()
+                  return Promise.resolve(res)
+                }
+              })
+          }
+        })
       }
     },
     route: {
@@ -138,7 +174,20 @@
         return orders.getTransportDetail(key, id)
           .then(res => {
             if (res.Success) {
-              return this.setTransportDetail(res.Data)
+              this.setTransportDetail(res.Data)
+              if (res.Data.ShippingWayCode !== '' && res.Data.TrackingNumber !== '') {
+                this.expressRoute = 'expressDetail'
+                return orders.getExpressDetail(key, res.Data.ShippingWayCode, res.Data.TrackingNumber)
+                  .then(res => {
+                    if (res.Success && res.List.length > 0) {
+                      this.expressMsg = res.List[0].Content
+                      this.setExpressDetail(res.List)
+                      return {}
+                    }
+                    this.expressMsg = '暂无物流，请联系客服查询'
+                    this.expressRoute = ''
+                  })
+              }
             }
           })
       },

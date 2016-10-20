@@ -2,7 +2,7 @@
   <div>
     <header class="nav_bar">
       <img class="logo_shopping" :src="logo2" alt="">
-      <a class="to_fill_order" href="#">{{title}}</a>
+      <a class="to_fill_order" v-link="{name:'cart'}">{{title}}</a>
       <div class="online_service" @click="getCustom">
         <img class="icon_online_sever" :src="onlineServer2" alt="">
         <span class="text_online">在线客服</span>

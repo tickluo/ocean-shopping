@@ -51,7 +51,7 @@
             ★身份证照片必须清晰、无水印、死角边框齐<br/>
             全，且身份证未过期。否则包裹将无法清关。
           </div>
-          <a href="#" class="scan_example">查看示例</a>
+          <a v-link="{name:'idCardExample'}" class="scan_example">查看示例</a>
         </div>
         <div class="upfile_card_wrap">
           <ul class="upfile_card_list">
@@ -89,6 +89,7 @@
                      }"
                  id="regionPicker"
                  v-el:region readonly="true"
+                 :value="mixRegion"
                  class="buyer_name"
                  placeholder="选择所在区域">
           <img :src="images.iconR" alt="" class="icon_right">
@@ -103,7 +104,12 @@
                      required: { rule: true, message: '请填写详细地址' }
                      }"
                   placeholder="详细地址..."></textarea>
-        <input type="text" id="zipNumber" v-el:zip class="buyer_name no_top_bor" placeholder="邮政编码">
+        <input class="buyer_name no_top_bor"
+               type="text"
+               id="zipNumber"
+               v-model="address.Postalcode"
+               v-el:zip
+               placeholder="邮政编码">
       </article>
 
       <article class="base_info" @click="setDefault">
@@ -317,6 +323,7 @@
   import 'lrz/dist/lrz.bundle'
   import images from '../../asset/images'
   import { app, user } from '../../store/action'
+  import { getLocation } from '../../services/util.svc'
 
   let area = new LArea()
 
@@ -357,6 +364,12 @@
           Area: regionArr[2]
         }
       },
+      mixRegion () {
+
+        return this.address.Province === '' ?
+          '' :
+          `${this.address.Province},${this.address.City},${this.address.Area}`
+      },
       hasPoImg () {
         return this.positiveImg !== ''
       },
@@ -366,7 +379,11 @@
     },
     vuex: {
       actions: {
-        showAlert: app.showAlert
+        showAlert: app.showAlert,
+        setModifyAddress: user.setModifyAddress
+      },
+      getters: {
+        modifyAddress: state => state.user.modifyAddress
       }
     },
     ready () {
@@ -382,6 +399,7 @@
     },
     methods: {
       returnBack () {
+        this.setModifyAddress({})
         window.history.go(-1)
       },
       uploadImg (type) {
@@ -401,7 +419,7 @@
                     this.address.IdCardOpposite = res.Data.FilePath
                   }
                 }
-                else return  this.showAlert('身份证上传失败')
+                else return this.showAlert('身份证上传失败')
               })
           })
       },
@@ -434,11 +452,29 @@
         user.saveAddress(this.$route.params.key, addressInfo)
           .then(res => {
             if (res.Success) {
+              this.setModifyAddress({})
               this.showAlert('保存成功')
-              this.returnBack
+              this.returnBack()
             }
           })
       }
+    },
+    route: {
+      data({ from:{ name } }){
+        if (name === 'selectAddress' && this.modifyAddress.Id) {
+          this.address = this.modifyAddress
+          this.positiveImg = this.modifyAddress.IdCardPositive
+          this.oppositeImg = this.modifyAddress.IdCardOpposite
+          this.address.IdCardPositive = getLocation(this.modifyAddress.IdCardPositive).pathname
+          this.address.IdCardOpposite = getLocation(this.modifyAddress.IdCardOpposite).pathname
+        } else {
+          this.address = initAddress()
+          this.positiveImg = ''
+          this.oppositeImg = ''
+        }
+        return {}
+      },
+      waitForData: true
     }
   }
 </script>

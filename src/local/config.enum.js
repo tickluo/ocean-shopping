@@ -15,8 +15,17 @@ const ExpensesType = {
   NoSet: 200
 }
 
+const PageSize = 6
+
+const ExpressUrl = 'http://m.kuaidi100.com/result.jsp?nu='
+
+const lbToG = 453.59237
+
 export {
   WayType,
   PayType,
-  ExpensesType
+  ExpensesType,
+  lbToG,
+  PageSize,
+  ExpressUrl
 }

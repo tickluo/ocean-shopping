@@ -39,13 +39,14 @@
     methods: {
       wrapHandle () {
         this.hideConfirm()
-        let resMsg = this.confirm.actionMsg
+        let successMsg = this.confirm.successMsg
+        let failMsg = this.confirm.failMsg
         this.confirm.handle()
           .then(res => {
             if (res.Success) {
-              return this.showAlert(resMsg)
+              return this.showAlert(successMsg)
             }
-            return this.showAlert(resMsg)
+            return this.showAlert(failMsg)
           })
       }
     }

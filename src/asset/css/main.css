@@ -72,6 +72,7 @@ textarea {
   font-weight: 600;
 }
 .dis_flex {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -102,6 +103,7 @@ textarea {
   box-flex: 1;
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .border_ccc {
   border: 1px solid #ccc;
@@ -549,6 +551,7 @@ body {
 }
 .align_items_cen {
   align-items: center;
+  -webkit-box-align: center;
 }
 .shopping_footer {
   padding: 0rem 0.2rem;
@@ -685,11 +688,13 @@ body {
   right: auto !important;
 }
 .shopping_cart_tit {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
   display: flex;
   align-items: center;
+  -webkit-box-align: center;
   font-weight: normal;
   height: 0.9rem;
   box-sizing: border-box;
@@ -701,6 +706,7 @@ body {
   height: 0.7rem;
   width: auto;
   margin-right: 0.1rem;
+  vertical-align: middle;
 }
 /*.cart_real_con{
     min-height: 2.04rem;
@@ -786,6 +792,8 @@ body {
 }
 .shop_brand_name {
   font-size: 0.28rem;
+  display: block;
+  vertical-align: middle;
 }
 .cart_opera_list {
   font-size: 0.26rem;
@@ -940,7 +948,7 @@ body {
 }
 .process_wrap .procsee_list li {
   float: left;
-  width: 1.52rem;
+  width: 22%;
   height: 1rem;
   padding-top: 0.15rem;
   box-sizing: border-box;
@@ -964,7 +972,7 @@ body {
 }
 .process_wrap .procsee_list li:nth-child(2n) {
   position: relative;
-  width: 0.34rem;
+  width: 4%;
   overflow: hidden;
 }
 .process_wrap .procsee_list li:nth-child(2n):after {
@@ -995,7 +1003,6 @@ body {
 .budget_shipment {
   padding: 0.2rem;
   box-sizing: border-box;
-  border-bottom: 1px solid #ccc;
 }
 .country_list {
   overflow: hidden;
@@ -1018,6 +1025,7 @@ body {
 }
 .fill_weight {
   margin-top: 0.05rem;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1220,6 +1228,7 @@ body {
 }
 .server_wrap .post_special {
   font-size: 0.26rem;
+  line-height: 0.4rem;
 }
 .server_wrap .post_special dl {
   margin-bottom: 0.3rem;
@@ -1233,6 +1242,9 @@ body {
 .server_wrap .post_special dl dd {
   display: inline-block;
   line-height: 0.37rem;
+}
+.server_wrap p {
+  min-height: 16px;
 }
 .default_server_wrap {
   padding: 0rem 0.2rem 0 0.2rem;
@@ -1266,12 +1278,17 @@ body {
 }
 .flex_width {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .sel_other_company {
   font-size: 0.28rem;
   line-height: 0.59rem;
   padding: 0.15rem 0.2rem;
   border-bottom: 1px solid #ccc;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1327,6 +1344,7 @@ body {
   margin-bottom: 0.1rem;
 }
 .user_address_name p {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1503,9 +1521,14 @@ body {
 .pay_way_wrap .alipay {
   font-size: 0.3rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .pay_way_box {
   padding: 0.19rem 0.2rem;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1516,6 +1539,7 @@ body {
 }
 .way_for_transport {
   padding: 0.24rem 0.2rem;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1531,6 +1555,10 @@ body {
 .way_for_transport_item {
   font-size: 0.3rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
   line-height: 0.42rem;
 }
 .icon_alipay_wecheat {
@@ -1848,6 +1876,7 @@ textarea.buyer_name {
 }
 .user_addresses_wrap .user_address_box {
   background: #fff;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1864,6 +1893,10 @@ textarea.buyer_name {
 .user_address_con {
   font-size: 0.28rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .user_address_con h4 .dis_inline_block {
   line-height: 0.42rem;
@@ -1931,6 +1964,7 @@ textarea.buyer_name {
   left: 0;
 }
 .order_number {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -1944,6 +1978,10 @@ textarea.buyer_name {
 .order_number .real_number {
   font-size: 0.3rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: keep-all;
@@ -1992,6 +2030,7 @@ textarea.buyer_name {
   font-size: 0.26rem;
 }
 .order_wrap .pay_money_wrap .font_28 {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2003,6 +2042,7 @@ textarea.buyer_name {
   border-top: 1px solid #ddd;
 }
 .order_list_con {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2028,6 +2068,10 @@ textarea.buyer_name {
 }
 .right_merch_text {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .right_merch_text .font-weight_6 {
   margin: 0.08rem 0;
@@ -2045,6 +2089,7 @@ textarea.buyer_name {
   padding: 0.04rem 0rem;
   line-height: 0.36rem;
   background: #f6f6f6;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2052,6 +2097,10 @@ textarea.buyer_name {
 }
 .order_static_wrap .order_static {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .order_static_wrap .order_static .font_size_25 {
   display: inline-block;
@@ -2118,6 +2167,7 @@ textarea.buyer_name {
 }
 .shopping_list_wrap .shopping_con_box {
   border-bottom: none;
+  margin-bottom: 0.14rem;
 }
 .shopping_list_wrap .shopping_con_box:first-child .shopping_cart_tit {
   border-top: 1px solid #ccc;
@@ -2204,6 +2254,7 @@ textarea.buyer_name {
   text-align: right;
   font-size: 0.28rem;
   padding: 0.2rem;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2268,6 +2319,7 @@ textarea.buyer_name {
 }
 .coupon_wrap {
   margin-top: 0.15rem;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2280,6 +2332,10 @@ textarea.buyer_name {
   font-size: 0.26rem;
   padding: 0.06rem 0.2rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
   word-break: keep-all;
 }
 .coupon_wrap .coupon_left {
@@ -2318,6 +2374,7 @@ textarea.buyer_name {
   width: 100%;
 }
 .summary_money .summary_con {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2326,6 +2383,10 @@ textarea.buyer_name {
 }
 .summary_money .summary_left {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
   line-height: 0.4rem;
 }
 .mar_bot_9 {
@@ -2367,6 +2428,7 @@ textarea.buyer_name {
 }
 .package_weight {
   border-top: 1px solid #ddd;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2377,6 +2439,10 @@ textarea.buyer_name {
 .package_weight label {
   font-size: 0.30rem;
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .package_weight .text_align_r {
   font-size: 0.26rem;
@@ -2400,6 +2466,7 @@ textarea.buyer_name {
   border-bottom: 1px solid #ddd;
 }
 .shentong .need_times {
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2409,6 +2476,10 @@ textarea.buyer_name {
 }
 .shentong .flex_width {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .shentong .triangle_left {
   line-height: 0.4rem;
@@ -2467,6 +2538,7 @@ textarea.buyer_name {
   line-height: 0.4rem;
   margin-top: 0.06rem;
   word-break: break-all;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2499,6 +2571,7 @@ textarea.buyer_name {
   padding: 0.2rem 0.2rem;
   color: #777;
   border-bottom: 1px solid #ddd;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2510,6 +2583,10 @@ textarea.buyer_name {
 }
 .track_list .track_list_con {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .track_list time {
   font-size: 0.24rem;
@@ -2550,6 +2627,7 @@ textarea.buyer_name {
   padding: 0.1rem 0.15rem 0.1rem 0.2rem;
   box-sizing: border-box;
   width: 100%;
+  display: -webkit-box;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;
@@ -2559,6 +2637,10 @@ textarea.buyer_name {
 }
 .sel_more_package .font_27 {
   flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .sel_more_package .text_align_r {
   width: 0.1rem;
@@ -2605,9 +2687,9 @@ textarea.buyer_name {
 .loading_wrap .roate_icon_load .load_img {
   width: 1.15rem;
   height: 1.15rem;
-  -webkit-animation: rotate_load 0.8 infinite linear ;
-  -moz-animation: rotate_load 0.8 infinite linear ;
-  animation: rotate_load 0.8s infinite linear ;
+  -webkit-animation: rotate_load 0.8 infinite linear;
+  -moz-animation: rotate_load 0.8 infinite linear;
+  animation: rotate_load 0.8s infinite linear;
 }
 @-webkit-keyframes rotate_load {
   0% {
@@ -2623,6 +2705,8 @@ textarea.buyer_name {
 .card_wrap {
   padding: 0.2rem 0.45rem;
   background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 .card_tips {
   color: #F43459;
@@ -2652,6 +2736,7 @@ textarea.buyer_name {
   border: 1px solid #999;
   padding: 0.1rem;
   box-sizing: border-box;
+  max-width: 720px;
 }
 .the_card_block .card_img_box img {
   width: 100%;
@@ -2668,7 +2753,171 @@ textarea.buyer_name {
   width: 0.8rem;
   height: 0.8rem;
   margin-top: -0.03rem;
-  -webkit-animation: rotate_load 0.8 infinite linear ;
-  -moz-animation: rotate_load 0.8 infinite linear ;
-  animation: rotate_load 0.8s infinite linear ;
+  -webkit-animation: rotate_load 0.8 infinite linear;
+  -moz-animation: rotate_load 0.8 infinite linear;
+  animation: rotate_load 0.8s infinite linear;
+}
+.bg_fff {
+  background: #fff;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.user_top_nav {
+  background: #fbfbfb;
+}
+.user_top_nav li {
+  width: 50%;
+}
+.user_top_nav li a {
+  line-height: 0.9rem;
+  font-size: 0.3rem;
+}
+.pos_height_190 {
+  background: #fff;
+  position: absolute;
+  top: 1.9rem;
+  left: 0;
+  height: 80%;
+  width: 100%;
+  border-top: 1px solid #ccc;
+}
+.pos_height_100 {
+  background: #fff;
+  position: absolute;
+  top: 1.0rem;
+  left: 0;
+  height: 85%;
+  width: 100%;
+  border-top: 1px solid #ccc;
+}
+.user_login_wrap {
+  background: #fff;
+  padding: 0.5rem;
+}
+.user_login_wrap .login_input {
+  margin-bottom: 0.3rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: flex;
+}
+.user_login_wrap .login_input .fill_veri_code {
+  flex: 1;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
+}
+.user_login_wrap .login_input .veri_img {
+  width: 2.1rem;
+  height: 0.7rem;
+  margin-left: 0.2rem;
+}
+.user_login_wrap .login_input .send_again {
+  width: 3.4rem;
+  margin-left: 0.2rem;
+  background: #ff6276;
+  font-size: 0.3rem;
+  color: #fff;
+  text-align: center;
+  padding: 0.14rem 0rem;
+  border-radius: 5px;
+}
+.user_login_wrap .forget_pas_link {
+  display: block;
+  text-align: right;
+  font-size: 0.3rem;
+  text-decoration: underline;
+  color: #0079ff;
+}
+.user_login_wrap .login_btn {
+  background: #333333;
+  color: #fff;
+  margin-top: 0.4rem;
+  font-size: 0.31rem;
+}
+.user_login_wrap .register_btn {
+  margin-top: 0.5rem;
+}
+.user_login_wrap .disabled_btn {
+  background: rgba(51, 51, 51, 0.6);
+}
+.roate_fade_wrap {
+  text-align: center;
+}
+.roate_fade {
+  margin: 0 auto;
+  width: 0.7rem;
+  height: 0.7rem;
+  -webkit-animation: rotate_load 0.8 infinite linear;
+  -moz-animation: rotate_load 0.8 infinite linear;
+  animation: rotate_load 0.8s infinite linear;
+}
+.example-title {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 20px;
+  background-color: #dddddd;
+}
+.example-list {
+  padding: 4px 4px 0;
+  list-style: none;
+}
+.example-listitem {
+  height: 50px;
+  line-height: 50px;
+  border: solid 1px #999;
+  border-radius: 2px;
+  margin-bottom: 4px;
+  text-align: center;
+  font-size: 0.26rem;
+}
+.example-listitem:last-child {
+  margin-bottom: 0;
+}
+.example-wrapper {
+  overflow: scroll;
+}
+.mint-loadmore-top span {
+  display: inline-block;
+  transition: .2s linear;
+}
+.rotate {
+  transform: rotate(180deg);
+}
+.mint-loadmore-top,
+.mint-loadmore-bottom {
+  font-size: 0.26rem;
+}
+@component-namespace mint {
+  @component loadmore {
+    overflow: hidden;
+    @descendent content {
+      @when dropped {
+        transition: .2s;
+      }
+    }
+    @descendent top,
+        bottom {
+      text-align: center;
+      height: 50px;
+      line-height: 50px;
+    }
+    @descendent top {
+      margin-top: -50px;
+    }
+    @descendent bottom {
+      margin-bottom: -50px;
+    }
+    @descendent spinner {
+      display: inline-block;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    @descendent text {
+      vertical-align: middle;
+    }
+  }
 }

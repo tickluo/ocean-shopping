@@ -1,11 +1,13 @@
 <template>
   <div class="mar_bot_13 bg_e6">
-    <article class="shopping_list_wrap">
+    <article class="shopping_list_wrap" v-if="countries.length > 0 && rates.length > 0">
       <cart-class v-for="item in cartList"
                   :title="item.Title"
                   :shop_id="$index"
                   :list="item.GrabAttrs"
-                  :rule="item.Rule">
+                  :rule="item.Rule"
+                  :logo="shopLogo(item.GrabAttrs[0])"
+                  :rate="shopRate(item.GrabAttrs[0])">
       </cart-class>
     </article>
 
@@ -15,7 +17,9 @@
       <span class="sel_all_txt">全选</span>
       <div class="total_money_wrap">
         <h4 class="money">RMB {{totalPrice}}</h4>
-        <a href="#" class="shipment_illustrate"> <img :src="images.circleTips" alt="">国际运费说明 </a>
+        <a class="shipment_illustrate" v-link="{name:'freight'}">
+          <img :src="images.circleTips" alt="">国际运费说明
+        </a>
       </div>
       <a @click.prevent="nextStep" class="calc_btn" :class="{calc_btn_disabled:hasSelected}">
         结算
@@ -29,6 +33,7 @@
   import cartClass from './cart-class.vue'
   import VFooter from '../layout/v-order-footer.vue'
   import { CCheckbox } from '../../components'
+  import { getShopInfo } from '../../services/match.svc'
   import { cart } from '../../store/action'
 
   export default{
@@ -44,7 +49,10 @@
         cartList: state =>state.cart.cartList,
         toggle: state => state.cart.order.selectAll,
         selectedTotalPrice: state => state.cart.shoppingTotalPrice,
-        selectedShopping: state => state.cart.order.selected
+        selectedShopping: state => state.cart.order.selected,
+        countries: state => state.cart.countries,
+        rates: state => state.cart.rates,
+        currency: state => state.app.Currency
       },
       actions: {
         getCartList: cart.getCartList,
@@ -58,18 +66,31 @@
       },
       totalPrice () {
         return this.selectedTotalPrice ? parseFloat(this.selectedTotalPrice).toFixed(2) : 0
+      },
+      serviceRate (){
+        return this.currency.ServiceCoefficient || 0
       }
     },
     methods: {
       getExchangeRate: cart.getExchangeRate,
       changeToggle () {
-        return this.selectAll(!this.toggle)
+        return this.selectAll(!this.toggle, this.serviceRate)
       },
       nextStep () {
         if (!this.hasSelected) {
           return this.$router.go({ name: 'company' })
         }
         return false
+      },
+      shopRate (shop) {
+        const rateTemp = getShopInfo(this.rates, shop)
+        return rateTemp
+          ? rateTemp.Rate
+          : this.countries.find(item => item.Id === shop.CountryId).Rate
+      },
+      shopLogo (shop) {
+        const rateTemp = getShopInfo(this.rates, shop)
+        return rateTemp ? rateTemp.Logo : ''
       }
     },
     components: {
@@ -83,7 +104,7 @@
           .then(() => this.getExchangeRate(key, ''))
           .then((data) => this.setShoppingRate(key, data.List))
           .then(()=> {
-            this.selectAll(true)
+            this.selectAll(true, this.serviceRate)
           })
           .catch(err => {
 

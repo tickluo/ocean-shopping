@@ -1,6 +1,7 @@
 <template>
   <div class="margin_top_08">
-    <article class="order_wrap" v-for="tranOrder in tranOrderList">
+    <article class="order_wrap" v-for="tranOrder in tranOrderList"
+             v-link="{name:'tranOrderDetail',params:{id:tranOrder.Id}}">
       <h4 class="order_number">
         <div class="real_number">
           转运:<span class="font-weight_6"> {{tranOrder.ShippingNo}}</span>
@@ -19,7 +20,7 @@
                         :state_name="shopping.ProductStautName"
                         :express="shopping.ExpressNumber">
       </display-shopping>
-      <div class="total_merch_num" v-link="{name:'tranOrderDetail',params:{id:tranOrder.Id}}">
+      <div class="total_merch_num">
         <a>共 <strong>{{tranOrder.PackageCount}}</strong> 个商品，查看全部</a>
       </div>
 
@@ -32,8 +33,9 @@
         </div>
         <a class="font_size_30"
            v-if="needPay(tranOrder.ShippingStatus,tranOrder.Replenishment)"
-           @click="payOrder(tranOrder.Id)">去付款</a>
-        <a class="font_size_30" v-if="!tranOrder.Replenishment && tranOrder.ShippingStatus === 4" href="#">确认收货</a>
+           @click.stop="payOrder(tranOrder.Id)">去付款</a>
+        <a class="font_size_30" v-if="!tranOrder.Replenishment && tranOrder.ShippingStatus === 4"
+           @click.stop="confirmGoods(tranOrder.Id)">确认收货</a>
       </div>
     </article>
   </div>
@@ -58,7 +60,10 @@
       actions: {
         getTranOrderList: orders.getTranOrderList,
         setPayOrder: user.setPayOrder,
-        genPay: app.genPay
+        genPay: app.genPay,
+        receiptGoods: orders.receiptGoods,
+        showConfirm: app.showConfirm,
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     methods: {
@@ -84,6 +89,18 @@
           backUrl: `/#!/order/${this.$route.params.key}/transport`
         })
         this.genPay(true)
+      },
+      confirmGoods (id) {
+        this.showConfirm({
+          tip: '是否已收到包裹？',
+          button: '确认收货',
+          success: '确认收货成功',
+          fail: '确认收货失败',
+          handle: () => {
+            this.setSubmitLoading(true, '正在确认收货...')
+            return this.receiptGoods(this.$route.params.key, id)
+          }
+        })
       }
     },
     route: {

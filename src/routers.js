@@ -2,7 +2,6 @@ import cart from './views/cart/cart.vue'
 import detail from './views/cart/shopping-detail.vue'
 import company from './views/cart/company.vue'
 import selectCompany from './views/cart/company-select.vue'
-import modify from './views/cart/shopping-modify.vue'
 import submit from './views/cart/submit.vue'
 import submitShopping from './views/cart/submit-shopping.vue'
 import faq from './views/layout/faq.vue'
@@ -19,6 +18,10 @@ import submitTransport from './views/order/submit-transport.vue'
 import mergeStore from './views/order/package-merge.vue'
 import tranOrder from './views/order/order-transport.vue'
 import tranOrderDetail from './views/order/order-transport-detail.vue'
+import freightDetail from './views/cart/freight-detail.vue'
+import idCardExample from './views/user/idcard-example.vue'
+import expressDetail from './views/order/express-detail.vue'
+import expressSite from './views/order/express-site.vue'
 
 export default router => {
   router.map({
@@ -32,13 +35,18 @@ export default router => {
       name: 'selectAddress',
       component: selectAddress
     },
+    '/idcard/example/:key': {
+      title: '身份证照片示例',
+      name: 'idCardExample',
+      component: idCardExample
+    },
     '/cart/:key': {
       title: '购物车',
       name: 'cart',
       auth: false,
       component: cart
     },
-    '/product/detail/:key': {
+    '/product/detail/:key/': {
       title: '填写代购单',
       name: 'detail',
       auth: false,
@@ -46,9 +54,15 @@ export default router => {
     },
     '/product/detail/:key/:Id/:shopId': {
       title: '修改代购单',
-      name: 'detailModify',
+      name: 'detail',
       auth: false,
-      component: modify
+      component: detail
+    },
+    '/freight/detail/:key': {
+      title: '国际运费说明',
+      name: 'freight',
+      auth: false,
+      component: freightDetail
     },
     '/cart/company/:key': {
       title: '选择转运公司',
@@ -135,6 +149,16 @@ export default router => {
       title: '选择合箱包裹',
       name: 'mergeStore',
       component: mergeStore
+    },
+    '/order/express/detail/:key': {
+      title: '转运物流跟踪',
+      name: 'expressDetail',
+      component: expressDetail
+    },
+    '/order/express/site/:key': {
+      title: '物流查询',
+      name: 'expressSite',
+      component: expressSite
     }
   })
 

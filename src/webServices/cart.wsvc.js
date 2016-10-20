@@ -1,13 +1,17 @@
 import api from '../webServices/api.wsvc'
 
 export default {
-  getShopping: model => api.post('/product/detail', { key: model }, true),
+  getShopping: model => api.post('/product/detail', model, true),
+  getCartCount: model => api.post('/cart/count', model),
   getShopRate: (model, domain) => api.post('/catelog/websites', {
     key: model,
     TopDomain: domain
+  }),
+  getCountryRate: model => api.post('/catelog/countries', { key: model }),
+  addToCart: (model, shopping) => api.post('/cart/modify', {
+    key: model,
+    GrabAttr: shopping
   }, true),
-  getCountryRate: model => api.post('/catelog/countries', { key: model }, true),
-  addToCart: (model, shopping) => api.post('/cart/modify', { key: model, GrabAttr: shopping }),
   removeShopping: (model, id) => api.post('/cart/remove',
     {
       key: model,
@@ -22,9 +26,9 @@ export default {
     key: model,
     CountryId: countryId
   }, true),
-  getFaq: model => api.post('/catelog/question/answer',
-    {
-      key: model,
-      Page: { PageIndex: 1, PageSize: 6 }
-    }, true)
+  getCompanyAndWay: (model, countryId) => api.post('/company/countryid', {
+    key: model,
+    CountryId: countryId
+  }, true),
+  getFaq: model => api.post('/catelog/question/answer', model)
 }
