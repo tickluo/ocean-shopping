@@ -4,32 +4,34 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <meta name="renderer" content="webkit">
-  <meta name="format-detection" content="email=no" />
+  <meta name="format-detection" content="email=no"/>
   <meta name="format-detection" content="telephone=no">
   <meta name="renderer" content="webkit">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name='apple-touch-fullscreen' content='yes'>
   <meta name="applicable-device" content="mobile">
   <title>Six City</title>
-
   <script type="text/javascript">
     (function () {
-      var Reg=/^.*Android \d(\.\d)*;.*/;
-      var res=Reg.test(window.navigator.userAgent)
+      var Reg = /^.*Android \d(\.\d)*;.*/;
+      var res = Reg.test(window.navigator.userAgent);
       var scale = 1.0;
       var ratio = 1;
-      if (window.devicePixelRatio >= 2 && !res) {
+      if (window.devicePixelRatio >= 2 && !res && !(window.name == 'sixCityFrame')) {
         scale *= 0.5;
-        ratio *=2;
+        ratio *= 2;
       }
-      var text = '<meta name="viewport" content="initial-scale=' + scale + ', maximum-scale=' + scale +', minimum-scale=' + scale + ', width=device-width, user-scalable=no" />';
+      var text = '<meta name="viewport" content="initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', width=device-width, user-scalable=no" />';
       document.write(text);
-      document.documentElement.style.fontSize = 50*ratio+ "px";
+      document.documentElement.style.fontSize = 50 * ratio + "px";
     })();
   </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 </head>
 <body>
 <div id="app"></div>
 <script src='//kefu.easemob.com/webim/easemob.js?tenantId=3305&hide=false&sat=false' async='async'></script>
+<script>
+</script>
 </body>
 </html>

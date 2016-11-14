@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ul class="sec_top_nav">
-      <li :class="{cur_order:route === 'shopOrder'}" v-link="{name:'shopOrder'}">
+    <ul class="sec_top_nav" v-disable-tap>
+      <li :class="{cur_order:route === 'shoporder'}" v-link="{name:'shoporder'}">
         <a>代购订单</a>
         <img :src="images.iconArrR" alt="" class="right_icon">
         <span class="bot_hr"></span>
@@ -19,8 +19,10 @@
         <a>转运订单</a>
         <span class="bot_hr"></span>
       </li>
+      <!--<span  class="hr_block"></span>-->
     </ul>
-    <router-view class="view" transition="slide-up" transition-mode="out-in" keep-alive>
+
+    <router-view class="view"  keep-alive>
     </router-view>
     <v-order-footer></v-order-footer>
   </div>

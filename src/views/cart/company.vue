@@ -1,9 +1,10 @@
 <template>
   <div>
-    <company-country v-for="item in companySet" :company="item">
-    </company-country>
-
-    <footer class="shopping_footer">
+    <div class="mar_bot_11" v-fix-bottom="ss">
+      <company-country v-for="item in companySet" :company="item">
+      </company-country>
+    </div>
+    <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
         <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1" alt="">
         <span class="goback_cart">返回购物车</span>
@@ -49,6 +50,8 @@
     },
     route: {
       data({ to: { params: { key } }, from: { name, title } }){
+        if (!this.cartList || this.cartList.length === 0)
+          return this.$router.go({ name: 'cart' })
         if (name !== 'selectCompany' && title !== '提交订单') {
           return this.getDefaultCompany(key, this.countries)
             .then(data => {

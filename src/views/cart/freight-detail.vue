@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-  <div class="bg_fff">
+  <div>
+    <div class="bg_fff mar_bot_10"  v-fix-bottom="ss">
     <section class="process_wrap">
       <ul class="procsee_list">
         <li>支付<br/>订单费用</li>
@@ -81,17 +82,13 @@
         </table>
       </div>
     </section>
-
-    <footer class="shopping_footer">
-      <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
-        <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1"
-             alt=""> <span class="goback_cart">返回购物车</span></div>
-    </footer>
+  </div>
+    <v-return-footer></v-return-footer>
   </div>
 </template>
 
 <script>
-  import images from '../../asset/images'
+  import vReturnFooter from '../layout/v-return-footer.vue'
   import { cart, app } from '../../store/action'
   import { rangeAlgo, mathAlgo } from '../../services/ship.svc'
   import { WayType, lbToG } from '../../local/config.enum'
@@ -99,12 +96,12 @@
   export default{
     data(){
       return {
-        images,
         selectedCountry: 0,
         freightWeight: '',
         gUnit: true
       }
     },
+    components: { vReturnFooter },
     vuex: {
       getters: {
         countries: state => state.cart.countries,

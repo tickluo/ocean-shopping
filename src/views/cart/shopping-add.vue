@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!$loadingRouteData">
+    <div class="mar_bot_11" v-fix-bottom>
       <section class="merch_wrap">
         <div class="merch_con">
           <div class="real_card_shopping"><img :src="display.picture" alt=""></div>
@@ -18,11 +18,12 @@
           </div>
         </div>
       </section>
-      <section class="shopping_tips">
+      <section v-if="ServiceCoefficient === 0" class="shopping_tips">
         <p class="font_28">{{OriginalCurrency}}&nbsp;:&nbsp;{{Currency}}=
           <span class="font-weight_6">1:{{select_currency && select_currency.Rate}}</span>
         </p>
-        <p class="wid_100" v-if="display.rate && display.rate.RateDescription">★{{select_currency.RateDescription}}</p>
+        <p class="wid_100" v-if="display.rate && display.rate.RateDescription">
+          ★{{select_currency.RateDescription}}</p>
       </section>
       <shopping-cost :price="afterRatePrice"
                      :currency_sign="currency.CurrencySign"
@@ -62,15 +63,15 @@
         </h3>
         <faq></faq>
       </section>
-      <footer class="shopping_footer">
-        <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
-          <img :src="images.iconShoppingCard_1_2x" alt="">
-          <span class="message_num">{{cart_count}}</span></div>
-        <a class="into_cart_btn" @click="addToCart()">
-          <img class="icon_into_shopping_cart" :src="images.IconShoppingCart_2"/>
-          <span class="dis_inline_block">放入购物车</span> </a>
-      </footer>
     </div>
+    <footer class="shopping_footer" v-disable-tap>
+      <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
+        <img :src="images.iconShoppingCard_1_2x" alt="">
+        <span class="message_num">{{cart_count}}</span></div>
+      <a class="into_cart_btn" @click="addToCart()">
+        <img class="icon_into_shopping_cart" :src="images.IconShoppingCart_2"/>
+        <span class="dis_inline_block">放入购物车</span> </a>
+    </footer>
   </div>
 </template>
 
@@ -108,6 +109,9 @@
       }
     },
     computed: {
+      ServiceCoefficient () {
+        return (this.currency && this.currency.ServiceCoefficient) || 0
+      },
       shopLogo () {
         const logo = this.select_currency.Logo
         if (!logo || logo === '') return ''
@@ -115,7 +119,8 @@
         return logoArr[logoArr.length - 1]
       },
       afterRatePrice () {
-        return this.select_currency && this.genRate(this.display.skuSelect.Price)
+        return this.select_currency
+          && parseFloat(this.genRate(this.display.skuSelect.Price) * (1 + this.ServiceCoefficient)).toFixed(2)
       },
       afterRateFreight () {
         return this.display.skuSelect && (this.genRate(this.display.skuSelect.Freight) || this.genRate(this.shopping.Freight))

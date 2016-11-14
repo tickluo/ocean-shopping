@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header">
     <header class="nav_bar">
       <img class="logo_shopping" :src="logo2" alt="">
       <a class="to_fill_order" v-link="{name:'cart'}">{{title}}</a>

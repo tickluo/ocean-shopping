@@ -39,8 +39,9 @@ const state = {
 }
 
 const mutations = {
-  [SET_ORDER_LIST] (state, list) {
-    state.orderList = list
+  [SET_ORDER_LIST] (state, list, index) {
+    if (index === 1) state.orderList = list
+    else state.orderList = state.orderList.concat(list)
   },
   [SET_DISPLAY_ORDER] (state, data) {
     state.orderDetail = data
@@ -61,8 +62,9 @@ const mutations = {
     state.packageListAfter = list
       .filter(item => item.PackageStauts === PackageStatus.PackageWarehouse)
   },
-  [SET_TRAN_ORDER_LIST] (state, list) {
-    state.tranOrderList = list
+  [SET_TRAN_ORDER_LIST] (state, list, index) {
+    if (index === 1) state.tranOrderList = list
+    else state.tranOrderList = state.tranOrderList.concat(list)
   },
   [SET_DISPLAY_PACKAGE] (state, data) {
     state.storeDetail = data

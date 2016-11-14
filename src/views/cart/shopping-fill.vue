@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
   <div>
+    <div v-fix-bottom="ss"></div>
     <section class="merch_wrap">
       <div class="merch_con">
         <div class="real_card_shopping">
@@ -14,7 +15,7 @@
         </div>
       </div>
     </section>
-    <section class="shopping_tips">
+    <section v-if="ServiceCoefficient === 0" class="shopping_tips">
       <p class="font_28">{{getCurrency(select_currency.CurrencyCode)}}
         &nbsp;:&nbsp;{{getCurrency(currentCurrency.CurrencyCode)}}=
         <span class="font-weight_6">1:{{select_currency.Rate}}</span>
@@ -109,15 +110,13 @@
     </section>
     <section class="fill_other">
       <input class="fill_other_input" v-model="fill_shopping.note" type="text" placeholder="如用其他要求，请在此填写"/></section>
-
     <section class="faq">
       <h3 class="tit1">
         常见问题FAQ
       </h3>
       <faq></faq>
     </section>
-
-    <footer class="shopping_footer" v-if="!$route.params.Id">
+    <footer class="shopping_footer" v-if="!$route.params.Id" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
         <img :src="images.iconShoppingCard_1_2x" alt="">
         <span class="message_num">{{cart_count}}</span></div>
@@ -126,7 +125,7 @@
         <span class="dis_inline_block">放入购物车</span> </a>
     </footer>
 
-    <footer class="shopping_footer" v-if="$route.params.Id">
+    <footer class="shopping_footer" v-if="$route.params.Id" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
         <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1" alt="">
         <span class="goback_cart">返回购物车</span>
@@ -172,6 +171,9 @@
       }
     },
     computed: {
+      ServiceCoefficient () {
+        return (this.currency && this.currency.ServiceCoefficient) || 0
+      },
       shoppingRate () {
         return this.select_currency.Rate
       }
@@ -179,7 +181,7 @@
     methods: {
       getCurrency,
       computeRate (price) {
-        return (price * this.shoppingRate).toFixed(2)
+        return parseFloat((price * this.shoppingRate).toFixed(2) * (1 + this.ServiceCoefficient)).toFixed(2)
       },
       selectIfBuy (isBuy) {
         this.fill_shopping.isBuy = isBuy

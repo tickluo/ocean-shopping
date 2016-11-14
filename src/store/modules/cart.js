@@ -15,6 +15,8 @@ import {
   SET_COMPANY_BY_CID,
   REMOVE_SHOPPING_BY_ID,
   SET_FAQ,
+  SET_FAQ_INDEX,
+  SET_FAQ_LOADED,
   SET_COMPANY_AND_WAY
 } from '../mutation-types'
 import { ExpensesType } from '../../local/config.enum'
@@ -33,7 +35,9 @@ const state = {
   countries: [],
   rates: [],
   shoppingTotalPrice: 0,
-  faqList: []
+  faqList: [],
+  faqIndex: 1,
+  faqAllLoaded: false
 }
 
 const getRateById = (url, wid, cid) => {
@@ -125,7 +129,9 @@ const mutations = {
       })
       state.cartList.forEach(shop => {
         shop.GrabAttrs.forEach(item => {
-          state.shoppingTotalPrice += parseFloat(genPrice(item, rate))
+          if (!state.removeList.includes(item.Id)) {
+            state.shoppingTotalPrice += parseFloat(genPrice(item, rate))
+          }
         })
       })
     } else {
@@ -161,7 +167,8 @@ const mutations = {
       state.cartList[shopId].GrabAttrs
         .forEach(item => {
           const shoppingPrice = parseFloat(genPrice(item, rate))
-          if (!state.order.selected[shopId].shopping.includes(item.Id)) {
+          if (!state.order.selected[shopId].shopping.includes(item.Id) &&
+            !state.removeList.includes(item.Id)) {
             state.order.selected[shopId].shopping.push(item.Id)
             state.shoppingTotalPrice += shoppingPrice
           }
@@ -184,7 +191,9 @@ const mutations = {
       state.order.selected[shopId].shopping.splice(0, state.order.selected[shopId].shopping.length)
       state.cartList[shopId].GrabAttrs
         .forEach(item => {
-          state.shoppingTotalPrice -= parseFloat(genPrice(item, rate))
+          if (!state.removeList.includes(item.Id)) {
+            state.shoppingTotalPrice -= parseFloat(genPrice(item, rate))
+          }
         })
       if (state.order.selected[shopId].RulePrice !== 0) {
         state.shoppingTotalPrice -= state.order.selected[shopId].RulePrice
@@ -313,6 +322,12 @@ const mutations = {
   [SET_FAQ] (state, list, index) {
     if (index === 1) state.faqList = list
     else state.faqList = state.faqList.concat(list)
+  },
+  [SET_FAQ_INDEX] (state, index) {
+    state.faqIndex = index
+  },
+  [SET_FAQ_LOADED] (state, isLoaded) {
+    state.faqAllLoaded = isLoaded
   }
 }
 

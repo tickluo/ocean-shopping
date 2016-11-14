@@ -47,6 +47,7 @@
         return this.currency.ServiceCoefficient || 0
       },
       shoppingList () {
+        if(!this.order.selected || this.order.selected.length === 0) return []
         if (this.order.selectAll) {
           return this.cartList.map((item) => {
             const rateTemp = getShopInfo(this.rates, item.GrabAttrs[0])
@@ -56,7 +57,9 @@
             const logo = rateTemp ? rateTemp.Logo : ''
             return {
               Title: item.Title,
-              GrabAttrs: item.GrabAttrs,
+              GrabAttrs: item.GrabAttrs.filter(shopping =>
+                !this.removeList.includes(shopping.Id)
+              ),
               rate,
               logo: this.shopLogo(logo)
             }
@@ -89,6 +92,7 @@
             })
             list[list.length - 1].Title = this.cartList[index].Title
             list[list.length - 1].GrabAttrs = this.cartList[index].GrabAttrs
+              .filter(shopping => !this.removeList.includes(shopping.Id))
             list[list.length - 1].rate = rate
             list[list.length - 1].logo = this.shopLogo(logo)
           }

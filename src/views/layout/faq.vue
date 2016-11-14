@@ -1,8 +1,5 @@
 <template>
-  <load-more :top-method="loadTop"
-             :bottom-method="loadBottom"
-             :bottom-all-loaded="allLoaded"
-             :auto-fill="false">
+  <div>
     <section class="faq">
       <div class="faq_con" v-for="faq in faqList">
         <h4 class="tit2">
@@ -12,7 +9,13 @@
           {{faq.Contents}} </p>
       </div>
     </section>
-  </load-more>
+    <div v-if="!faqAllLoaded"
+         class="btn_wrap"
+         @click="loadMore">
+      <a class="more_question">更多常见问题</a>
+    </div>
+    <p v-if="faqAllLoaded" class="no_more_question">无更多问题</p>
+  </div>
 </template>
 
 <script>
@@ -22,33 +25,34 @@
   export default{
     data(){
       return {
-        pageIndex: 0,
+        pageIndex: 1,
         allLoaded: false
       }
     },
-    components: {
-      LoadMore
-    },
     vuex: {
       getters: {
-        faqList: state => state.cart.faqList
+        faqList: state => state.cart.faqList,
+        faqIndex: state => state.cart.faqIndex,
+        faqAllLoaded: state => state.cart.faqAllLoaded
       },
       actions: {
-        getFaq: cart.getFaq
+        getFaq: cart.getFaq,
+        setFaqIndex: cart.setFaqIndex,
+        setFaqLoaded: cart.setFaqLoaded
       }
     },
     methods: {
-      loadBottom (id) {
-        this.getFaq(this.$route.params.key, ++this.pageIndex)
+      loadMore () {
+        this.getFaq(this.$route.params.key, this.faqIndex + 1)
           .then(res => {
-            this.allLoaded = res.TotalPage <= this.pageIndex
-            this.$broadcast('onBottomLoaded', id)
+            if (res.Success) this.setFaqIndex(this.faqIndex + 1)
+            if (res.TotalPage <= this.faqIndex) this.setFaqLoaded(true)
           })
       }
     },
     ready () {
       if (this.faqList.length === 0)
-        return this.getFaq(this.$route.params.key, ++this.pageIndex)
+        return this.getFaq(this.$route.params.key, 1)
     }
   }
 </script>

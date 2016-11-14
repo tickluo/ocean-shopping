@@ -22,9 +22,46 @@ import freightDetail from './views/cart/freight-detail.vue'
 import idCardExample from './views/user/idcard-example.vue'
 import expressDetail from './views/order/express-detail.vue'
 import expressSite from './views/order/express-site.vue'
+import auth from './views/user/auth.vue'
+import login from './views/user/login.vue'
+import register from './views/user/register.vue'
+import entry from './views/entry.vue'
+import error from './views/error.vue'
+import disclaimer from './views/cart/disclaimer.vue'
+import userCenter from './views/user/user-center.vue'
 
 export default router => {
   router.map({
+    '/entry/:route/:key/:authkey': {
+      component: entry,
+      name: 'entry',
+      title: 'wtf-can-U-C-this-page'
+    },
+    '/user': {
+      component: auth,
+      subRoutes: {
+        '/login': {
+          title: '用户登录',
+          name: 'login',
+          component: login
+        },
+        '/register': {
+          title: '用户注册',
+          name: 'register',
+          component: register
+        }
+      }
+    },
+    '/error': {
+      component: error,
+      title: '出错了',
+      name: 'error'
+    },
+    '/user/center/:key': {
+      title: '个人中心',
+      name: 'userCenter',
+      component: userCenter
+    },
     '/user/address/add/:key': {
       title: '添加收货地址',
       name: 'addAddress',
@@ -33,6 +70,11 @@ export default router => {
     '/user/address/select/:key': {
       title: '选择收货地址',
       name: 'selectAddress',
+      component: selectAddress
+    },
+    '/user/address/manage/:key': {
+      title: '管理收货地址',
+      name: 'manageAddress',
       component: selectAddress
     },
     '/idcard/example/:key': {
@@ -54,7 +96,7 @@ export default router => {
     },
     '/product/detail/:key/:Id/:shopId': {
       title: '修改代购单',
-      name: 'detail',
+      name: 'modifyDetail',
       auth: false,
       component: detail
     },
@@ -63,6 +105,12 @@ export default router => {
       name: 'freight',
       auth: false,
       component: freightDetail
+    },
+    '/disclaimer': {
+      title: '免责声明',
+      name: 'disclaimer',
+      auth: false,
+      component: disclaimer
     },
     '/cart/company/:key': {
       title: '选择转运公司',
@@ -99,7 +147,7 @@ export default router => {
       component: order,
       subRoutes: {
         '/': {
-          name: 'shopOrder',
+          name: 'shoporder',
           component: shopOrder
         },
         '/store': {
@@ -161,6 +209,14 @@ export default router => {
       component: expressSite
     }
   })
+  /*
+   router.beforeEach((to, from, next) => {
+   if (transition.to.auth && !Auth.authenticated) {
+   transition.redirect('/user/login')
+   } else {
+   transition.next()
+   }
+   })*/
 
   router.afterEach(() => {
     window.scrollTo(0, 0)
@@ -168,7 +224,6 @@ export default router => {
 
 // If no route is matched redirect to default
   router.redirect({
-    '*': '/cart/:key'
+    '*': '/user/login'
   })
 }
-

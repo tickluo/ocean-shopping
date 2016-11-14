@@ -11,7 +11,7 @@
       </div>
     </div>
     <ul class="cart_opera_list">
-      <li><a v-link="{name:'detail',params:{Id:item.Id,shopId:shop_id}}">修改代购单</a></li>
+      <li><a v-link="{name:'modifyDetail',params:{Id:item.Id,shopId:shop_id}}">修改代购单</a></li>
       <li><a :href="item.Url">直达官网</a></li>
       <li><a @click.prevent="removeFromCart">删除商品</a></li>
     </ul>

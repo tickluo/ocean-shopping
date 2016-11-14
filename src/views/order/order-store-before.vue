@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mar_bot_10">
     <article class="order_wrap" v-for="package in packageList"
              v-link="{name:'storeOrderDetail',params:{id:package.Id}}">
       <h4 class="order_number">

@@ -13,30 +13,15 @@
         </div>
       </li>
     </ul>
-
-    <footer class="shopping_footer">
-      <div class="icon_shopping_cart_1" @click="returnBack">
-        <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
-        <span class="goback_cart">返回</span>
-      </div>
-    </footer>
+    <v-return-footer></v-return-footer>
   </div>
 </template>
 
 <script>
-  import images from '../../asset/images'
+  import vReturnFooter from '../layout/v-return-footer.vue'
 
   export default{
-    data () {
-      return {
-        images
-      }
-    },
-    methods: {
-      returnBack () {
-        window.history.go(-1)
-      }
-    },
+    components: { vReturnFooter },
     vuex: {
       getters: {
         expressInfo: state => state.orders.expressInfo

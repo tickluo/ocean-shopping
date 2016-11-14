@@ -72,6 +72,8 @@
       {
         let url = ''
         if (Id) {
+          if (!this.cartList || this.cartList.length === 0)
+            return this.$router.go({ name: 'cart' })
           this.modifyShopping = this.cartList[shopId * 1].GrabAttrs
             .find(item => item.Id === parseInt(Id))
           url = this.modifyShopping.Url
@@ -147,8 +149,7 @@
             if (!this.isCountryRate) this.selectCurrency = this.websiteRate
             else this.selectCurrency = this.countries[0]
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

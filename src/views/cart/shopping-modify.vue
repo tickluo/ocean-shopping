@@ -1,6 +1,6 @@
 <template>
   <div class="bot_ccc">
-    <div v-if="!$loadingRouteData">
+    <div class="mar_bot_10" v-fix-bottom="ss">
       <section class="merch_wrap">
         <div class="merch_con">
           <div class="real_card_shopping"><img :src="display.picture" alt=""></div>
@@ -16,7 +16,7 @@
           </div>
         </div>
       </section>
-      <section class="shopping_tips">
+      <section v-if="ServiceCoefficient === 0" class="shopping_tips">
         <p class="font_28">{{OriginalCurrency}}&nbsp;:&nbsp;{{Currency}}=
           <span class="font-weight_6">1:{{select_currency && select_currency.Rate}}</span>
         </p>
@@ -61,19 +61,21 @@
         <h3 class="tit1">
           常见问题FAQ
         </h3>
-        <faq></faq>
       </section>
-      <footer class="shopping_footer">
-        <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
-          <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1" alt="">
-          <span class="goback_cart">返回购物车</span>
-        </div>
-        <div class="into_cart_btn">
-          <img class="icon_into_shopping_cart" :src="images.iconShoppingCart_2"/>
-          <span class="dis_inline_block" @click="addToCart()">保存修改</span>
-        </div>
-      </footer>
+        <faq></faq>
+
     </div>
+
+    <footer class="shopping_footer" v-disable-tap>
+      <div class="icon_shopping_cart_1" v-link="{name:'cart'}">
+        <img class="icon_go_back_cart" :src="images.iconShoppingCard_1_1" alt="">
+        <span class="goback_cart">返回购物车</span>
+      </div>
+      <div class="into_cart_btn">
+        <img class="icon_into_shopping_cart" :src="images.iconShoppingCart_2"/>
+        <span class="dis_inline_block" @click="addToCart()">保存修改</span>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -109,6 +111,9 @@
       }
     },
     computed: {
+      ServiceCoefficient () {
+        return (this.currency && this.currency.ServiceCoefficient) || 0
+      },
       shopLogo () {
         const logo = this.select_currency.Logo
         if (!logo || logo === '') return ''
@@ -116,7 +121,8 @@
         return logoArr[logoArr.length - 1]
       },
       afterRatePrice () {
-        return this.select_currency && this.genRate(this.display.skuSelect.Price)
+        return this.select_currency
+          && parseFloat(this.genRate(this.display.skuSelect.Price) * (1 + this.ServiceCoefficient)).toFixed(2)
       },
       afterRateFreight () {
         return this.display.skuSelect && (this.genRate(this.display.skuSelect.Freight) || this.genRate(this.shopping.Freight))

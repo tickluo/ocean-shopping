@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="mar_bot_9">
-
+    <div class="mar_bot_18" v-fix-bottom>
       <article class="order_wrap">
         <h4 class="order_number">
           <div class="real_number">
@@ -31,18 +30,18 @@
       </article>
 
     </div>
-    <section class="summary_money">
+    <section class="summary_money" v-disable-tap>
       <div class="summary_con">
         <span class="summary_left">订单总额</span>
         <strong class="text_align_r">RMB {{orderDetail.TotalAmount}}</strong>
       </div>
     </section>
 
-    <div class="order_money_change" v-if="orderDetail.Replenishment">
+    <div class="order_money_change" v-if="orderDetail.Replenishment" v-disable-tap>
       订单金额变动 +RMB {{orderDetail.Replenishment.Money}}
     </div>
-    <footer class="shopping_footer">
-      <div class="icon_shopping_cart_1" v-link="{name:'shopOrder'}">
+    <footer class="shopping_footer" v-disable-tap>
+      <div class="icon_shopping_cart_1" v-link="{name:'shoporder'}">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span>
       </div>

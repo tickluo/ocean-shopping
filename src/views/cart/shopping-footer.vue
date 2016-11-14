@@ -1,5 +1,5 @@
 <template>
-  <footer class="shopping_footer">
+  <footer class="shopping_footer" v-disable-tap>
     <div class="icon_shopping_cart_1">
       <img :src="shoppingCard1" alt="">
       <span class="message_num">3</span>

@@ -14,4 +14,9 @@ export default Vue => {
       return /^[-+]?[0-9]+$/.test(val)
     }
   )
+  Vue.validator('length',
+    (val, rule) => {
+      return val.length === rule
+    }
+  )
 }

@@ -21,7 +21,6 @@
   </div>
 </template>
 
-
 <script type="text/babel">
   import RoateFade from './c-fade.vue'
 
@@ -48,7 +47,7 @@
       },
       bottomDistance: {
         type: Number,
-        default: 70
+        default: 0
       },
       bottomMethod: {
         type: Function
@@ -77,6 +76,7 @@
         startY: 0,
         startScrollTop: 0,
         currentY: 0
+//        flag: true
       };
     },
     events: {
@@ -89,9 +89,10 @@
         }
       },
       onBottomLoaded(id) {
-        setTimeout(() => {
-          this.bottomStatus = 'pull'
-        }, 800)
+        /* setTimeout(() => {
+         this.bottomStatus = 'pull'
+         }, 800)*/
+        this.bottomStatus = 'pull'
         this.bottomDropped = false;
         if (id === this.uuid) {
           this.$nextTick(() => {
@@ -106,9 +107,22 @@
         if (!this.bottomAllLoaded && !this.containerFilled) {
           this.fillContainer();
         }
+//        this.flag=true;
       }
     },
     methods: {
+      checkAndroid (){
+/*        var Reg = /^.*Android \d(\.\d)*;.*!/;
+        return Reg.test(window.navigator.userAgent);*/
+        const hasScrollable=this.$el.parentNode.className;
+        if(hasScrollable){
+          if(hasScrollable.indexOf("scrollable")>-1){
+            return false;
+          }else{
+            return true;
+          }
+        }
+      },
       getScrollEventTarget(element) {
         let currentNode = element;
         while (currentNode && currentNode.tagName !== 'HTML' && currentNode.tagName !== 'BODY' && currentNode.nodeType === 1) {
@@ -131,6 +145,7 @@
         this.$el.addEventListener('touchstart', this.handleTouchStart);
         this.$el.addEventListener('touchmove', this.handleTouchMove);
         this.$el.addEventListener('touchend', this.handleTouchEnd);
+        !this.checkAndroid() && this.$el.parentNode.addEventListener('scroll', this.handleScroll);
       },
       init() {
         this.topStatus = 'pull';
@@ -161,9 +176,9 @@
       },
       checkBottomReached() {
         if (this.scrollEventTarget === window) {
-          return document.body.scrollTop + document.documentElement.clientHeight === document.body.scrollHeight;
+          return document.body.scrollTop + document.documentElement.clientHeight >= document.body.scrollHeight;
         } else {
-          return this.$el.getBoundingClientRect().bottom === this.scrollEventTarget.getBoundingClientRect().bottom;
+          return this.$el.getBoundingClientRect().bottom <= this.scrollEventTarget.getBoundingClientRect().bottom +1;
         }
       },
       handleTouchStart(event) {
@@ -193,7 +208,10 @@
           if (this.translate < 0) {
             this.translate = 0;
           }
+         this.translate = parseInt(this.translate/2);
+         this.translate = this.translate >=200?200:this.translate;
           this.topStatus = this.translate >= this.topDistance ? 'drop' : 'pull';
+
         }
         if (this.direction === 'up') {
           this.bottomReached = this.bottomReached || this.checkBottomReached();
@@ -209,32 +227,51 @@
         }
       },
       handleTouchEnd() {
-        if (this.direction === 'down' && this.getScrollTop(this.scrollEventTarget) === 0 && this.translate > 0) {
-          this.topDropped = true;
-          if (this.topStatus === 'drop') {
-            this.translate = '50';
+        if(!this.checkAndroid()){
+          this.translate = '0';
+          if(this.direction === 'down' && this.$el.parentNode.scrollTop <= 0){
             this.topStatus = 'loading';
             this.topMethod(this.uuid);
-          } else {
-            this.translate = '0';
-            this.topStatus = 'pull';
           }
+        }else {
+          if (this.direction === 'down' && this.getScrollTop(this.scrollEventTarget) === 0 && this.translate > 0) {
+            this.topDropped = true;
+            this.translate = '0';
+            if (this.topStatus === 'drop') {
+              this.translate = '50';
+              this.topStatus = 'loading';
+              this.topMethod(this.uuid);
+            } else {
+              this.translate = '0';
+              this.topStatus = 'pull';
+            }
+          }
+          if (this.direction === 'up' && this.bottomReached && this.translate < 0) {
+            this.bottomDropped = true;
+            this.bottomReached = false;
+            if (this.bottomStatus === 'drop') {
+
+              this.translate = '-50';
+              this.bottomStatus = 'loading';
+              this.bottomMethod(this.uuid);
+            } else {
+              this.translate = '0';
+              this.bottomStatus = 'pull';
+            }
+          }
+          this.direction = '';
         }
-        if (this.direction === 'up' && this.bottomReached && this.translate < 0) {
-          this.bottomDropped = true;
-          this.bottomReached = false;
-          if (this.bottomStatus === 'drop') {
-            this.translate = '-50';
-            this.bottomStatus = 'loading';
-            this.bottomMethod(this.uuid);
-          } else {
-            this.translate = '0';
-            this.bottomStatus = 'pull';
-          }
+        },
+      handleScroll(){
+        if(this.$el.parentNode.scrollTop + this.$el.parentNode.offsetHeight  >= parseInt(this.$el.offsetHeight *0.7)  && !this.bottomAllLoaded){
+//          this.flag= false;
+          this.translate = '0';
+          this.bottomStatus = 'loading';
+          this.bottomMethod(this.uuid);
         }
         this.direction = '';
       }
-    },
+      },
     ready() {
       this.uuid = Math.random().toString(36).substring(3, 8);
       this.init();

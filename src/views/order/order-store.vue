@@ -1,22 +1,21 @@
 <template>
   <div>
-    <ul class="third_top_nav">
-      <li :class="{on_item:route === 'storeOrderBefore'}">
-        <a v-link="{name:'storeOrderBefore',params:{key:$route.params.key}}"><span class="depot">等待商品入库</span>
+    <ul class="third_top_nav" v-disable-tap>
+      <li :class="{on_item:route === 'storeOrderBefore'}" v-link="{name:'storeOrderBefore',params:{key:$route.params.key}}">
+        <a><span class="depot">等待商品入库</span>
           <span class="message_num">{{beforeCount}}</span>
           <span class="bot_hr"></span>
         </a></li>
-      <li :class="{on_item:route === 'storeOrderAfter'}">
-        <a v-link="{name:'storeOrderAfter',params:{key:$route.params.key}}"><span class="depot">商品已入库</span>
+      <li :class="{on_item:route === 'storeOrderAfter'}" v-link="{name:'storeOrderAfter',params:{key:$route.params.key}}">
+        <a ><span class="depot">商品已入库</span>
           <span class="message_num">{{afterCount}}</span>
           <span class="bot_hr"></span>
         </a></li>
     </ul>
 
-    <div class="margin_top_27">
-      <router-view class="view" transition="slide-up" transition-mode="out-in" keep-alive>
+    <!--<div class="margin_top_27">-->
+      <router-view class="view top_17" v-fix-bottom="ss"   keep-alive>
       </router-view>
-    </div>
   </div>
 </template>
 

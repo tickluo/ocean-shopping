@@ -2,7 +2,7 @@ import api from '../webServices/api.wsvc'
 
 export default {
   saveOrder: model => api.post('/order/save', model, true),
-  getOrderList: model => api.post('/order/list', model, true),
+  getOrderList: (model, loading) => api.post('/order/list', model, loading),
   getOrderDetail: model => api.post('/order/detail', model, true),
   cancelOrder: model => api.post('/order/cancel', model, true),
   getPackageList: model => api.post('/package/list', model, true),
@@ -13,7 +13,7 @@ export default {
   getShipWay: model => api.post('/way/list', model, true),
   getShipService: model => api.post('/company/service', model, true),
   saveTranOrder: model => api.post('/shipping/create', model, true),
-  getTranOrderList: model => api.post('/shipping/list', model, true),
+  getTranOrderList: (model, loading) => api.post('/shipping/list', model, loading),
   getTranOrderDetail: model => api.post('/shipping/detail', model, true),
   receiptGoods: model => api.post('/shipping/confirm', model, true),
   getExpressDetail: model => api.post('/catelog/express/details', model)

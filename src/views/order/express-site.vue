@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg_fff">
     <section class="transport_company">
       <h4>物流公司: <strong>{{express.name}}</strong></h4>
       <h4>物流单号: <strong>{{express.number}}</strong></h4>
@@ -12,26 +12,21 @@
         </p>
       </div>
     </section>
-    <iframe name="import_frame"
+    <iframe id="importFrame" name="import_frame"
             width=100%
-            height=80%
             :src="expressUrl"
             frameborder=auto
             @load="loaded">
     </iframe>
-
-    <footer class="shopping_footer">
-      <div class="icon_shopping_cart_1" @click="returnBack">
-        <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
-        <span class="goback_cart">返回</span>
-      </div>
-    </footer>
+    <v-return-footer></v-return-footer>
   </div>
 </template>
 
 <script>
   import images from '../../asset/images'
   import { ExpressUrl } from '../../local/config.enum'
+  import vReturnFooter from '../layout/v-return-footer.vue'
+
   export default {
     data(){
       return {
@@ -39,6 +34,7 @@
         loading: true
       }
     },
+    components: { vReturnFooter },
     computed: {
       expressUrl () {
         return `${ExpressUrl}${this.express.number}`
@@ -47,9 +43,6 @@
     methods: {
       loaded () {
         this.loading = false
-      },
-      returnBack () {
-        window.history.go(-1)
       }
     },
     vuex: {

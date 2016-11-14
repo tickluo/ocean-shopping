@@ -90,6 +90,7 @@
     "vue-router": "^0.7.13",
     "vue-validator": "^2.1.7",
     "vuex": "^0.8.2",
+    "web-storage-cache": "^1.0.3",
     "whatwg-fetch": "^1.0.0"
   },
   "site_url": {

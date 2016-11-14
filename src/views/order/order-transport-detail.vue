@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mar_bot_9 mar_bot_15_5">
+    <div class="mar_bot_15_5"  v-fix-bottom>
       <article class="order_wrap about_transport">
         <h4 class="order_number">
           <div class="real_number">
@@ -36,7 +36,7 @@
           </div>
         </section>
       </article>
-      <article class="order_wrap">
+      <article v-if="tranOrderDetail.shopping" class="order_wrap">
         <display-shopping v-for="shopping in tranOrderDetail.GrabAttributes"
                           :cover="shopping.Cover"
                           :name="shopping.Name"
@@ -50,7 +50,7 @@
       </article>
     </div>
 
-    <section class="pay_way_wrap" :class="{'fix_bot_16':tranOrderDetail.Replenishment}">
+    <section v-disable-tap class="pay_way_wrap" :class="{'fix_bot_16':tranOrderDetail.Replenishment}">
       <div class="pay_way_box bg_f8">
         <div class="alipay">
           国际运费
@@ -61,11 +61,11 @@
       </div>
     </section>
 
-    <div class="order_money_change" v-if="tranOrderDetail.Replenishment">
+    <div class="order_money_change" v-disable-tap v-if="tranOrderDetail.Replenishment">
       {{tranOrderDetail.Replenishment.Reason}} + RMB {{tranOrderDetail.Replenishment.Money}}
     </div>
 
-    <footer class="shopping_footer">
+    <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" @click="returnBack">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span>

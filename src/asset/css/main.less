@@ -97,6 +97,14 @@ textarea {
     color: #fff;
     border-radius: 5px;
     font-size: 0.3rem;
+  -moz-user-select:none;/*火狐*/
+  -webkit-user-select:none;/*webkit浏览器*/
+  -ms-user-select:none;/*IE10*/
+  -khtml-user-select:none;/*早期浏览器*/
+  transition: all 0.3s ease;
+  &:active{
+    opacity: 0.8;
+  }
 }
 
 .circle_dot_fill(@w, @h, @c) {
@@ -172,6 +180,20 @@ textarea {
     -moz-box-flex: 1;
     -ms-flex: 1;
 }
+.justify-end{
+    justify-content: flex-end;
+    -webkit-justify-content:flex-end;
+    -moz-justify-content:flex-end;
+    -ms-justify-content:flex-end;
+    -o-justify-content:flex-end;
+}
+.justify-between{
+    justify-content: space-between;
+    -webkit-justify-content:space-between;
+    -moz-justify-content:space-between;
+    -ms-justify-content:space-between;
+    -o-justify-content:space-between;
+}
 
 .pop_wrap(@w, @h, @bg, @bor) {
     width: @w;
@@ -232,14 +254,15 @@ textarea {
 }
 
 .mar_top_5 {
-    margin-top: 0.05rem;
+  margin-top: 0.05rem;
 }
-
 html,
 body {
     width: 100%;
     box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
     //       min-height: 100%;
+  //height:100%;
 }
 
 #app {
@@ -689,8 +712,40 @@ body {
     padding: 0 0.2rem 0.1rem 0.2rem;
     color: @color_333;
     background: #fff;
-}
 
+}
+.btn_wrap{
+  background: #fff;
+  padding:0rem 0 0 0.2rem;
+  text-align: center;
+}
+.more_question{
+  font-size: 0.30rem;
+  text-align: right;
+  .pos(r);
+  margin-bottom: 0.1rem;
+  color: #0079ff;
+  text-decoration: underline;
+  margin-top: 0.1rem;
+  display: inline-block;
+  &:after {
+    content: "";
+    position: absolute;
+    right: -0.4rem;
+    width: 0;
+    height: 0;
+    top: 60%;
+    margin-top: -0.13rem;
+    .triangle(down, 0.2rem 0.12rem, @color_light_blue);
+  }
+}
+.no_more_question{
+  text-align: center;
+  color: #c0c0c0;
+  font-size: 0.24rem;
+  padding: 0.1rem 0rem;
+  background: #fff;
+}
 .faq_text {
     //    .dis_flex;
     //display: inline-block;
@@ -790,9 +845,22 @@ body {
         background: @color_pink;
         border-radius: 5px;
         padding: 0 0.5rem;
+      -moz-user-select:none;/*火狐*/
+
+      -webkit-user-select:none;/*webkit浏览器*/
+
+      -ms-user-select:none;/*IE10*/
+
+      -khtml-user-select:none;/*早期浏览器*/
+
+      user-select:none;
         span {
             font-size: 0.3rem;
         }
+      &:active{
+        opacity: 0.8;
+      }
+
     }
     .icon_into_shopping_cart {
         width: auto;
@@ -963,6 +1031,10 @@ body {
     background: url(../images/circle_stroke.png) center no-repeat;
     background-size: 100% auto;
 }
+.icon_circle_disable{
+  background: url(../images/circle_disable_sel.png) center no-repeat;
+  background-size: 100% auto;
+}
 
 .icon_circle_fill {
     background: url(../images/circle_fill.png) center no-repeat;
@@ -994,6 +1066,15 @@ body {
         text-align: center;
         width: 33.33%;
         box-sizing: border-box;
+      background: #FBFBFB;
+      -moz-user-select:none;/*火狐*/
+      -webkit-user-select:none;/*webkit浏览器*/
+      -ms-user-select:none;/*IE10*/
+      -khtml-user-select:none;/*早期浏览器*/
+      transition: all 0.3s ease;
+      &:active{
+        background: #eee;
+      }
     }
     li:last-child {
         border-right: none;
@@ -1052,27 +1133,37 @@ body {
             }
         }
     }
-    .calc_btn {
-        .pos(a);
-        font-size: 0.3rem;
-        border-radius: 5px;
-        top: 0.15rem;
-        right: 0.1rem;
-        text-align: center;
-        width: 1.3rem;
-        line-height: 0.8rem;
-        color: #fff;
-        background: @color_pink;
-        &_disabled {
-            opacity: 0.6;
-        }
-    }
+
+}
+.calc_btn {
+  .pos(a);
+  font-size: 0.3rem;
+  border-radius: 5px;
+  top: 0.15rem;
+  right: 0.1rem;
+  text-align: center;
+  width: 1.3rem;
+  line-height: 0.8rem;
+  color: #fff;
+  background: @color_pink;
+  -moz-user-select:none;/*火狐*/
+  -webkit-user-select:none;/*webkit浏览器*/
+  -ms-user-select:none;/*IE10*/
+  -khtml-user-select:none;/*早期浏览器*/
+  transition: all 0.3s ease;
+  &_disabled {
+    opacity: 0.6;
+  }
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .nav_bot_list {
     width: 100%;
     overflow: hidden;
     color: #888;
+  .pos(f);
     li {
         font-size: 0;
         float: left;
@@ -1103,7 +1194,10 @@ body {
     margin-bottom: 1.3rem;
     //    background: #e6e6e6;
 }
-
+.mar_bot_11 {
+  margin-bottom: 1.1rem;
+  //    background: #e6e6e6;
+}
 .pad_bot_18 {
     padding-bottom: 1.8rem;
 }
@@ -1232,7 +1326,8 @@ body {
     margin-top: 0.05rem;
     .dis_flex;
     align-items: center;
-    justify-content: space-between;
+//    justify-content: space-between;
+    .justify-between;
     .ke {
         overflow: hidden;
         margin-right: 0.8rem;
@@ -1257,6 +1352,7 @@ body {
     border-radius: 5px;
     box-sizing: border-box;
     width: 2.4rem;
+  margin-right:1rem;
 }
 
 .sel_unit {
@@ -1504,6 +1600,14 @@ body {
         color: @color_pink_f3;
         padding: 0 0.23rem;
         border-radius: 5px;
+      -moz-user-select:none;/*火狐*/
+      -webkit-user-select:none;/*webkit浏览器*/
+      -ms-user-select:none;/*IE10*/
+      -khtml-user-select:none;/*早期浏览器*/
+      transition: all 0.3s ease;
+      &:active{
+        opacity: 0.8;
+      }
     }
 }
 
@@ -1619,6 +1723,14 @@ body {
     width: 54%;
     text-align: center;
     margin-top: 0.16rem;
+  -moz-user-select:none;/*火狐*/
+  -webkit-user-select:none;/*webkit浏览器*/
+  -ms-user-select:none;/*IE10*/
+  -khtml-user-select:none;/*早期浏览器*/
+  transition: all 0.3s ease;
+  &:active{
+    opacity: 0.8;
+  }
 }
 
 .font_size_30 {
@@ -1655,8 +1767,8 @@ body {
         border-bottom: 1px solid #ddd;
     }
     .faq {
-        padding: 0.2rem 0.2rem 0.3rem 0.2rem;
-        border-bottom: 1px solid #ccc;
+        padding: 0.2rem 0.2rem 0rem 0.2rem;
+        //border-bottom: 1px solid #ccc;
     }
     .tit2 {
         margin-top: 0.04rem;
@@ -2168,18 +2280,25 @@ textarea.buyer_name {
     width: 100%;
     z-index: 10;
     overflow: hidden;
-    //    height: 0.8rem;
     background: #fff;
     font-size: 0.28rem;
     text-align: center;
+    border-bottom:1px solid #eee;
     .pos(f);
-    top: 1.01rem;
+    top: 1rem;
     li {
         float: left;
         width: 33.33%;
-        border-bottom: 1px solid #aaa;
         .pos(r);
-        a {
+      background: #fff;
+      -moz-user-select:none;/*火狐*/
+      -webkit-user-select:none;/*webkit浏览器*/
+      -ms-user-select:none;/*IE10*/
+      -khtml-user-select:none;/*早期浏览器*/
+      transition: all 0.3s ease;
+      &:active{  background: rgb(245,245,245);
+      }
+      a {
             display: block;
             line-height: 0.8rem;
         }
@@ -2211,6 +2330,19 @@ textarea.buyer_name {
     }
 }
 
+.hr_block {
+  .pos(a);
+  left: 0;
+  bottom: 0rem;
+  width: 33.33%;
+  height: 0.05rem;
+  background: @color_pink_ff62;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+
+
 .order_number {
     .dis_flex;
     font-size: 0.3rem;
@@ -2234,6 +2366,9 @@ textarea.buyer_name {
 
 .margin_top_08 {
     margin-top: 0.8rem;
+}
+.margin_bot_08{
+  margin-bottom: 1rem;
 }
 
 .order_wrap {
@@ -2274,8 +2409,10 @@ textarea.buyer_name {
     }
     .pay_money_wrap {
         .font_28 {
-            .dis_flex;
-            justify-content: flex-end;
+            //.dis_flex;
+//            justify-content: flex-end;
+//            .justify-end;
+          text-align: right;
         }
     }
 }
@@ -2283,6 +2420,11 @@ textarea.buyer_name {
 .order_list {
     padding: 0.15rem 0.2rem;
     border-top: 1px solid #ddd;
+    background: rgba(255,255,255,1);
+  transition: all 0.3s ease;
+  &:active{
+    background: rgba(245,245,245,1);
+  }
 }
 
 .order_list_con {
@@ -2383,6 +2525,14 @@ textarea.buyer_name {
         .narrow_btn(2rem, 0.6rem, @color_pink, #fff);
         border-radius: 5px;
         margin-top: 0.1rem;
+       -moz-user-select:none;/*火狐*/
+       -webkit-user-select:none;/*webkit浏览器*/
+       -ms-user-select:none;/*IE10*/
+       -khtml-user-select:none;/*早期浏览器*/
+       transition: all 0.3s ease;
+       &:active{
+        opacity: 0.8;
+      }
     }
     .cancel_order_btn {
         background: #444;
@@ -2397,9 +2547,9 @@ textarea.buyer_name {
     .shopping_con_box {
         border-bottom: none;
         margin-bottom: 0.14rem;
+      border-top: 1px solid #ccc;
     }
-    .shopping_con_box:first-child .shopping_cart_tit {
-        border-top: 1px solid #ccc;
+  .shopping_con_box:first-child .shopping_cart_tit {
     }
 }
 
@@ -2494,7 +2644,8 @@ textarea.buyer_name {
     font-size: 0.28rem;
     padding: 0.2rem;
     .dis_flex;
-    justify-content: flex-end;
+//    justify-content: flex-end;
+    .justify-end;
     //    -webkit-font-size-adjust: none;
     //    padding-right: 0.5rem;
     border-top: 1px solid #ddd;
@@ -2620,9 +2771,9 @@ textarea.buyer_name {
     margin-bottom: 0.1rem;
 }
 
-.mar_bot_10 {
+/*.mar_bot_10 {
     margin-bottom: 1.07rem;
-}
+}*/
 
 .mar_bot_15 {
     margin-bottom: 1.5rem;
@@ -2748,6 +2899,14 @@ textarea.buyer_name {
     line-height: 0.4rem;
     margin-left: 0.2rem;
     border-radius: 2px;
+  -moz-user-select:none;/*火狐*/
+  -webkit-user-select:none;/*webkit浏览器*/
+  -ms-user-select:none;/*IE10*/
+  -khtml-user-select:none;/*早期浏览器*/
+  transition: all 0.3s ease;
+  &:active{
+    opacity: 0.8;
+  }
 }
 
 .about_transport {
@@ -2916,6 +3075,8 @@ textarea.buyer_name {
             height: 1.15rem;
             -webkit-animation: rotate_load 0.8 infinite linear;
             -moz-animation: rotate_load 0.8 infinite linear;
+            -ms-animation: rotate_load 0.8 infinite linear;
+            -o-animation: rotate_load 0.8 infinite linear;
             animation: rotate_load 0.8s infinite linear;
         }
     }
@@ -2923,13 +3084,19 @@ textarea.buyer_name {
 
 @-webkit-keyframes rotate_load {
     0% {
+        transform: rotate(0deg);
         -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
     }
-    50% {
-        -webkit-transform: rotate(180deg);
-    }
+
     100% {
+        transform: rotate(360deg);
         -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
     }
 }
 
@@ -3019,7 +3186,7 @@ textarea.buyer_name {
     .pos(a);
     top: 1.9rem;
     left: 0;
-    height: 80%;
+    height: 85%;
     width: 100%;
     border-top: 1px solid #ccc;
 }
@@ -3027,7 +3194,7 @@ textarea.buyer_name {
 .pos_height_100 {
     background: #fff;
     .pos(a);
-    top: 1.0rem;
+    top: 1rem;
     left: 0;
     height: 85%;
     width: 100%;
@@ -3081,6 +3248,10 @@ textarea.buyer_name {
     }
 }
 
+#importFrame{
+  display: block;
+}
+
 //roate loade more
 .roate_fade_wrap {
     text-align: center;
@@ -3088,7 +3259,7 @@ textarea.buyer_name {
 
 .roate_fade {
     //display:block;
-    margin: 0 auto;
+    margin: 0.22rem auto 0.1rem auto;
     width: 0.7rem;
     height: 0.7rem;
     -webkit-animation: rotate_load 0.8 infinite linear;
@@ -3119,27 +3290,32 @@ textarea.buyer_name {
     font-size: 0.26rem;
 }
 
-.example-listitem:last-child {
+/*.example-listitem:last-child {
     margin-bottom: 0;
-}
+}*/
 
 .example-wrapper {
     //height: 300px;
-    overflow: scroll;
+    //overflow: scroll;
+
 }
 
-.mint-loadmore-top span {
+/*.mint-loadmore-top span {
     display: inline-block;
     transition: .2s linear;
-}
+}*/
 
-.rotate {
+/*.rotate {
     transform: rotate(180deg);
-}
-
+}*/
 .mint-loadmore-top,
 .mint-loadmore-bottom {
     font-size: 0.26rem;
+    //background: #fff;
+    //padding-top: 0.1rem;
+}
+.mint-loadmore-content{
+  transition: transform 0.3s ease;
 }
 
 @component-namespace mint {
@@ -3171,4 +3347,45 @@ textarea.buyer_name {
             vertical-align: middle;
         }
     }
+}
+
+
+// solve scrollable
+.scrollable{
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  right: 0;
+  bottom: 0rem;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-y: auto!important;
+}
+.mar_bot_21{
+  margin-bottom: 2.1rem;
+}
+.mar_bot_10{
+  margin-bottom: 1.1rem;
+}
+.mar_bot_18{
+  margin-bottom: 1.8rem;
+}
+.top_17{
+  top: 2.7rem;
+}
+
+.animated {
+  .pos(a);
+  left: 0rem;
+  top:1rem;
+  right: 0rem;
+  bottom: 0rem;
+}
+
+
+
+.expand-transition {
+  transition: all .3s ease;
+}
+.expand-enter, .expand-leave {
+  opacity: 0;
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mar_bot_29">
+    <div class="mar_bot_29" v-fix-bottom>
       <article class="about_address_wrap">
         <section class="change_address">
           <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
@@ -47,7 +47,7 @@
         </section>
         <div class="way_for_transport" v-if="hasBox">
           <div class="icon_circle_stroke"
-               :class="{'icon_circle_fill':doBox}"
+               :class="{'icon_circle_fill':doBox,'icon_circle_disable':packageCount === 1}"
                @click="selectBox">
             <input type="radio" name="zengzhi" value="">
           </div>
@@ -98,7 +98,7 @@
       </article>
     </div>
 
-    <section class="pay_way_wrap">
+    <section class="pay_way_wrap" v-disable-tap>
       <div class="pay_way_box">
         <img class="icon_alipay_wecheat" :src="images.iconAlipay" alt="">
         <div class="alipay">
@@ -119,7 +119,7 @@
       </div>
     </section>
 
-    <footer class="shopping_footer">
+    <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'storeOrderAfter'}">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span></div>
@@ -224,6 +224,7 @@
         return this.selectShipService.includes(id)
       },
       selectBox () {
+        if (this.packageCount === 1) return false
         this.doBox = !this.doBox
         if (!this.doBox) {
           this.setPackageIds([])
@@ -300,7 +301,8 @@
     },
     route: {
       data ({ to: { params: { id, type, key } } }) {
-        // TODO:check if use dispatch could cache data
+        if (!this.defaultPid || this.defaultPid === 0)
+          return this.$router.go({ name: 'storeOrderAfter' })
         let ids = []
         if (type === 'new') this.initOrder()
         else ids = Array.from(this.order.PackageIds)
@@ -344,8 +346,7 @@
             if (this.defaultAddress.Id) return {}
             this.setDefaultAddress(key)
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

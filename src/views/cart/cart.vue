@@ -1,17 +1,18 @@
 <template>
-  <div class="mar_bot_13 bg_e6">
-    <article class="shopping_list_wrap" v-if="countries.length > 0 && rates.length > 0">
-      <cart-class v-for="item in cartList"
-                  :title="item.Title"
-                  :shop_id="$index"
-                  :list="item.GrabAttrs"
-                  :rule="item.Rule"
-                  :logo="shopLogo(item.GrabAttrs[0])"
-                  :rate="shopRate(item.GrabAttrs[0])">
-      </cart-class>
-    </article>
-
-    <section class="sec_footer">
+  <div class="bg_e6">
+    <div class="mar_bot_21"  v-fix-bottom="ss">
+      <article  class="shopping_list_wrap" v-if="countries.length > 0 && rates.length > 0">
+        <cart-class v-for="item in cartList"
+                    :title="item.Title"
+                    :shop_id="$index"
+                    :list="item.GrabAttrs"
+                    :rule="item.Rule"
+                    :logo="shopLogo(item.GrabAttrs[0])"
+                    :rate="shopRate(item.GrabAttrs[0])">
+        </cart-class>
+      </article>
+    </div>
+    <section class="sec_footer" v-disable-tap>
       <c-checkbox :selected="toggle" @click="changeToggle">
       </c-checkbox>
       <span class="sel_all_txt">全选</span>
@@ -25,11 +26,12 @@
         结算
       </a>
     </section>
-    <v-footer></v-footer>
+
+    <v-footer v-disable-tap></v-footer>
   </div>
 </template>
 <script>
-  import imageModule from '../../asset/images'
+  import images from '../../asset/images'
   import cartClass from './cart-class.vue'
   import VFooter from '../layout/v-order-footer.vue'
   import { CCheckbox } from '../../components'
@@ -39,7 +41,6 @@
   export default{
     name: 'cartIndex',
     data () {
-      let images = imageModule
       return {
         images
       }
@@ -62,7 +63,9 @@
     },
     computed: {
       hasSelected () {
-        return this.selectedShopping ? this.selectedShopping.every(item => item.shopping.length === 0) : false
+        return this.selectedShopping && this.selectedShopping.length > 0
+          ? this.selectedShopping.every(item => item.shopping.length === 0)
+          : true
       },
       totalPrice () {
         return this.selectedTotalPrice ? parseFloat(this.selectedTotalPrice).toFixed(2) : 0
@@ -99,18 +102,14 @@
       VFooter
     },
     route: {
-      data({ to: { params: { key } } }){
+      data ({ to: { params: { key } } }) {
         return this.getCartList(key)
           .then(() => this.getExchangeRate(key, ''))
           .then((data) => this.setShoppingRate(key, data.List))
           .then(()=> {
-            this.selectAll(true, this.serviceRate)
+            return this.selectAll(true, this.serviceRate)
           })
-          .catch(err => {
-
-          })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

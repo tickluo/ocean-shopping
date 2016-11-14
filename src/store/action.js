@@ -135,6 +135,12 @@ const cart = {
         }
         return Promise.resolve(res)
       })
+  },
+  setFaqIndex ({ dispatch }, index) {
+    return dispatch(types.SET_FAQ_INDEX, index)
+  },
+  setFaqLoaded ({ dispatch }, isLoaded) {
+    return dispatch(types.SET_FAQ_LOADED, isLoaded)
   }
 }
 
@@ -142,14 +148,14 @@ const orders = {
   saveOrder (order) {
     return orderApi.saveOrder(order)
   },
-  getOrderList ({ dispatch }, token, index) {
+  getOrderList ({ dispatch }, token, index, loading) {
     return orderApi.getOrderList({
       key: token,
       Page: { PageIndex: index, PageSize }
-    })
+    }, loading)
       .then(data => {
         if (data.Success) {
-          dispatch(types.SET_ORDER_LIST, data.List)
+          dispatch(types.SET_ORDER_LIST, data.List, index)
         }
         return Promise.resolve(data)
       })
@@ -265,14 +271,14 @@ const orders = {
         return Promise.reject(res.Message)
       })
   },
-  getTranOrderList ({ dispatch }, token, page) {
+  getTranOrderList ({ dispatch }, token, index, loading) {
     return orderApi.getTranOrderList({
       key: token,
-      Page: page
-    })
+      Page: { PageIndex: index, PageSize }
+    }, loading)
       .then(data => {
         if (data.Success) {
-          dispatch(types.SET_TRAN_ORDER_LIST, data.List)
+          dispatch(types.SET_TRAN_ORDER_LIST, data.List, index)
         }
         return Promise.resolve(data)
       })

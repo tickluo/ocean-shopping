@@ -50,7 +50,7 @@
       </display-shopping>
     </article>
 
-    <footer class="shopping_footer">
+    <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'submitStore'}">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span></div>

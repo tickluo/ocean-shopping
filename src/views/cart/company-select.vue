@@ -1,6 +1,6 @@
 <template>
   <div>
-    <article class="post_country_company">
+    <article class="post_country_company mar_bot_10"  v-fix-bottom="ss">
       <h3 class="tit4">
         您有商品从<span class="font-weight_6">{{countryInfo &&　countryInfo.Name}}</span>发货，请选择转运公司
       </h3>
@@ -12,7 +12,7 @@
       </company-detail>
     </article>
 
-    <footer class="shopping_footer">
+    <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" @click="returnBack">
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span></div>
