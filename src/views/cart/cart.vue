@@ -1,7 +1,8 @@
 <template>
   <div class="bg_e6">
-    <div class="mar_bot_21"  v-fix-bottom="ss">
-      <article  class="shopping_list_wrap" v-if="countries.length > 0 && rates.length > 0">
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="mar_bot_10" v-fix-bottom="ss">
+      <article class="shopping_list_wrap" v-if="countries.length > 0 && rates.length > 0">
         <cart-class v-for="item in cartList"
                     :title="item.Title"
                     :shop_id="$index"
@@ -11,6 +12,7 @@
                     :rate="shopRate(item.GrabAttrs[0])">
         </cart-class>
       </article>
+      <empty v-if="isEmpty" :e-text="eText" :e-src="images.eCart"></empty>
     </div>
     <section class="sec_footer" v-disable-tap>
       <c-checkbox :selected="toggle" @click="changeToggle">
@@ -26,7 +28,6 @@
         结算
       </a>
     </section>
-
     <v-footer v-disable-tap></v-footer>
   </div>
 </template>
@@ -34,15 +35,18 @@
   import images from '../../asset/images'
   import cartClass from './cart-class.vue'
   import VFooter from '../layout/v-order-footer.vue'
+  import VLoading from '../../components/v-loading.vue'
+  import Empty from '../../components/empty.vue'
   import { CCheckbox } from '../../components'
   import { getShopInfo } from '../../services/match.svc'
-  import { cart } from '../../store/action'
+  import { app, cart } from '../../store/action'
 
   export default{
     name: 'cartIndex',
     data () {
       return {
-        images
+        images,
+        eText: '购物车空空如也'
       }
     },
     vuex: {
@@ -53,17 +57,26 @@
         selectedShopping: state => state.cart.order.selected,
         countries: state => state.cart.countries,
         rates: state => state.cart.rates,
-        currency: state => state.app.Currency
+        currency: state => state.app.appPersist.Currency,
+        removeList: state => state.cart.removeList
       },
       actions: {
         getCartList: cart.getCartList,
         selectAll: cart.selectAll,
-        setShoppingRate: cart.setShoppingRate
+        setShoppingRate: cart.setShoppingRate,
+        clearRemoveList: cart.clearRemoveList
       }
     },
     computed: {
+      isEmpty () {
+        let shoppingLength = 0
+        this.cartList.forEach(item => {
+          shoppingLength += item.GrabAttrs.length
+        })
+        return this.cartList.length === 0 || shoppingLength === this.removeList.length
+      },
       hasSelected () {
-        return this.selectedShopping && this.selectedShopping.length > 0
+        return this.selectedShopping && this.selectedShopping.length > 0 && !this.isEmpty
           ? this.selectedShopping.every(item => item.shopping.length === 0)
           : true
       },
@@ -99,13 +112,16 @@
     components: {
       cartClass,
       CCheckbox,
-      VFooter
+      VFooter,
+      VLoading,
+      Empty
     },
     route: {
-      data ({ to: { params: { key } } }) {
-        return this.getCartList(key)
-          .then(() => this.getExchangeRate(key, ''))
-          .then((data) => this.setShoppingRate(key, data.List))
+      data () {
+        this.clearRemoveList()
+        return this.getCartList()
+          .then(() => this.getExchangeRate(''))
+          .then((data) => this.setShoppingRate(data.List))
           .then(()=> {
             return this.selectAll(true, this.serviceRate)
           })

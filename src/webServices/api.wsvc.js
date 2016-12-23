@@ -1,30 +1,29 @@
 import 'whatwg-fetch'
 import config from '../../config/_base.config'
-import store from '../store/store'
-import { app } from '../store/action'
-import { setSession } from '../services/storage'
+import { setSession, getSession } from '../services/storage.svc'
 import { sessionConfig } from '../local/config.enum'
 
 const url = config.url
 
 /* const checkStatus = response => {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  }
-  throw new Error(response.statusText)
-}*/
+ if (response.status >= 200 && response.status < 300) {
+ return response
+ }
+ throw new Error(response.statusText)
+ }*/
 
 const parseJSON = response => response.json()
 
 export default {
-  post: (params, model, needLoading = false) => {
-    if (needLoading) app.setLoading(store, needLoading)
+  post: (params, model) => {
+    const postModel = model || {}
+    postModel.key = getSession(sessionConfig.Key)
     return fetch(url + params, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      /* return fetch(params, {
+      /* fetch(params, {
        method: 'POST',
        /!* credentials: 'include',*!/
        credentials: 'same-origin',
@@ -32,15 +31,9 @@ export default {
        Accept: 'application/json',
        'Content-Type': 'application/json'
        },*/
-      body: JSON.stringify(model)
+      body: JSON.stringify(postModel)
     })
-      .then(res => {
-        if (needLoading) {
-          app.setLoading(store, false)
-          app.setSubmitLoading(store, false, '')
-        }
-        return Promise.resolve(res)
-      })
+      .then(res => Promise.resolve(res))
       .then(parseJSON)
       .then(res => {
         if (!res.Success && res.Code === -2000) {
@@ -52,4 +45,5 @@ export default {
   },
   local: (fileName) => fetch(`../asset/json/${fileName}`)
     .then(parseJSON)
+
 }

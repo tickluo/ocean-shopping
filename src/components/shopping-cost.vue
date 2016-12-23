@@ -12,7 +12,7 @@
       <div class="mrch_attr_tit">商品数量:</div>
       <div class="merch_attr_detail">
         <span class="button_reduce" @click="reduceCount"></span>
-        <span class="real_num"><input type="text" :value="defaultCount"/></span>
+        <span class="real_num"><input type="text" :value="defaultCount" readonly="readonly"/></span>
         <span class="button_add" @click="addCount"></span>
       </div>
     </section>

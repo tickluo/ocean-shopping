@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
   <div>
-    <div class="bg_fff mar_bot_10"  v-fix-bottom="ss">
+    <div class="bg_fff"  v-fix-bottom="ss">
     <section class="process_wrap">
       <ul class="procsee_list">
         <li>支付<br/>订单费用</li>
@@ -133,8 +133,9 @@
         }
         if (this.companyAndWay.findIndex(item => item.countryId === this.selectedCountry) < 0) {
           this.setSubmitLoading(true, '正在估算...')
-          cart.getCompanyAndWay(this.$route.params.key, this.selectedCountry)
+          cart.getCompanyAndWay(this.selectedCountry)
             .then(res => {
+              this.setSubmitLoading(false)
               if (res.Success) {
                 this.setCompanyAndWay(this.selectedCountry, res.List)
               }
@@ -148,20 +149,19 @@
         }
         if (shipWay.WayType === WayType.Math) {
           return mathAlgo(
-            this.freightWeight,
-            shipWay.FirstWeight * unitRate,
+            this.freightWeight * unitRate,
+            shipWay.FirstWeight,
             shipWay.FirstWeightPrice,
             shipWay.ContinuedWeight,
-            shipWay.ContinuedWeightPrice,
-            shipWay.Rate
+            shipWay.ContinuedWeightPrice
           ).toFixed(2)
         }
       }
     },
     route: {
-      data({ to: { params: { key } } }){
+      data(){
         if (this.countries.length < 1) {
-          return this.setCountryRate(key)
+          return this.setCountryRate()
             .then(res => {
               if (res.Success) {
                 this.selectedCountry = this.countries[0].Id
@@ -171,8 +171,7 @@
           this.selectedCountry = this.countries[0].Id
           return {}
         }
-      },
-      waitForData: true
+      }
     }
   }
 </script>

@@ -19,7 +19,6 @@
 </template>
 
 <script>
-  import LoadMore from '../../components/c-loadmore.vue'
   import { cart } from '../../store/action'
 
   export default{
@@ -43,7 +42,7 @@
     },
     methods: {
       loadMore () {
-        this.getFaq(this.$route.params.key, this.faqIndex + 1)
+        this.getFaq(this.faqIndex + 1)
           .then(res => {
             if (res.Success) this.setFaqIndex(this.faqIndex + 1)
             if (res.TotalPage <= this.faqIndex) this.setFaqLoaded(true)
@@ -52,7 +51,7 @@
     },
     ready () {
       if (this.faqList.length === 0)
-        return this.getFaq(this.$route.params.key, 1)
+        return this.getFaq(1)
     }
   }
 </script>

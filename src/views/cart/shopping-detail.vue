@@ -1,30 +1,37 @@
 <template>
   <div>
-    <shopping-fill v-if="type === 'fill'"
-                   :shopping="shoppingView"
-                   :cart_count="cartCount"
-                   :is_country_rate="isCountryRate"
-                   :fill_shopping="fillShopping"
-                   :select_currency="selectCurrency">
-    </shopping-fill>
-    <shopping-add v-if="type === 'add'"
-                  :shopping="shoppingView"
-                  :cart_count="cartCount"
-                  :select_currency="selectCurrency">
-    </shopping-add>
-    <shopping-modify v-if="type === 'modify'"
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData">
+      <shopping-fill v-if="type === 'fill'"
                      :shopping="shoppingView"
-                     :select_currency="selectCurrency"
-                     :modify_shopping="modifyShopping">
-    </shopping-modify>
+                     :cart_count="cartCount"
+                     :is_country_rate="isCountryRate"
+                     :fill_shopping="fillShopping"
+                     :select_currency="selectCurrency">
+      </shopping-fill>
+      <shopping-modify v-if="type === 'add'"
+                       :shopping="shoppingView"
+                       :type="'add'"
+                       :cart_count="cartCount"
+                       :select_currency="selectCurrency"
+                       :modify_shopping="modifyShopping">
+      </shopping-modify>
+      <shopping-modify v-if="type === 'modify'"
+                       :shopping="shoppingView"
+                       :type="'modify'"
+                       :cart_count="cartCount"
+                       :select_currency="selectCurrency"
+                       :modify_shopping="modifyShopping">
+      </shopping-modify>
+    </div>
   </div>
 </template>
 
 <script>
   import { cart } from '../../store/action'
   import ShoppingFill from './shopping-fill.vue'
-  import ShoppingAdd from './shopping-add.vue'
   import ShoppingModify from './shopping-modify.vue'
+  import VLoading from '../../components/v-loading.vue'
   import { getDisableSku } from '../../services/sku.svc'
   import { parseDomain } from '../../services/util.svc'
 
@@ -42,8 +49,8 @@
     },
     components: {
       ShoppingFill,
-      ShoppingAdd,
-      ShoppingModify
+      ShoppingModify,
+      VLoading
     },
     methods: {
       getExchangeRate: cart.getExchangeRate,
@@ -68,20 +75,25 @@
       }
     },
     route: {
-      data({ to: { params: { key, Id, shopId } } })
+      data({ to: { params: { Id, shopId } } })
       {
         let url = ''
         if (Id) {
-          if (!this.cartList || this.cartList.length === 0)
-            return this.$router.go({ name: 'cart' })
           this.modifyShopping = this.cartList[shopId * 1].GrabAttrs
             .find(item => item.Id === parseInt(Id))
           url = this.modifyShopping.Url
         }
+        else {
+          this.modifyShopping = {
+            Note: '',
+            IsBuy: true,
+            Coupon: ''
+          }
+        }
         return Promise.all([
-          this.getShopping(key, url),
-          cart.getCartCount(key),
-          this.setCountryRate(key)
+          this.getShopping(url),
+          cart.getCartCount(),
+          this.setCountryRate()
         ])
           .then((resArr) => {
             if (resArr[1].Success) {
@@ -141,7 +153,7 @@
               })
             }
             // TODO: don't use parseDomain
-            return this.getExchangeRate(key, parseDomain(resArr[0].Data.Shop.Url))
+            return this.getExchangeRate(parseDomain(resArr[0].Data.Url))
           })
           .then(res => {
             this.websiteRate = res.List[0]

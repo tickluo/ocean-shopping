@@ -39,7 +39,7 @@
         rates: state => state.cart.rates,
         removeList: state => state.cart.removeList,
         countries: state => state.cart.countries,
-        currency: state => state.app.Currency
+        currency: state => state.app.appPersist.Currency
       }
     },
     computed: {

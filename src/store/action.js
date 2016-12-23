@@ -6,8 +6,8 @@ import * as types from './mutation-types'
 import { PageSize } from '../local/config.enum'
 
 const app = {
-  setAppCurrency ({ dispatch }, token) {
-    return appApi.getAppCurrency(token)
+  setAppCurrency ({ dispatch }) {
+    return appApi.getAppCurrency()
       .then(data => {
         if (data.Success) return dispatch(types.SET_APP_CURRENCY, data.Data)
         return Promise.reject(data.Message)
@@ -18,9 +18,6 @@ const app = {
   },
   genPay ({ dispatch }, toggle) {
     return dispatch(types.GEN_PAY, toggle)
-  },
-  setLoading ({ dispatch }, toggle) {
-    return dispatch(types.SET_LOADING, toggle)
   },
   setSubmitLoading ({ dispatch }, toggle, msg) {
     return dispatch(types.SET_SUBMIT_LOADING, toggle, msg)
@@ -37,8 +34,8 @@ const app = {
 }
 
 const cart = {
-  getShopping (token, url) {
-    return cartApi.getShopping({ key: token, Url: url })
+  getShopping (url) {
+    return cartApi.getShopping({ Url: url })
     /* .then(shopping => {
      dispatch(types.RECEIVE_SHOPPING_INFO, shopping.Data)
      return Promise.resolve(shopping)
@@ -47,21 +44,21 @@ const cart = {
   setShopping ({ dispatch }, shopping) {
     return dispatch(types.RECEIVE_SHOPPING_INFO, shopping)
   },
-  getCartCount (token) {
-    return cartApi.getCartCount({ key: token })
+  getCartCount () {
+    return cartApi.getCartCount()
   },
-  getExchangeRate (token, domain) {
-    return cartApi.getShopRate(token, domain)
+  getExchangeRate (domain) {
+    return cartApi.getShopRate({ TopDomain: domain })
   },
-  setShoppingRate ({ dispatch }, token, rateList) {
-    return cartApi.getCountryRate(token)
+  setShoppingRate ({ dispatch }, rateList) {
+    return cartApi.getCountryRate()
       .then((res) => {
         dispatch(types.SAVE_SHOP_RATE, rateList)
         return dispatch(types.SAVE_COUNTRY_RATE, res.List)
       })
   },
-  setCountryRate ({ dispatch }, token) {
-    return cartApi.getCountryRate(token)
+  setCountryRate ({ dispatch }) {
+    return cartApi.getCountryRate()
       .then((res) => {
         dispatch(types.SAVE_COUNTRY_RATE, res.List)
         return Promise.resolve(res)
@@ -73,9 +70,12 @@ const cart = {
   updateShoppingDisplay ({ dispatch }, detail) {
     dispatch(types.UPDATE_SHOPPING_DISPLAY, detail)
   },
-  getCartList ({ dispatch }, token) {
-    return cartApi.getCartList(token)
-      .then(cartInfo => dispatch(types.GET_CART_LIST, cartInfo.List))
+  getCartList ({ dispatch }) {
+    return cartApi.getCartList()
+      .then(cartInfo => {
+        dispatch(types.GET_CART_LIST, cartInfo.List)
+        return cartInfo
+      })
   },
   selectAll ({ dispatch }, toggle, rate) {
     dispatch(types.SELECT_ALL_SHOPPING, toggle, rate)
@@ -92,11 +92,14 @@ const cart = {
   reduceShoppingCount ({ dispatch }) {
     dispatch(types.DECREASE_SHOPPING_COUNT)
   },
-  addToCart (token, shopping) {
-    return cartApi.addToCart(token, shopping)
+  addToCart (shopping) {
+    return cartApi.addToCart({ GrabAttr: shopping })
   },
-  removeShopping ({ dispatch }, token, id) {
-    return cartApi.removeShopping(token, id)
+  clearRemoveList ({ dispatch }) {
+    dispatch(types.CLEAR_REMOVE_LIST)
+  },
+  removeShopping ({ dispatch }, id) {
+    return cartApi.removeShopping({ GrabAttributeId: id })
       .then(res => {
         if (res.Success) {
           dispatch(types.REMOVE_SHOPPING_BY_ID, id)
@@ -105,28 +108,27 @@ const cart = {
         return Promise.reject(res.Message)
       })
   },
-  getDefaultCompany ({ dispatch }, token, countryIds) {
-    return cartApi.getDefaultCompany(token, countryIds)
+  getDefaultCompany ({ dispatch }, countryIds) {
+    return cartApi.getDefaultCompany({ CountryIds: countryIds })
       .then(res => {
         dispatch(types.SET_DEFAULT_COMPANY, res.List)
         return res.List
       })
   },
-  getCompanyByCid (token, countryId) {
-    return cartApi.getCompanyByCid(token, countryId)
+  getCompanyByCid (countryId) {
+    return cartApi.getCompanyByCid({ CountryId: countryId })
   },
   setCompanyByCid ({ dispatch }, countryId, company) {
     dispatch(types.SET_COMPANY_BY_CID, countryId, company)
   },
-  getCompanyAndWay (token, countryId) {
-    return cartApi.getCompanyAndWay(token, countryId)
+  getCompanyAndWay (countryId) {
+    return cartApi.getCompanyAndWay({ CountryId: countryId })
   },
   setCompanyAndWay ({ dispatch }, countryId, company) {
     dispatch(types.SET_COMPANY_AND_WAY, countryId, company)
   },
-  getFaq ({ dispatch }, token, index) {
+  getFaq ({ dispatch }, index) {
     return cartApi.getFaq({
-      key: token,
       Page: { PageIndex: index, PageSize }
     })
       .then(res => {
@@ -148,11 +150,8 @@ const orders = {
   saveOrder (order) {
     return orderApi.saveOrder(order)
   },
-  getOrderList ({ dispatch }, token, index, loading) {
-    return orderApi.getOrderList({
-      key: token,
-      Page: { PageIndex: index, PageSize }
-    }, loading)
+  getOrderList ({ dispatch }, index) {
+    return orderApi.getOrderList({ Page: { PageIndex: index, PageSize }})
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_ORDER_LIST, data.List, index)
@@ -160,8 +159,8 @@ const orders = {
         return Promise.resolve(data)
       })
   },
-  getOrderDetail ({ dispatch }, token, id) {
-    return orderApi.getOrderDetail({ key: token, OrderId: id })
+  getOrderDetail ({ dispatch }, id) {
+    return orderApi.getOrderDetail({ OrderId: id })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_DISPLAY_ORDER, data.Data)
@@ -169,8 +168,8 @@ const orders = {
         return Promise.resolve(data)
       })
   },
-  cancelOrder ({ dispatch }, token, id) {
-    return orderApi.cancelOrder({ key: token, OrderId: id })
+  cancelOrder ({ dispatch }, id) {
+    return orderApi.cancelOrder({ OrderId: id })
       .then(res => {
         if (res.Success) {
           dispatch(types.CANCEL_ORDER, id)
@@ -179,8 +178,8 @@ const orders = {
         return Promise.reject(res.Message)
       })
   },
-  getPackageList ({ dispatch }, token) {
-    return orderApi.getPackageList({ key: token, Type: 2 })
+  getPackageList ({ dispatch }) {
+    return orderApi.getPackageList({ Type: 2 })
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_PACKAGE_LIST, data.List)
@@ -188,9 +187,8 @@ const orders = {
         return Promise.resolve(data)
       })
   },
-  setStoreDetail ({ dispatch }, token, id) {
+  setStoreDetail ({ dispatch }, id) {
     return orderApi.getPackageDetail({
-      key: token,
       PackageId: id
     })
       .then(data => {
@@ -200,9 +198,8 @@ const orders = {
         return Promise.resolve(data)
       })
   },
-  getStoreDetail (token, id) {
+  getStoreDetail (id) {
     return orderApi.getPackageDetail({
-      key: token,
       PackageId: id
     })
   },
@@ -212,34 +209,29 @@ const orders = {
   setDefaultPid ({ dispatch }, id) {
     return dispatch(types.SET_DEFAULT_PID, id)
   },
-  getPackageByShipId (token, id) {
+  getPackageByShipId (id) {
     return orderApi.getPackageByShipId({
-      key: token,
       ShippingCompanyId: id
     })
   },
-  getPackageCount (token, id) {
+  getPackageCount (id) {
     return orderApi.getPackageCount({
-      key: token,
       ShippingCompanyId: id
     })
   },
-  getPackageByIds (token, ids) {
+  getPackageByIds (ids) {
     return orderApi.getPackageByIds({
-      key: token,
       PackageIds: ids
     })
   },
-  getShipWay (token, weight, id) {
+  getShipWay (weight, id) {
     return orderApi.getShipWay({
-      key: token,
       Weight: weight,
       ShippingCompanyId: id
     })
   },
-  getShipService (token, id) {
+  getShipService (id) {
     return orderApi.getShipService({
-      key: token,
       ShippingCompanyId: id
     })
   },
@@ -261,8 +253,8 @@ const orders = {
   saveTranOrder (order) {
     return orderApi.saveTranOrder(order)
   },
-  receiptGoods ({ dispatch }, token, id) {
-    return orderApi.receiptGoods({ key: token, ShippingId: id })
+  receiptGoods ({ dispatch }, id) {
+    return orderApi.receiptGoods({ ShippingId: id })
       .then(res => {
         if (res.Success) {
           dispatch(types.RECEIPT_GOODS, id)
@@ -271,11 +263,8 @@ const orders = {
         return Promise.reject(res.Message)
       })
   },
-  getTranOrderList ({ dispatch }, token, index, loading) {
-    return orderApi.getTranOrderList({
-      key: token,
-      Page: { PageIndex: index, PageSize }
-    }, loading)
+  getTranOrderList ({ dispatch }, index) {
+    return orderApi.getTranOrderList({ Page: { PageIndex: index, PageSize }})
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_TRAN_ORDER_LIST, data.List, index)
@@ -283,18 +272,16 @@ const orders = {
         return Promise.resolve(data)
       })
   },
-  getTransportDetail (token, id) {
+  getTransportDetail (id) {
     return orderApi.getTranOrderDetail({
-      key: token,
       ShippingId: id
     })
   },
   setTransportDetail ({ dispatch }, order) {
     return dispatch(types.SET_TRAN_ORDER_DETAIL, order)
   },
-  getExpressDetail (token, code, expressNo) {
+  getExpressDetail (code, expressNo) {
     return orderApi.getExpressDetail({
-      key: token,
       Code: code,
       ExpressNo: expressNo
     })
@@ -308,8 +295,8 @@ const orders = {
 }
 
 const user = {
-  getDefaultAddress ({ dispatch }, token) {
-    return userApi.getDefaultAddress({ key: token })
+  getDefaultAddress ({ dispatch }) {
+    return userApi.getDefaultAddress()
       .then(data => {
         if (data.Success) {
           dispatch(types.SET_DEFAULT_ADDRESS, data.Data)
@@ -326,24 +313,19 @@ const user = {
   setSelectAddress ({ dispatch }, id) {
     return dispatch(types.SET_SELECT_ADDRESS, id)
   },
-  getUserAddress (token) {
-    return userApi.getUserAddress({ key: token })
+  getUserAddress () {
+    return userApi.getUserAddress()
   },
-  uploadIdCard (token, file) {
+  uploadIdCard (file) {
     return userApi.uploadIdCard({
-      key: token,
       IdCartImage: file
     })
   },
-  saveAddress (token, address) {
-    return userApi.saveAddress({
-      key: token,
-      Address: address
-    })
+  saveAddress (address) {
+    return userApi.saveAddress({ Address: address })
   },
-  deleteAddress (token, addressId, setId) {
+  deleteAddress (addressId, setId) {
     return userApi.deleteAddress({
-      key: token,
       AddressId: addressId,
       SetId: setId
     })

@@ -163,7 +163,7 @@
     vuex: {
       getters: {
         countries: state => state.cart.countries,
-        currentCurrency: state => state.app.Currency
+        currentCurrency: state => state.app.appPersist.Currency
       },
       actions: {
         showAlert: app.showAlert,
@@ -229,8 +229,9 @@
         const duringMsg = this.$route.params.Id ? '正在修改...' : '正在添加至购物车...'
         const resMsg = this.$route.params.Id ? '修改' : '添加'
         this.setSubmitLoading(true, duringMsg)
-        return cart.addToCart(this.$route.params.key, this.genCartInfo())
+        return cart.addToCart(this.genCartInfo())
           .then(res => {
+            this.setSubmitLoading(false)
             if (res.Success) {
               this.showAlert(`${resMsg}成功`)
               this.$router.go({ name: 'cart' })

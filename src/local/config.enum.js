@@ -4,8 +4,24 @@ const sessionConfig = {
   AppConfig: 'SCAPPKEY',
   LoginRoute: 'SCLROUTE',
   ErrorMsg: 'SCERRMSG',
-  Duration: 86400
+  Duration: 86400000
 }
+
+const CountryNumber = Object.freeze({
+  1: 'jp',
+  2: 'usa',
+  3: 'cn',
+  4: 'en',
+  5: 'eur'
+})
+
+/* const CountryNumber = Object.freeze({
+  1: 'jp',
+  2: 'usa',
+  3: 'cn',
+  4: 'eur',
+  5: 'en'
+})*/
 
 const WayType = Object.freeze({
   Range: 4,
@@ -40,5 +56,6 @@ export {
   lbToG,
   PageSize,
   ExpressUrl,
-  DisclaimerUrl
+  DisclaimerUrl,
+  CountryNumber
 }

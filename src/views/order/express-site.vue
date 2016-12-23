@@ -1,5 +1,5 @@
 <template>
-  <div class="bg_fff">
+  <div class="bg_fff" v-fix-bottom="ss" style="bottom:0rem">
     <section class="transport_company">
       <h4>物流公司: <strong>{{express.name}}</strong></h4>
       <h4>物流单号: <strong>{{express.number}}</strong></h4>

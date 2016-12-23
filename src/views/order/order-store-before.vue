@@ -1,5 +1,6 @@
 <template>
-  <div class="mar_bot_10">
+  <div class="mar_top_17" v-fix-bottom="ss">
+    <empty v-if="packageList.length === 0" :e-text="eText" :e-src="images.eOrderBefore"></empty>
     <article class="order_wrap" v-for="package in packageList"
              v-link="{name:'storeOrderDetail',params:{id:package.Id}}">
       <h4 class="order_number">
@@ -31,11 +32,14 @@
   import displayShopping from '../layout/display-shopping.vue'
   import { ProductStatus } from '../../local/state.enum'
   import { orders, app } from '../../store/action'
-
+  import Empty from '../../components/empty.vue'
+  import images from '../../asset/images'
   export default{
     data(){
       return {
-        ProductStatus
+        ProductStatus,
+        images,
+        eText: "还没有待入库的商品"
       }
     },
     vuex: {
@@ -57,7 +61,8 @@
       }
     },
     components: {
-      displayShopping
+      displayShopping,
+      Empty
     }
   }
 </script>

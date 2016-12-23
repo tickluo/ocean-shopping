@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_18" v-fix-bottom>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="mar_bot_08" :class="{'mar_bot_14': orderDetail.Replenishment}" v-fix-bottom>
       <article class="order_wrap">
         <h4 class="order_number">
           <div class="real_number">
@@ -30,7 +31,7 @@
       </article>
 
     </div>
-    <section class="summary_money" v-disable-tap>
+    <section class="summary_money" :class="{'fix_bot_16': orderDetail.Replenishment}" v-disable-tap>
       <div class="summary_con">
         <span class="summary_left">订单总额</span>
         <strong class="text_align_r">RMB {{orderDetail.TotalAmount}}</strong>
@@ -38,7 +39,7 @@
     </section>
 
     <div class="order_money_change" v-if="orderDetail.Replenishment" v-disable-tap>
-      订单金额变动 +RMB {{orderDetail.Replenishment.Money}}
+      {{orderDetail.Replenishment.Reason||''}} + RMB {{orderDetail.Replenishment.Money}}
     </div>
     <footer class="shopping_footer" v-disable-tap>
       <div class="icon_shopping_cart_1" v-link="{name:'shoporder'}">
@@ -58,6 +59,7 @@
 <script>
   import images from '../../asset/images'
   import displayShopping from '../layout/display-shopping.vue'
+  import VLoading from '../../components/v-loading.vue'
   import { orders, user, app } from '../../store/action'
   import { OrderStatus, OrderType } from '../../local/state.enum'
 
@@ -79,7 +81,8 @@
       }
     },
     components: {
-      displayShopping
+      displayShopping,
+      VLoading
     },
     methods: {
       payOrder () {
@@ -96,22 +99,21 @@
           orderNo: this.orderDetail.OrderNo,
           type: tempType,
           totalAmount: tempPrice,
-          returnUrl: '/#!/order/' + this.$route.params.key,
-          backUrl: `/#!/order/detail/${this.$route.params.id}/${this.$route.params.key}`
+          returnUrl: '/#!/order/',
+          backUrl: `/#!/order/detail/${this.$route.params.id}`
         })
         this.genPay(true)
       }
     },
     route: {
-      data ({ to: { params: { id, key } } }) {
-        if (this.orderDetail.Id && this.orderDetail.Id === id) {
-          return this.orderDetail
+      data ({ to: { params: { id } } }) {
+        if (this.orderDetail.Id && this.orderDetail.Id === id * 1) {
+          return {}
         }
-        return this.getOrderDetail(key, id)
+        return this.getOrderDetail(id)
           .then(res => {
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

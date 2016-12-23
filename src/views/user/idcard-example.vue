@@ -1,6 +1,6 @@
 <template>
   <div>
-    <article class="card_wrap mar_bot_10" v-fix-bottom="ss">
+    <article class="card_wrap" v-fix-bottom="ss">
       <p class="card_tips">身份证照片必须清晰、无水印、死角边框齐全，且身份证未过期。否则包裹将无法清关。
       </p>
       <section class="the_card_block">

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_11" v-fix-bottom="ss">
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="" v-fix-bottom="ss">
       <company-country v-for="item in companySet" :company="item">
       </company-country>
     </div>
@@ -20,6 +21,7 @@
 <script>
   import images from '../../asset/images'
   import companyCountry from './company-country.vue'
+  import VLoading from '../../components/v-loading.vue'
   import { numberUnique } from '../../services/util.svc'
   import { cart } from '../../store/action'
 
@@ -46,20 +48,18 @@
       }
     },
     components: {
-      companyCountry
+      companyCountry,
+      VLoading
     },
     route: {
-      data({ to: { params: { key } }, from: { name, title } }){
-        if (!this.cartList || this.cartList.length === 0)
-          return this.$router.go({ name: 'cart' })
+      data({ from: { name, title } }){
         if (name !== 'selectCompany' && title !== '提交订单') {
-          return this.getDefaultCompany(key, this.countries)
+          return this.getDefaultCompany(this.countries)
             .then(data => {
             })
         }
         return {}
-      },
-      waitForData: true
+      }
     }
   }
 </script>

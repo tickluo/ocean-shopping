@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_9" v-fix-bottom>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="mar_bot_08" v-fix-bottom="ss">
       <article class="order_wrap">
         <h4 class="order_number">
           <div class="real_number">
@@ -44,6 +45,7 @@
 
 <script>
   import images from '../../asset/images'
+  import VLoading from '../../components/v-loading.vue'
   import displayShopping from '../layout/display-shopping.vue'
   import { orders } from '../../store/action'
 
@@ -63,7 +65,8 @@
       }
     },
     components: {
-      displayShopping
+      displayShopping,
+      VLoading
     },
     methods: {
       submit (pid, sid) {
@@ -86,15 +89,14 @@
       }
     },
     route: {
-      data ({ to: { params: { id, key } } }) {
-        if (this.storeDetail.Id && this.storeDetail.Id === id) {
-          return this.storeDetail
+      data ({ to: { params: { id } } }) {
+        if (this.storeDetail.Id && this.storeDetail.Id === id * 1) {
+          return {}
         }
-        return this.setStoreDetail(key, id)
+        return this.setStoreDetail(id)
           .then(res => {
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

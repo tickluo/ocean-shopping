@@ -1,3 +1,5 @@
+import createPersist from 'vuex-localstorage'
+import { sessionConfig } from '../../local/config.enum'
 import {
   SET_APP_CURRENCY,
   GEN_PAY,
@@ -8,10 +10,17 @@ import {
   HIDE_CONFIRM
 } from '../mutation-types'
 
+const APP_ENV_KEY = 'APP_ENV_KEY'
+
+const persist = createPersist(APP_ENV_KEY, {
+  Currency: {}
+}, {
+  expires: sessionConfig.Duration
+})
+
 const state = {
-  Currency: {},
+  appPersist: persist.get(),
   genPay: false,
-  loading: false,
   submitLoading: {
     loading: false,
     message: ''
@@ -32,7 +41,8 @@ const state = {
 
 const mutations = {
   [SET_APP_CURRENCY] (state, currency) {
-    state.Currency = currency
+    state.appPersist.Currency = currency
+    persist.set(state.appPersist)
   },
   [GEN_PAY] (state, toggle) {
     state.genPay = toggle

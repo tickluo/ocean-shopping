@@ -4,8 +4,10 @@
 
 <script>
   import config from '../../../config/_base.config'
+  import { getSession } from '../../services/storage.svc'
   import { payWay } from '../../local/restful.enum'
   import { getLocalURL } from '../../services/util.svc'
+  import { sessionConfig } from '../../local/config.enum'
 
   export default{
     data(){
@@ -18,7 +20,7 @@
     },
     computed: {
       key () {
-        return this.$route.params.key
+        return getSession(sessionConfig.Key)
       }
     },
     ready () {

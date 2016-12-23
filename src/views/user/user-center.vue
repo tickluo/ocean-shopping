@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="pos_height_100">
-      <a v-link="{name:'manageAddress'}" class="sel_other_company">
+    <div class="pos_height_100" v-fix-bottom="ss">
+      <a v-link="{name:'manageAddress'}" class="s_list_box">
         <span class="flex_width">管理地址</span>
         <img :src="images.iconR" alt="" class="icon_right">
       </a>

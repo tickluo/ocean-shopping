@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_29" v-fix-bottom>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="mar_bot_29" v-fix-bottom>
       <article class="about_address_wrap">
         <section class="change_address">
           <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
@@ -134,6 +135,7 @@
   import images from '../../asset/images'
   import { orders, user, app } from '../../store/action'
   import displayShopping from '../layout/display-shopping.vue'
+  import VLoading from '../../components/v-loading.vue'
   import { WayType, PayType } from '../../local/config.enum'
   import { rangeAlgo, mathAlgo } from '../../services/ship.svc'
 
@@ -180,7 +182,8 @@
       }
     },
     components: {
-      displayShopping
+      displayShopping,
+      VLoading
     },
     computed: {
       hasAddress () {
@@ -254,8 +257,7 @@
             tempShip.FirstWeight,
             tempShip.FirstWeightPrice,
             tempShip.ContinuedWeight,
-            tempShip.ContinuedWeightPrice,
-            tempShip.Rate
+            tempShip.ContinuedWeightPrice
           ).toFixed(2)
         }
         // TODO: change to regular alert
@@ -274,7 +276,6 @@
         submitOrder.Coupon = ''
         submitOrder.AddressId = this.defaultAddress.Id
         submitOrder.Note = this.note
-        submitOrder.key = this.$route.params.key
         this.showConfirm({
           tip: '是否支付运单？',
           button: '支付',
@@ -284,12 +285,13 @@
             this.setSubmitLoading(true, '正在生成运单...')
             return orders.saveTranOrder(submitOrder)
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success) {
                   this.setPayOrder({
                     paymentNo: res.Data.PaymentNo,
                     totalAmount: res.Data.TotalAmount,
-                    returnUrl: `/#!/order/${this.$route.params.key}/store/after`,
-                    backUrl: `/#!/order/${this.$route.params.key}/store/after`
+                    returnUrl: `/#!/order/store/after`,
+                    backUrl: `/#!/order/store/after`
                   })
                   this.genPay(true)
                 }
@@ -300,14 +302,12 @@
       }
     },
     route: {
-      data ({ to: { params: { id, type, key } } }) {
-        if (!this.defaultPid || this.defaultPid === 0)
-          return this.$router.go({ name: 'storeOrderAfter' })
+      data ({ to: { params: { id, type } } }) {
         let ids = []
         if (type === 'new') this.initOrder()
         else ids = Array.from(this.order.PackageIds)
         ids.push(this.defaultPid)
-        return orders.getPackageByIds(key, ids)
+        return orders.getPackageByIds(ids)
           .then(data => {
             let weight = 0
             if (data.Success) {
@@ -322,9 +322,9 @@
               this.packages = data.List
             }
             return Promise.all([
-              orders.getShipWay(key, weight, id),
-              orders.getShipService(key, id),
-              orders.getPackageCount(key, id)
+              orders.getShipWay(weight, id),
+              orders.getShipService(id),
+              orders.getPackageCount(id)
             ])
           })
           .then(res => {
@@ -344,7 +344,7 @@
               this.packageCount = res[2].Data.PackageCount
             }
             if (this.defaultAddress.Id) return {}
-            this.setDefaultAddress(key)
+            this.setDefaultAddress()
           })
       }
     }

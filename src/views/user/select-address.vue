@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_10" v-fix-bottom>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="" v-fix-bottom>
       <section class="change_address">
         <div class="user_address_name">
           <a class="wid_btn" v-link="{name:'addAddress'}">
@@ -47,6 +48,7 @@
 
 <script>
   import images from '../../asset/images'
+  import VLoading from '../../components/v-loading.vue'
   import { user, app } from '../../store/action'
 
   export default{
@@ -55,6 +57,9 @@
         images,
         addresses: []
       }
+    },
+    components: {
+      VLoading
     },
     vuex: {
       getters: {
@@ -104,8 +109,9 @@
           fail: '地址删除失败',
           handle: () => {
             this.setSubmitLoading(true, '正在删除地址...')
-            return user.deleteAddress(this.$route.params.key, addressId, nextId)
+            return user.deleteAddress(addressId, nextId)
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success) {
                   this.addresses.splice(index, 1)
                 }
@@ -116,15 +122,14 @@
       }
     },
     route: {
-      data({ to: { params: { key } } }){
-        return user.getUserAddress(key)
+      data(){
+        return user.getUserAddress()
           .then(res => {
             if (res.Success) {
               this.addresses = res.List
             }
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

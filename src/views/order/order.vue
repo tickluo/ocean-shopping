@@ -8,7 +8,7 @@
       </li>
       <li
         :class="{cur_order:route === 'storeOrderBefore' || route === 'storeOrderAfter'}"
-        v-link="{name:'storeOrderBefore',params:{key:$route.params.key}}">
+        v-link="{name:'storeOrderBefore'}">
         <img :src="images.iconArrR" alt="" class="right_icon left_icon">
         <a>转运仓库</a>
         <img :src="images.iconArrR" alt="" class="right_icon">

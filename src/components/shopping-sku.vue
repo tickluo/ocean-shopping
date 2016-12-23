@@ -1,7 +1,7 @@
 <template>
   <section class="select_attr_wrap" v-if="skuSelect">
     <h4 class="select_attr_wrap_tit">
-      {{title}} <span class="font-weight_6">{{CurrrentDisplayOption}}</span>
+      {{title}}
     </h4>
     <ul class="select_attr_list">
       <li v-for="item in list" track-by="PropId"
@@ -29,15 +29,15 @@
       }
     },
     computed: {
+      skuRowId () {
+        return this.skuSelect.PropIds.findIndex(item => item[0] === `${this.id}`)
+      },
       Skus () {
         return this.sku.map((item)=> ({
           SkuId: item.SkuId,
           PropIds: item.PropIds,
           Selected: item.Selected
         }))
-      },
-      CurrrentDisplayOption () {
-        return this.SelectOption(this.skuSelect.PropIds[this.id]).PropertieName
       }
     },
     methods: {
@@ -51,8 +51,9 @@
          * set current SKU selected
          */
         let propIdsBuffer = context.skuSelect.PropIds.join(',').split(',')
-        propIdsBuffer.splice(PropId.charAt(0) * 1, 1, PropId)
-        let currentSku = context.sku.find(item => item.PropIds.toString() === propIdsBuffer.toString())
+        propIdsBuffer.splice(this.skuRowId, 1, PropId)
+        /* let currentSku = context.sku.find(item => item.PropIds.toString() === propIdsBuffer.toString())*/
+        let currentSku = context.sku.find(item => propIdsBuffer.every(sku => item.PropIds.includes(sku)))
         /**
          * get disabled SKU options
          */

@@ -3,18 +3,21 @@
     <v-header v-disable-tap :title="title"></v-header>
     <router-view class="view" transition="expand" keep-alive></router-view>
     <pay-form v-if="genPay"></pay-form>
-    <v-loading></v-loading>
     <c-alert></c-alert>
     <c-confirm></c-confirm>
+    <v-handle-loading></v-handle-loading>
+    <!--<v-footer v-disable-tap></v-footer>-->
   </div>
 </template>
 
 <script>
-  import './asset/css/main.css'
+  import './asset/css/common.css'
+  import './asset/css/cart.css'
+  import './asset/css/order.css'
+  import './asset/css/user.css'
   import store from './store/store'
-  import { VHeader, CAlert, CConfirm } from './components'
+  import { VHeader, CAlert, CConfirm, VHandleLoading } from './components'
   import PayForm from './views/user/get-pay.vue'
-  import VLoading from './components/v-loading.vue'
 
   export default {
     name: "App",
@@ -32,8 +35,8 @@
     components: {
       VHeader,
       PayForm,
-      VLoading,
       CAlert,
+      VHandleLoading,
       CConfirm
     }
   }

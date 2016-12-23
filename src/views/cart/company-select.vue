@@ -1,6 +1,7 @@
 <template>
   <div>
-    <article class="post_country_company mar_bot_10"  v-fix-bottom="ss">
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <article v-if="!$loadingRouteData" class="bg_fff" v-fix-bottom="ss">
       <h3 class="tit4">
         您有商品从<span class="font-weight_6">{{countryInfo &&　countryInfo.Name}}</span>发货，请选择转运公司
       </h3>
@@ -26,6 +27,7 @@
 
 <script>
   import companyDetail from './company-detail.vue'
+  import VLoading from '../../components/v-loading.vue'
   import { cart } from '../../store/action'
   import images from '../../asset/images'
 
@@ -64,19 +66,20 @@
       confirmCompany () {
         this.setCompanyByCid(parseInt(this.$route.params.countryId), {
           CountryId: parseInt(this.$route.params.countryId),
-          ShippingCompanyCount:this.companyList.length,
+          ShippingCompanyCount: this.companyList.length,
           ShippingCompany: this.companyList
             .find(item => item.ShippingWayDefault.ShippingCompanyId === this.ShippingCompanyId)
-      })
+        })
         this.$router.go({ name: 'company' })
       }
     },
     components: {
-      companyDetail
+      companyDetail,
+      VLoading
     },
     route: {
-      data({ to: { params: { key, countryId } } }){
-        return cart.getCompanyByCid(key, countryId)
+      data({ to: { params: { countryId } } }){
+        return cart.getCompanyByCid(countryId)
           .then(data => {
             this.companyList = []
             data.List.forEach((item, index) => {
@@ -84,8 +87,7 @@
             })
             this.ShippingCompanyId = this.companyList[0].ShippingWayDefault.ShippingCompanyId
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

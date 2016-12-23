@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="roate_fade_wrap">
       <img class="roate_fade" :src="images.roateFade">
-    </div>
   </div>
 </template>
 

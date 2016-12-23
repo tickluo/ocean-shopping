@@ -57,50 +57,50 @@ export default router => {
       title: '出错了',
       name: 'error'
     },
-    '/user/center/:key': {
+    '/user/center': {
       title: '个人中心',
       name: 'userCenter',
       component: userCenter
     },
-    '/user/address/add/:key': {
+    '/user/address/add': {
       title: '添加收货地址',
       name: 'addAddress',
       component: addAddress
     },
-    '/user/address/select/:key': {
+    '/user/address/select': {
       title: '选择收货地址',
       name: 'selectAddress',
       component: selectAddress
     },
-    '/user/address/manage/:key': {
+    '/user/address/manage': {
       title: '管理收货地址',
       name: 'manageAddress',
       component: selectAddress
     },
-    '/idcard/example/:key': {
+    '/idcard/example': {
       title: '身份证照片示例',
       name: 'idCardExample',
       component: idCardExample
     },
-    '/cart/:key': {
+    '/cart': {
       title: '购物车',
       name: 'cart',
       auth: false,
       component: cart
     },
-    '/product/detail/:key/': {
-      title: '填写代购单',
+    '/product/detail/': {
+      title: '商品详情',
       name: 'detail',
       auth: false,
       component: detail
     },
-    '/product/detail/:key/:Id/:shopId': {
-      title: '修改代购单',
+    '/product/detail/:Id/:shopId': {
+      title: '商品详情',
       name: 'modifyDetail',
       auth: false,
       component: detail
     },
-    '/freight/detail/:key': {
+    '/freight/detail': {
       title: '国际运费说明',
       name: 'freight',
       auth: false,
@@ -112,19 +112,19 @@ export default router => {
       auth: false,
       component: disclaimer
     },
-    '/cart/company/:key': {
+    '/cart/company': {
       title: '选择转运公司',
       name: 'company',
       auth: false,
       component: company
     },
-    '/cart/company/select/:key/:countryId': {
+    '/cart/company/select/:countryId': {
       title: '选择转运公司',
       name: 'selectCompany',
       auth: false,
       component: selectCompany
     },
-    '/cart/submit/:key': {
+    '/cart/submit': {
       title: '提交订单',
       name: 'submit',
       auth: false,
@@ -140,7 +140,7 @@ export default router => {
         }
       }
     },
-    '/order/:key': {
+    '/order': {
       title: '我的订单',
       name: 'orderList',
       auth: false,
@@ -170,40 +170,40 @@ export default router => {
         }
       }
     },
-    '/order/detail/:id/:key': {
+    '/order/detail/:id': {
       title: '订单详情',
       name: 'shopOrderDetail',
       auth: false,
       component: shopOrderDetail
     },
-    '/store/detail/:id/:key': {
+    '/store/detail/:id': {
       title: '包裹详情',
       name: 'storeOrderDetail',
       auth: false,
       component: storeOrderDetail
     },
-    '/transport/detail/:id/:key': {
+    '/transport/detail/:id': {
       title: '转运详情',
       name: 'tranOrderDetail',
       auth: false,
       component: tranOrderDetail
     },
-    '/store/submit/:id/:type/:key': {
+    '/store/submit/:id/:type': {
       title: '提交转运',
       name: 'submitStore',
       component: submitTransport
     },
-    '/store/merge/:id/:key': {
+    '/store/merge/:id': {
       title: '选择合箱包裹',
       name: 'mergeStore',
       component: mergeStore
     },
-    '/order/express/detail/:key': {
+    '/order/express/detail': {
       title: '转运物流跟踪',
       name: 'expressDetail',
       component: expressDetail
     },
-    '/order/express/site/:key': {
+    '/order/express/site': {
       title: '物流查询',
       name: 'expressSite',
       component: expressSite

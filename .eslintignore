@@ -9,3 +9,4 @@ node_modules/
 config/_base.config.js
 src/asset/libs/*
 src/services/valid.svc.js
+src/services/uploadImg.svc.js

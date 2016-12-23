@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-el="http://www.w3.org/1999/xhtml">
   <div>
-    <div class="view mar_bot_10" v-fix-bottom="ss">
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="view" v-fix-bottom="ss">
       <validator name="addressValidation">
         <article class="base_info">
           <input type="text"
@@ -57,19 +58,25 @@
           <div class="upfile_card_wrap">
             <ul class="upfile_card_list">
               <li>
-                <input id="filePositive" type="file" @change="uploadImg('positive')" accept="image/*"/>
+                <input id="filePositive"
+                       type="file"
+                       @change="uploadImg('positive')"
+                       accept="image/*"/>
                 <div class="id_card">
-              <span class="del_btn" v-if="hasPoImg" @click="deleteImg('positive')"><img :src="images.iconX"
-                                                                                        alt=""></span>
+              <span class="del_btn" v-if="hasPoImg" @click="deleteImg('positive')">
+                <img :src="images.iconX" alt=""></span>
                   <img v-if="hasPoImg" class="icon_camera" :src="positiveImg" alt="">
                 </div>
                 <div class="up_side">身份证正面</div>
               </li>
               <li>
-                <input id="fileOpposite" type="file" @change="uploadImg('opposite')" accept="image/*"/>
+                <input id="fileOpposite"
+                       type="file"
+                       @change="uploadImg('opposite')"
+                       accept="image/*"/>
                 <div class="id_card">
-              <span class="del_btn" v-if="hasOpImg" @click="deleteImg('opposite')"><img :src="images.iconX"
-                                                                                        alt=""></span>
+              <span class="del_btn" v-if="hasOpImg" @click="deleteImg('opposite')">
+                <img :src="images.iconX" alt=""></span>
                   <img v-if="hasOpImg" class="icon_camera" :src="oppositeImg" alt="">
                 </div>
                 <div class="up_side">身份证反面</div>
@@ -89,7 +96,8 @@
                      required: { rule: true, message: '请选择地区' }
                      }"
                    id="regionPicker"
-                   v-el:region readonly="true"
+                   readonly="readonly"
+                   v-el:region
                    :value="mixRegion"
                    class="buyer_name"
                    placeholder="选择所在区域">
@@ -108,6 +116,7 @@
           <input class="buyer_name no_top_bor"
                  type="text"
                  id="zipNumber"
+                 readonly="readonly"
                  v-model="address.Postalcode"
                  v-el:zip
                  placeholder="邮政编码">
@@ -321,10 +330,11 @@
 </style>
 <script>
   import '../../asset/libs/LArea.min'
-  import 'lrz/dist/lrz.bundle'
   import images from '../../asset/images'
+  import VLoading from '../../components/v-loading.vue'
   import { app, user } from '../../store/action'
   import { getLocation } from '../../services/util.svc'
+  import { checkFile, isUploadSupported, readFile } from '../../services/uploadImg.svc'
 
   let area = new LArea()
 
@@ -333,6 +343,7 @@
       Province: '',
       City: '',
       Area: '',
+      imgFile: null,
       RecipientName: '',
       PhoneNumber: '',
       Postalcode: '',
@@ -353,12 +364,15 @@
         address: initAddress()
       }
     },
+    components: {
+      VLoading
+    },
     computed: {
       zipNumber () {
         return this.$els.zip.value
       },
       region () {
-        let regionArr = this.$els.region.value.split(',')
+        let regionArr = document.querySelector('#regionPicker').value.split(',')
         return {
           Province: regionArr[0],
           City: regionArr[1],
@@ -366,7 +380,6 @@
         }
       },
       mixRegion () {
-
         return this.address.Province === '' ?
           '' :
           `${this.address.Province},${this.address.City},${this.address.Area}`
@@ -381,6 +394,7 @@
     vuex: {
       actions: {
         showAlert: app.showAlert,
+        setSubmitLoading: app.setSubmitLoading,
         setModifyAddress: user.setModifyAddress
       },
       getters: {
@@ -405,10 +419,15 @@
       },
       uploadImg (type) {
         let context = this
-        lrz(context.$event.target.files[0], { fieldName: 'idcart' })
+        const file = context.$event.target.files[0]
+        if (!isUploadSupported()) return this.showAlert('您的浏览器版本过低，不能上传，请升级')
+        if (!checkFile(file)) return this.showAlert('请上传图片格式文件(jpg|jpeg|png)等')
+        readFile(file)
           .then(data => {
-            user.uploadIdCard(this.$route.params.key, data.base64.replace("data:" + data.file.type + ";base64,", ""))
+            this.setSubmitLoading(true, '正在上传')
+            user.uploadIdCard(data.base64.replace(/data:(\S*);base64,/, ""))
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success) {
                   this.showAlert('身份证上传成功')
                   if (type === 'positive') {
@@ -420,8 +439,12 @@
                     this.address.IdCardOpposite = res.Data.FilePath
                   }
                 }
-                else return this.showAlert('身份证上传失败')
+                else this.showAlert('身份证上传失败')
+                document.querySelector('input[type="file"]').value = null
               })
+          })
+          .catch(err => {
+            this.showAlert(err)
           })
       },
       deleteImg (type) {
@@ -445,13 +468,16 @@
           })
           return this.showAlert(this.$addressValidation.errors[0].message)
         }
+        this.setSubmitLoading(true, '正在保存...')
+        let regionArr = document.querySelector('#regionPicker').value.split(',')
         let addressInfo = Object.assign({}, this.address)
-        addressInfo.Province = this.region.Province
-        addressInfo.City = this.region.City
-        addressInfo.Area = this.region.Area
+        addressInfo.Province = regionArr[0]
+        addressInfo.City = regionArr[1]
+        addressInfo.Area = regionArr[2]
         addressInfo.Postalcode = this.zipNumber
-        user.saveAddress(this.$route.params.key, addressInfo)
+        user.saveAddress(addressInfo)
           .then(res => {
+            this.setSubmitLoading(false)
             if (res.Success) {
               this.setModifyAddress({})
               this.showAlert('保存成功')
@@ -462,7 +488,7 @@
     },
     route: {
       data({ from:{ name } }){
-        if ((name === 'selectAddress' || name === 'manageAddress') && this.modifyAddress.Id) {
+        if ((name === 'selectAddress' || name === 'manageAddress' || !name) && this.modifyAddress.Id) {
           this.address = this.modifyAddress
           this.positiveImg = this.modifyAddress.IdCardPositive
           this.oppositeImg = this.modifyAddress.IdCardOpposite
@@ -474,8 +500,7 @@
           this.oppositeImg = ''
         }
         return {}
-      },
-      waitForData: true
+      }
     }
   }
 </script>

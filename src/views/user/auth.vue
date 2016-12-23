@@ -19,7 +19,7 @@
 
 <script>
   import userApi from '../../webServices/user.wsvc'
-  import { getSession } from '../../services/storage'
+  import { getSession } from '../../services/storage.svc'
   import { sessionConfig } from '../../local/config.enum'
 
   export default{

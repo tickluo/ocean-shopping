@@ -94,7 +94,7 @@
   import appApi from '../../webServices/app.wsvc'
   import userApi from '../../webServices/user.wsvc'
   import { app } from '../../store/action'
-  import { getSession } from '../../services/storage'
+  import { getSession } from '../../services/storage.svc'
   import { sessionConfig } from '../../local/config.enum'
 
   export default{
@@ -166,6 +166,7 @@
           LKey: getSession(sessionConfig.AuthKey)
         })
           .then(res => {
+            this.setSubmitLoading(false)
             if (res.Success) {
               this.sendMsg = true
               this.regPassword = ''
@@ -188,6 +189,7 @@
           LKey: getSession(sessionConfig.AuthKey)
         })
           .then(res => {
+            this.setSubmitLoading(false)
             if (res.Success) {
               const routeName = getSession(sessionConfig.LoginRoute)
               this.regBtn = true

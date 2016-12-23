@@ -1,3 +1,6 @@
+import createPersist from 'vuex-localstorage'
+import { sessionConfig, ExpensesType } from '../../local/config.enum'
+import { parseDomain, toFloatFixed } from '../../services/util.svc'
 import {
   ADD_TO_CART,
   RECEIVE_SHOPPING_INFO,
@@ -14,15 +17,16 @@ import {
   SAVE_SHOP_RATE,
   SET_COMPANY_BY_CID,
   REMOVE_SHOPPING_BY_ID,
+  CLEAR_REMOVE_LIST,
   SET_FAQ,
   SET_FAQ_INDEX,
   SET_FAQ_LOADED,
   SET_COMPANY_AND_WAY
 } from '../mutation-types'
-import { ExpensesType } from '../../local/config.enum'
-import { parseDomain, toFloatFixed } from '../../services/util.svc'
 
-const state = {
+const CART_ENV_KEY = 'CART_ENV_KEY'
+
+const persist = createPersist(CART_ENV_KEY, {
   detail: {},
   display: {},
   cartList: [],
@@ -38,7 +42,11 @@ const state = {
   faqList: [],
   faqIndex: 1,
   faqAllLoaded: false
-}
+}, {
+  expires: sessionConfig.Duration
+})
+
+const state = persist.get()
 
 const getRateById = (url, wid, cid) => {
   const webRate = state.rates.find(rate => {
@@ -68,27 +76,31 @@ const getRulePrice = (rule, price, rate) => {
 
 const genExpressFee = (list, Rate) => {
   if (!list || list.length === 0) return 0
-  return (Math.max(...list
-      .map(item => item.ExpressFee)) * Rate).toFixed(2) * 1
+  return (Math.max(...list.map(item => item.ExpressFee)) * Rate).toFixed(2) * 1
 }
 
 const mutations = {
   [ADD_TO_CART] (state, shopping) {
     state.cart = shopping
+    persist.set(state)
   },
   [RECEIVE_SHOPPING_INFO] (state, shopping) {
     state.detail = shopping
+    persist.set(state)
   },
   [GET_CART_LIST] (state, list) {
     state.cartList = list
+    persist.set(state)
   },
   [INIT_SHOPPING_DISPLAY] (state, detail) {
     state.display = detail
+    persist.set(state)
   },
   [UPDATE_SHOPPING_DISPLAY] (state, detail) {
     state.display.skuSelect = detail.skuSelect
     state.display.disableSku = detail.disableSku
     state.display.picture = detail.picture ? detail.picture : state.display.picture
+    persist.set(state)
   },
   [SELECT_ALL_SHOPPING] (state, toggle, rate) {
     if (toggle) {
@@ -159,6 +171,7 @@ const mutations = {
       }
       state.shoppingTotalPrice = 0
     }
+    persist.set(state)
   },
   [SELECT_SHOP_SHOPPING] (state, toggle, shopId, rate) {
     if (toggle) {
@@ -216,6 +229,7 @@ const mutations = {
       }
     }
     state.order.selectAll = state.order.selected.every(item => item.selectShop === true)
+    persist.set(state)
   },
   [SELECT_SHOPPING] (state, toggle, shopId, id, rate) {
     let shopPriceTemp = 0
@@ -283,51 +297,67 @@ const mutations = {
     }
     state.order.selectAll = state.order.selected
       .every(item => item.selectShop === true)
+    persist.set(state)
   },
   [INCREASE_SHOPPING_COUNT] (state) {
     state.display.count++
+    persist.set(state)
   },
   [DECREASE_SHOPPING_COUNT] (state) {
     state.display.count--
+    persist.set(state)
   },
   [SET_DEFAULT_COMPANY] (state, companyList) {
     state.company.companySet = []
     companyList.forEach((item, index) => {
       state.company.companySet.$set(index, item)
     })
+    persist.set(state)
   },
   [SAVE_SHOP_RATE] (state, rateList) {
     rateList.forEach((item, index) => {
       state.rates.$set(index, item)
     })
+    persist.set(state)
   },
   [SAVE_COUNTRY_RATE] (state, countryList) {
     countryList.forEach((item, index) => {
       state.countries.$set(index, item)
     })
+    persist.set(state)
   },
   [SET_COMPANY_BY_CID] (state, countryId, company) {
     const index = state.company.companySet.findIndex(item => item.CountryId === countryId)
     state.company.companySet.splice(index, 1, company)
+    persist.set(state)
   },
   [SET_COMPANY_AND_WAY] (state, countryId, company) {
     const index = state.company.companyAndWay.findIndex(item => item.countryId === countryId)
     if (index < 0) {
       state.company.companyAndWay.push({ countryId, company })
     }
+    persist.set(state)
   },
   [REMOVE_SHOPPING_BY_ID] (state, id) {
     state.removeList.push(id)
+    persist.set(state)
+  },
+  [CLEAR_REMOVE_LIST] (state) {
+    state.removeList.splice(0, state.removeList.length)
+    persist.set(state)
   },
   [SET_FAQ] (state, list, index) {
     if (index === 1) state.faqList = list
     else state.faqList = state.faqList.concat(list)
+    persist.set(state)
   },
   [SET_FAQ_INDEX] (state, index) {
     state.faqIndex = index
+    persist.set(state)
   },
   [SET_FAQ_LOADED] (state, isLoaded) {
     state.faqAllLoaded = isLoaded
+    persist.set(state)
   }
 }
 

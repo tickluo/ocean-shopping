@@ -1,7 +1,8 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
   <div>
-    <div v-fix-bottom="ss">
-      <div class="mar_bot_21">
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" v-fix-bottom="ss">
+      <div class="mar_bot_10">
         <article class="about_address_wrap">
           <section class="change_address">
             <div class="user_address_name" v-if="!hasAddress" v-link="{name:'addAddress'}">
@@ -97,7 +98,7 @@
 
 <script>
   import images from '../../asset/images'
-  import { CAlert } from '../../components'
+  import { CAlert, VLoading } from '../../components'
   import { matchCompanyShop } from '../../services/match.svc'
   import { orders, user, app } from '../../store/action'
 
@@ -109,7 +110,8 @@
       }
     },
     components: {
-      CAlert
+      CAlert,
+      VLoading
     },
     vuex: {
       getters: {
@@ -147,8 +149,7 @@
         let postOrder = {
           TotalAmount: this.totalPrice,
           PaymentType: 30,
-          Phone: this.phone,
-          key: this.$route.params.key
+          Phone: this.phone
         }
         postOrder.SaveGrab = matchCompanyShop(this.companySet, this.selectedShop)
         this.showConfirm({
@@ -160,12 +161,13 @@
             this.setSubmitLoading(true, '正在生成订单...')
             return orders.saveOrder(postOrder)
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success) {
                   this.setPayOrder({
                     paymentNo: res.Data.PaymentNo,
                     totalAmount: res.Data.TotalAmount,
-                    returnUrl: '/#!/order/' + this.$route.params.key,
-                    backUrl: '/#!/order/' + this.$route.params.key
+                    returnUrl: '/#!/order/',
+                    backUrl: '/#!/order/'
                   })
                   this.genPay(true)
                 }
@@ -176,11 +178,11 @@
       }
     },
     route: {
-      data ({ to: { params: { key } } }) {
+      data () {
         if (!this.selectedShop || this.selectedShop.length === 0)
           return this.$router.go({ name: 'cart' })
         if (this.defaultAddress.Id) return {}
-        return this.setDefaultAddress(key)
+        return this.setDefaultAddress()
           .then(res => {
           })
       }

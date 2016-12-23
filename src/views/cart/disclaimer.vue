@@ -1,8 +1,8 @@
 <template>
   <div class="bg_fff">
-    <iframe v-auto-height id="importFrame" name="import_frame"
+    <iframe  id="importFrame" name="import_frame"
             width="100%"
-            height="100%"
+            height="800"
             :src="disclaimerUrl"
             frameborder=auto
             @load="loaded">
@@ -36,5 +36,6 @@
         window.history.go(-1)
       }
     }
+
   }
 </script>

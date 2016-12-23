@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="mar_bot_15_5"  v-fix-bottom>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <div v-if="!$loadingRouteData" class="" v-fix-bottom>
       <article class="order_wrap about_transport">
         <h4 class="order_number">
           <div class="real_number">
@@ -36,7 +37,7 @@
           </div>
         </section>
       </article>
-      <article v-if="tranOrderDetail.shopping" class="order_wrap">
+      <article v-if="tranOrderDetail.GrabAttributes.length > 0" class="order_wrap">
         <display-shopping v-for="shopping in tranOrderDetail.GrabAttributes"
                           :cover="shopping.Cover"
                           :name="shopping.Name"
@@ -70,9 +71,7 @@
         <img class="icon_go_back_cart icon_back" :src="images.iconGoback" alt="">
         <span class="goback_cart">返回</span>
       </div>
-      <div class="fot_order_static">
-        {{tranOrderDetail.ShippingStatuName}}
-      </div>
+      <div class="fot_order_static">{{getStateMsg(tranOrderDetail)}}</div>
       <div class="into_cart_btn"
            @click="payOrder"
            v-if="needPay(tranOrderDetail.ShippingStatus,tranOrderDetail.Replenishment)">
@@ -91,6 +90,7 @@
 
 <script>
   import images from '../../asset/images'
+  import VLoading from '../../components/v-loading.vue'
   import displayShopping from '../layout/display-shopping.vue'
   import { orders, user, app } from '../../store/action'
   import { ShipStatus, OrderType } from '../../local/state.enum'
@@ -104,7 +104,8 @@
       }
     },
     components: {
-      displayShopping
+      displayShopping,
+      VLoading
     },
     vuex: {
       getters: {
@@ -122,6 +123,12 @@
       }
     },
     methods: {
+      getStateMsg (tranOrder) {
+        if (tranOrder.ShippingStatuName === '已取消' && tranOrder.ShippingCancelReasonName) {
+          return tranOrder.ShippingStatuName + '：' + tranOrder.ShippingCancelReasonName
+        }
+        return tranOrder.ShippingStatuName
+      },
       returnBack () {
         this.$router.go({ name: 'tranOrder' })
       },
@@ -129,7 +136,7 @@
         return statusId === ShipStatus.ShipPending || hasReplenishment
       },
       payOrder () {
-        let tempType = OrderType.Order
+        let tempType = OrderType.Shipping
         let tempPrice = this.tranOrderDetail.TotalAmount
         let tempId = this.tranOrderDetail.Id
         if (this.tranOrderDetail.Replenishment) {
@@ -142,8 +149,8 @@
           orderNo: this.tranOrderDetail.ShippingNo,
           type: tempType,
           totalAmount: tempPrice,
-          returnUrl: `/#!/order/${this.$route.params.key}/transport`,
-          backUrl: `/#!/transport/detail/${this.$route.params.id}/${this.$route.params.key}`
+          returnUrl: `/#!/order/transport`,
+          backUrl: `/#!/transport/detail/${this.$route.params.id}`
         })
         this.genPay(true)
       },
@@ -155,8 +162,9 @@
           fail: '确认收货失败',
           handle: () => {
             this.setSubmitLoading(true, '正在确认收货...')
-            return this.receiptGoods(this.$route.params.key, id)
+            return this.receiptGoods(id)
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success) {
                   this.returnBack()
                   return Promise.resolve(res)
@@ -167,17 +175,17 @@
       }
     },
     route: {
-      data ({ to: { params: { id, key } } }) {
-        if (this.tranOrderDetail.Id && this.tranOrderDetail.Id === id) {
-          return this.tranOrderDetail
+      data ({ to: { params: { id } } }) {
+        if (this.tranOrderDetail.Id && this.tranOrderDetail.Id === id * 1) {
+          return {}
         }
-        return orders.getTransportDetail(key, id)
+        return orders.getTransportDetail(id)
           .then(res => {
             if (res.Success) {
               this.setTransportDetail(res.Data)
               if (res.Data.ShippingWayCode !== '' && res.Data.TrackingNumber !== '') {
                 this.expressRoute = 'expressDetail'
-                return orders.getExpressDetail(key, res.Data.ShippingWayCode, res.Data.TrackingNumber)
+                return orders.getExpressDetail(res.Data.ShippingWayCode, res.Data.TrackingNumber)
                   .then(res => {
                     if (res.Success && res.List.length > 0) {
                       this.expressMsg = res.List[0].Content
@@ -190,8 +198,7 @@
               }
             }
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

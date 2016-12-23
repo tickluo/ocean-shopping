@@ -1,26 +1,30 @@
 <template>
   <div>
     <ul class="third_top_nav" v-disable-tap>
-      <li :class="{on_item:route === 'storeOrderBefore'}" v-link="{name:'storeOrderBefore',params:{key:$route.params.key}}">
+      <li :class="{on_item:route === 'storeOrderBefore'}"
+          v-link="{name:'storeOrderBefore'}">
         <a><span class="depot">等待商品入库</span>
           <span class="message_num">{{beforeCount}}</span>
           <span class="bot_hr"></span>
         </a></li>
-      <li :class="{on_item:route === 'storeOrderAfter'}" v-link="{name:'storeOrderAfter',params:{key:$route.params.key}}">
-        <a ><span class="depot">商品已入库</span>
+      <li :class="{on_item:route === 'storeOrderAfter'}"
+          v-link="{name:'storeOrderAfter'}">
+        <a><span class="depot">商品已入库</span>
           <span class="message_num">{{afterCount}}</span>
           <span class="bot_hr"></span>
         </a></li>
     </ul>
 
     <!--<div class="margin_top_27">-->
-      <router-view class="view top_17" v-fix-bottom="ss"   keep-alive>
-      </router-view>
+    <v-loading v-if="$loadingRouteData"></v-loading>
+    <router-view v-if="!$loadingRouteData" class="" keep-alive>
+    </router-view>
   </div>
 </template>
 
 <script>
   import { orders } from '../../store/action'
+  import VLoading from '../../components/v-loading.vue'
 
   export default{
     computed: {
@@ -34,6 +38,7 @@
         return this.packageListAfter ? this.packageListAfter.length : 0
       }
     },
+    components: { VLoading },
     vuex: {
       getters: {
         packageListBefore: state => state.orders.packageListBefore,
@@ -44,14 +49,13 @@
       }
     },
     route: {
-      data ({ to: { params: { key } } }) {
-        return this.getPackageList(key)
+      data () {
+        return this.getPackageList()
           .then(res => {
             if (res.Success) {
             }
           })
-      },
-      waitForData: true
+      }
     }
   }
 </script>

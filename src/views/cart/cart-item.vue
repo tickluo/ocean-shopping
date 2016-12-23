@@ -32,7 +32,7 @@
       getters: {
         order: state => state.cart.order,
         removeList: state => state.cart.removeList,
-        currency: state => state.app.Currency
+        currency: state => state.app.appPersist.Currency
       },
       actions: {
         selectShopping: cart.selectShopping,
@@ -54,11 +54,7 @@
       afterRatePrice () {
         return toFloatFixed(
           toFloatFixed(
-            parseFloat(this.item.OriginalPrice * this.rate),
-            2
-          ) * (1 + this.serviceRate),
-          2
-        )
+            parseFloat(this.item.OriginalPrice * this.rate), 2) * (1 + this.serviceRate), 2)
       }
     },
     components: {
@@ -76,8 +72,9 @@
           fail: '商品删除失败',
           handle: () => {
             this.setSubmitLoading(true, '正在删除商品...')
-            return this.removeShopping(this.$route.params.key, this.item.Id)
+            return this.removeShopping(this.item.Id)
               .then(res => {
+                this.setSubmitLoading(false)
                 if (res.Success && this.toggle) {
                   this.selectShopping(false, this.shop_id, this.item.Id, this.serviceRate)
                 }

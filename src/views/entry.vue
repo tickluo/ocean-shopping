@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import { setSession, deleteSession } from '../services/storage'
+  import { setSession, deleteSession } from '../services/storage.svc'
   import { sessionConfig } from '../local/config.enum'
   import { app } from '../store/action'
 
@@ -16,9 +16,9 @@
     route: {
       data ({ to: { params: { route, key, authkey } } }) {
         if (key !== 'no') {
-          this.setAppCurrency(key)
           setSession(sessionConfig.Key, key)
           deleteSession(sessionConfig.AuthKey)
+          this.setAppCurrency()
           return this.$router.go({ name: route, params: { key: key } })
         }
         setSession(sessionConfig.LoginRoute, route)
