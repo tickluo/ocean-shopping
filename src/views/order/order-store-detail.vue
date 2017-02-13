@@ -47,6 +47,7 @@
   import images from '../../asset/images'
   import VLoading from '../../components/v-loading.vue'
   import displayShopping from '../layout/display-shopping.vue'
+  import { toFloatFixed } from '../../services/util.svc'
   import { orders } from '../../store/action'
 
   export default{
@@ -80,12 +81,12 @@
           return 0
         if (this.storeDetail.GrabAttrs.length === 1) {
           let shopping = this.storeDetail.GrabAttrs[0]
-          return parseFloat(shopping.Price * shopping.Quantity).toFixed(2)
+          return toFloatFixed(shopping.Price * shopping.Quantity, 2)
         }
-        return parseFloat(this.storeDetail.GrabAttrs
+        return toFloatFixed(this.storeDetail.GrabAttrs
           .reduce((pre, cur) => {
             return pre.Price * pre.Quantity + cur.Price * cur.Quantity
-          })).toFixed(2)
+          }), 2)
       }
     },
     route: {

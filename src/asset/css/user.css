@@ -1,10 +1,15 @@
+/*基础文件 除common样式表文件外 其他样式文件依赖此文件内的变量*/
+/*间距*/
+/*圆形 颜色  宽高*/
 .align_items_cen {
   align-items: center;
   -webkit-box-align: center;
 }
+/*定位*/
 .pos_r {
   position: relative;
 }
+/*边框属性*/
 .border_bot_b {
   border-bottom: 1px solid #BBB;
 }
@@ -23,6 +28,16 @@
 .bor_bot_97 {
   border: 1px solid #979797;
 }
+.margin_top_08 {
+  margin-top: 0.8rem;
+}
+.margin_bot_08 {
+  margin-bottom: 1rem;
+}
+.mar_bot_105 {
+  margin-bottom: 1.05rem;
+}
+/*flex布局*/
 .box_flex {
   box-flex: 1;
   -webkit-box-flex: 1;
@@ -43,6 +58,10 @@
   -ms-justify-content: space-between;
   -o-justify-content: space-between;
 }
+/*弹出层容器*/
+/*填充三角符号*/
+/*按钮*/
+/*背景属性*/
 .bg_f4 {
   background: #f4f4f4;
 }
@@ -61,15 +80,6 @@
 .text_align_r {
   text-align: right;
 }
-.margin_top_08 {
-  margin-top: 0.8rem;
-}
-.margin_bot_08 {
-  margin-bottom: 1rem;
-}
-.mar_bot_105 {
-  margin-bottom: 1.05rem;
-}
 .message_num {
   display: inline-block;
   width: 0.44rem;
@@ -82,6 +92,7 @@
   color: #fff;
   font-size: 0.26rem;
 }
+/*固定导航*/
 .nav_bar {
   color: #333;
   font-size: 0rem;
@@ -102,6 +113,7 @@
   font-size: 0.32rem;
   vertical-align: middle;
 }
+/*支付信息*/
 .summary_money {
   font-size: 0.3rem;
   border-top: 0.04rem solid #ff6d7e;
@@ -117,6 +129,7 @@
 .summary_money .summary_left {
   line-height: 0.4rem;
 }
+/*固定底部*/
 .shopping_footer {
   padding: 0rem 0.2rem;
   width: 100%;
@@ -178,6 +191,7 @@
   vertical-align: middle;
   margin-right: 0.1rem;
 }
+/*底部导航itme*/
 .nav_bot_list {
   width: 100%;
   overflow: hidden;
@@ -234,6 +248,7 @@
 .fix_bot_16 {
   bottom: 1.6rem !important;
 }
+/*input输入框*/
 .fill_other {
   border-bottom: 1px solid #ddd;
   padding: 0.19rem 0.2rem;
@@ -276,6 +291,7 @@
   border-width: 0.19rem 0.11rem;
   border-style: solid;
 }
+/*支付方式*/
 .pay_way_wrap {
   position: fixed;
   width: 100%;
@@ -344,6 +360,7 @@
 .wid_btn:active {
   opacity: 0.8;
 }
+/*设置默认地址滑动动画*/
 @keyframes changeBg {
   from {
     background: #f8f8f8;
@@ -443,6 +460,7 @@
 .order_wrap .order_list:first-child {
   border-top: none;
 }
+/*订单列表 商品描述文字样式*/
 .merch_main_img {
   width: 1.7rem;
   height: 1.7rem;
@@ -466,6 +484,7 @@
   font-size: 0.30rem;
   line-height: 0.42rem;
 }
+/*订单状态*/
 .order_static_wrap {
   margin-top: 0.15rem;
   padding: 0.04rem 0rem;
@@ -513,6 +532,7 @@
   text-align: center;
   line-height: 0.7rem;
 }
+/*二级固定导航*/
 .sec_top_nav {
   width: 100%;
   z-index: 10;
@@ -568,6 +588,7 @@
   right: auto;
   left: 0;
 }
+/*注册登录 导航*/
 .user_top_nav {
   background: #fbfbfb;
 }
@@ -578,6 +599,7 @@
   line-height: 0.9rem;
   font-size: 0.3rem;
 }
+/*注册登录布局*/
 .pos_height_190 {
   background: #fff;
   position: absolute;
@@ -596,6 +618,7 @@
   width: 100%;
   border-top: 1px solid #ccc;
 }
+/*登录 盒子*/
 .user_login_wrap {
   background: #fff;
   padding: 0.5rem;
@@ -649,6 +672,7 @@
   float: right;
   margin-top: 0.155rem;
 }
+/*修改地址*/
 .change_address:first-child {
   border-top: none;
 }
@@ -675,6 +699,7 @@
   border-width: 0.11rem 0.12rem;
   border-style: solid;
 }
+/*个人信息输入*/
 .user_address_name {
   font-size: 0.28rem;
 }
@@ -708,6 +733,7 @@
   display: inline-block;
   line-height: 0.42rem;
 }
+/*用户地址盒子模型*/
 .user_addresses_wrap {
   border-top: 1px solid #ccc;
 }
@@ -748,6 +774,7 @@
 .chosed_address {
   background: #f6f6f6;
 }
+/*个人信息盒子模型*/
 .buyer_name {
   background: #fff;
   color: #333;
@@ -811,6 +838,7 @@ textarea.buyer_name {
   box-sizing: border-box;
   padding: 0.2rem 0rem 0.24rem;
 }
+/*上传证件*/
 .upfile_card_list {
   width: 5.4rem;
   margin: 0 auto;
@@ -845,6 +873,7 @@ textarea.buyer_name {
   background: #ff6276;
   color: #fff;
 }
+/*省份证示例*/
 .id_card {
   position: relative;
   width: 2.4rem;

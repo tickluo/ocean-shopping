@@ -16,12 +16,12 @@ const CountryNumber = Object.freeze({
 })
 
 /* const CountryNumber = Object.freeze({
-  1: 'jp',
-  2: 'usa',
-  3: 'cn',
-  4: 'eur',
-  5: 'en'
-})*/
+ 1: 'jp',
+ 2: 'usa',
+ 3: 'cn',
+ 4: 'eur',
+ 5: 'en'
+ })*/
 
 const WayType = Object.freeze({
   Range: 4,
@@ -42,9 +42,14 @@ const ExpensesType = {
 
 const PageSize = 6
 
-const ExpressUrl = 'http://m.kuaidi100.com/result.jsp?nu='
+const timeStamp = {
+  cart: 21600000,
+  order: 900000
+}
 
-const DisclaimerUrl = 'http://www.6city.com/Html/disclaimer.html'
+const ExpressUrl = 'https://m.kuaidi100.com/result.jsp?nu='
+
+const DisclaimerUrl = 'https://www.6city.com/Html/disclaimer.html'
 
 const lbToG = 453.59237
 
@@ -57,5 +62,6 @@ export {
   PageSize,
   ExpressUrl,
   DisclaimerUrl,
-  CountryNumber
+  CountryNumber,
+  timeStamp
 }

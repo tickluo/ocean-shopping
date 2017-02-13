@@ -18,6 +18,9 @@ import {
   SET_COMPANY_BY_CID,
   REMOVE_SHOPPING_BY_ID,
   CLEAR_REMOVE_LIST,
+  ADD_NO_COUNT_SHOPPING,
+  REMOVE_NO_COUNT_SHOPPING,
+  CLEAR_NO_COUNT_SHOPPING,
   SET_FAQ,
   SET_FAQ_INDEX,
   SET_FAQ_LOADED,
@@ -31,6 +34,7 @@ const persist = createPersist(CART_ENV_KEY, {
   display: {},
   cartList: [],
   removeList: [],
+  noCountList: [],
   order: {},
   company: {
     companySet: [],
@@ -66,17 +70,19 @@ const genPrice = (shopping, rate) => {
 
 const getRulePrice = (rule, price, rate) => {
   if (rule.ExpensesType === ExpensesType.NotFull) {
-    if (price < rule.LimitPrice * rate) return (rule.ExpensesPrice * rate).toFixed(2) * 1
+    if (price < rule.LimitPrice * rate && price !== 0) {
+      return toFloatFixed((rule.ExpensesPrice * rate), 2)
+    }
   }
-  if (rule.ExpensesType === ExpensesType.Must) {
-    return (rule.ExpensesPrice * rate).toFixed(2) * 1
+  if (rule.ExpensesType === ExpensesType.Must && price !== 0) {
+    return toFloatFixed((rule.ExpensesPrice * rate), 2)
   }
   return 0
 }
 
 const genExpressFee = (list, Rate) => {
   if (!list || list.length === 0) return 0
-  return (Math.max(...list.map(item => item.ExpressFee)) * Rate).toFixed(2) * 1
+  return toFloatFixed((Math.max(...list.map(item => item.ExpressFee)) * Rate), 2)
 }
 
 const mutations = {
@@ -110,7 +116,9 @@ const mutations = {
         selected: state.cartList.map(list => {
           let shopTotalPrice = 0
           list.GrabAttrs.forEach(item => {
-            shopTotalPrice += parseFloat(genPrice(item, rate))
+            if (!state.noCountList.includes(item.Id)) {
+              shopTotalPrice += parseFloat(genPrice(item, rate))
+            }
           })
           const Rate = getRateById(
             list.GrabAttrs[0].Url,
@@ -122,7 +130,8 @@ const mutations = {
           const ruleRate = ruleTemp ? ruleTemp.Rate : 0
           let RulePrice = 0
           if (list.Rule.ExpensesType === ExpensesType.NoSet) {
-            RulePrice += genExpressFee(list.GrabAttrs, Rate)
+            RulePrice += genExpressFee(
+              list.GrabAttrs.filter(item => !state.noCountList.includes(item.Id)), Rate)
           } else {
             RulePrice += getRulePrice(list.Rule, shopTotalPrice, ruleRate)
           }
@@ -135,13 +144,15 @@ const mutations = {
             ruleRate,
             RulePrice,
             Rule: list.Rule,
-            shopping: list.GrabAttrs.map(item => item.Id)
+            shopping: list.GrabAttrs
+              .filter(item => !state.noCountList.includes(item.Id))
+              .map(item => item.Id)
           })
         })
       })
       state.cartList.forEach(shop => {
         shop.GrabAttrs.forEach(item => {
-          if (!state.removeList.includes(item.Id)) {
+          if (!state.noCountList.includes(item.Id)) {
             state.shoppingTotalPrice += parseFloat(genPrice(item, rate))
           }
         })
@@ -181,7 +192,7 @@ const mutations = {
         .forEach(item => {
           const shoppingPrice = parseFloat(genPrice(item, rate))
           if (!state.order.selected[shopId].shopping.includes(item.Id) &&
-            !state.removeList.includes(item.Id)) {
+            !state.noCountList.includes(item.Id)) {
             state.order.selected[shopId].shopping.push(item.Id)
             state.shoppingTotalPrice += shoppingPrice
           }
@@ -204,7 +215,7 @@ const mutations = {
       state.order.selected[shopId].shopping.splice(0, state.order.selected[shopId].shopping.length)
       state.cartList[shopId].GrabAttrs
         .forEach(item => {
-          if (!state.removeList.includes(item.Id)) {
+          if (!state.noCountList.includes(item.Id)) {
             state.shoppingTotalPrice -= parseFloat(genPrice(item, rate))
           }
         })
@@ -216,7 +227,8 @@ const mutations = {
     if (state.cartList[shopId].Rule.ExpensesType === ExpensesType.NoSet) {
       const expressFee = genExpressFee(
         state.cartList[shopId].GrabAttrs
-          .filter(item => state.order.selected[shopId].shopping.includes(item.Id)),
+          .filter(item => state.order.selected[shopId].shopping.includes(item.Id) &&
+            !state.noCountList.includes(item.Id)),
         state.order.selected[shopId].Rate
       )
       if (toggle && state.order.selected[shopId].RulePrice === 0) {
@@ -247,7 +259,7 @@ const mutations = {
     }
     state.order.selected[shopId].selectShop =
       state.cartList[shopId].GrabAttrs.filter(item => (
-        !state.removeList.includes(item.Id)
+        !state.noCountList.includes(item.Id)
       )).length === state.order.selected[shopId].shopping.length
     if (rule.ExpensesType === ExpensesType.NotFull) {
       state.order.selected[shopId].shopping.forEach(shoppingId => {
@@ -256,35 +268,37 @@ const mutations = {
       })
       if (state.order.selected[shopId].RulePrice !== 0 &&
         rule.LimitPrice * shopRate <= (shopPriceTemp)) {
-        state.shoppingTotalPrice -= (rule.ExpensesPrice * shopRate).toFixed(2) * 1
+        state.shoppingTotalPrice -= toFloatFixed((rule.ExpensesPrice * shopRate), 2)
         state.order.selected[shopId].RulePrice = 0
       }
       if (state.order.selected[shopId].RulePrice === 0 &&
         rule.LimitPrice * shopRate > (shopPriceTemp) &&
         state.order.selected[shopId].shopping.length !== 0) {
-        state.shoppingTotalPrice += (rule.ExpensesPrice * shopRate).toFixed(2) * 1
-        state.order.selected[shopId].RulePrice = (rule.ExpensesPrice * shopRate).toFixed(2) * 1
+        state.shoppingTotalPrice += toFloatFixed((rule.ExpensesPrice * shopRate), 2)
+        state.order.selected[shopId].RulePrice = toFloatFixed((rule.ExpensesPrice * shopRate), 2)
       }
       if (state.order.selected[shopId].RulePrice !== 0 &&
         state.order.selected[shopId].shopping.length === 0) {
-        state.shoppingTotalPrice -= (rule.ExpensesPrice * shopRate).toFixed(2) * 1
+        state.shoppingTotalPrice -= toFloatFixed((rule.ExpensesPrice * shopRate), 2)
         state.order.selected[shopId].RulePrice = 0
       }
     }
     if (rule.ExpensesType === ExpensesType.Must) {
       if (state.order.selected[shopId].shopping.length === 0) {
-        state.shoppingTotalPrice -= (rule.ExpensesPrice * shopRate).toFixed(2) * 1
+        state.shoppingTotalPrice -= toFloatFixed((rule.ExpensesPrice * shopRate), 2)
         state.order.selected[shopId].RulePrice = 0
       }
       if (state.order.selected[shopId].shopping.length === 1 && toggle) {
-        state.shoppingTotalPrice += (rule.ExpensesPrice * shopRate).toFixed(2) * 1
-        state.order.selected[shopId].RulePrice = (rule.ExpensesPrice * shopRate).toFixed(2) * 1
+        state.shoppingTotalPrice += toFloatFixed((rule.ExpensesPrice * shopRate), 2)
+        state.order.selected[shopId].RulePrice = toFloatFixed((rule.ExpensesPrice * shopRate), 2)
       }
     }
     if (rule.ExpensesType === ExpensesType.NoSet) {
       const expressFee = genExpressFee(
         state.cartList[shopId].GrabAttrs
-          .filter(item => state.order.selected[shopId].shopping.includes(item.Id)),
+          .filter(item => state.order.selected[shopId].shopping.includes(item.Id) &&
+            !state.noCountList.includes(item.Id)
+          ),
         state.order.selected[shopId].Rate
       )
       if (state.order.selected[shopId].shopping.length === 0) {
@@ -344,6 +358,19 @@ const mutations = {
   },
   [CLEAR_REMOVE_LIST] (state) {
     state.removeList.splice(0, state.removeList.length)
+    persist.set(state)
+  },
+  [ADD_NO_COUNT_SHOPPING] (state, id) {
+    state.noCountList.push(id)
+    persist.set(state)
+  },
+  [REMOVE_NO_COUNT_SHOPPING] (state, id) {
+    const index = state.noCountList.findIndex(item => item === id)
+    state.noCountList.splice(index, 1)
+    persist.set(state)
+  },
+  [CLEAR_NO_COUNT_SHOPPING] (state) {
+    state.noCountList.splice(0, state.noCountList.length)
     persist.set(state)
   },
   [SET_FAQ] (state, list, index) {

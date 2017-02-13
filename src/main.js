@@ -50,6 +50,28 @@ Vue.directive('fix-bottom', {
     })
   }
 })
+// prevent_swipe
+Vue.directive('prevent-swipe', {
+  bind () {
+    const el = this.el
+    let sy = 0
+    el.addEventListener('touchstart', (e) => {
+      sy = e.pageY
+    })
+    el.addEventListener('touchmove', (e) => {
+      const down = (e.pageY - sy > 0)
+      const up = (e.pageY - sy < 0)
+      // top
+      if (down && el.scrollTop <= 0) {
+        e.preventDefault()
+      }
+      // bottom
+      if (up && el.scrollTop >= el.scrollHeight - el.clientHeight) {
+        e.preventDefault()
+      }
+    })
+  }
+})
 
 // disable dom toucheStart
 Vue.directive('disable-tap', {

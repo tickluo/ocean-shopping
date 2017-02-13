@@ -5,6 +5,7 @@ export default {
   getOrderList: model => api.post('/order/list', model),
   getOrderDetail: model => api.post('/order/detail', model),
   cancelOrder: model => api.post('/order/cancel', model),
+  deleteOrder: model => api.post('/order/delete', model),
   getPackageList: model => api.post('/package/list', model),
   getPackageDetail: model => api.post('/package/detail', model),
   getPackageByShipId: model => api.post('/package/list/company', model),

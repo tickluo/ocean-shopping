@@ -16,6 +16,7 @@ import {
   SET_TRAN_ORDER_LIST,
   SET_TRAN_ORDER_DETAIL,
   CANCEL_ORDER,
+  DELETE_ORDER,
   RECEIPT_GOODS,
   SET_EXPRESS_DETAIL,
   SET_EXPRESS_SITE
@@ -65,6 +66,10 @@ const mutations = {
       item.ProductStauts = ProductStatus.ProductCancelled
     })
     state.orderList.splice(state.orderList.findIndex(item => item.Id === id), 1, removedOrder)
+    persist.set(state)
+  },
+  [DELETE_ORDER] (state, id) {
+    state.orderList.splice(state.orderList.findIndex(item => item.Id === id), 1)
     persist.set(state)
   },
   [SET_PACKAGE_LIST] (state, list) {

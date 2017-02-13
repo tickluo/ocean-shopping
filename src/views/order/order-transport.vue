@@ -199,7 +199,7 @@
     },
     route: {
       data () {
-        if (this.tranOrderList.length > 0) return {}
+        /* if (this.tranOrderList.length > 0) return {}*/
         return this.getTranOrderList(1)
           .then((res)=> {
             this.empty = !!(res.Success && res.List.length === 0)

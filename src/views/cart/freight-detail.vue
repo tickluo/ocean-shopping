@@ -154,7 +154,7 @@
             shipWay.FirstWeightPrice,
             shipWay.ContinuedWeight,
             shipWay.ContinuedWeightPrice
-          ).toFixed(2)
+          )
         }
       }
     },

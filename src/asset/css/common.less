@@ -110,11 +110,10 @@ textarea {
     margin-right: 0.1rem;
   }
 }
-
+/*颜色*/
 .corlor_33 {
   color: #333 !important;
 }
-
 .color_gray_9 {
   color: #999;
 }
@@ -122,6 +121,19 @@ textarea {
   background: #fff;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+}
+
+/*title*/
+.tit1 {
+  font-weight: 600;
+  font-size: 0.3rem;
+  padding: 0.2rem 0rem 0.12rem;
+  display: inline-block;
+}
+.tit2 {
+  font-weight: 600;
+  font-size: 0.28rem;
+  display: inline-block;
 }
 .shopping_tit {
   color: #333;
@@ -137,28 +149,24 @@ textarea {
   word-break: break-all;
 }
 
-/*定位滚动容器*/
-.scrollable{
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  right: 0;
-  bottom: 1rem;
-  -webkit-overflow-scrolling: touch !important;
-  overflow-y: auto!important;
-}
-.expand-transition {
-  transition: opacity .3s ease;
-}
-.expand-enter, .expand-leave {
-  opacity: 0;
-}
 
 
+/*font-size*/
 .pullup, .pullup-arrow{
   font-size: 0.26rem;
 }
-
+.font_28 {
+  font-size: 0.28rem !important;
+}
+.font_size_25 {
+  font-size: 0.25rem !important;
+}
+.font_size_30 {
+  font-size: 0.3rem;
+}
+.font_size_24 {
+  font-size: 0.24rem !important;
+}
 .empty_wrap{
   position: absolute;
   top:2.8rem;
@@ -183,7 +191,31 @@ textarea {
   margin-top: -0.03rem;
 }
 
+/*loading wrap*/
+.top_leave_wrap {
+  background: #fff;
+  box-sizing: border-box;
+  width: 100%;
+  height: 92.5%;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  overflow: hidden;
+  z-index: 1;
+}
+/*定位滚动容器*/
+.scrollable{
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-y: auto!important;
+}
 .roate_load_img,
+.readd_cart_loading img,
 .loading_wrap .roate_icon_load .load_img
 {
   -webkit-animation: rotate_load 0.8s infinite linear;
@@ -192,7 +224,6 @@ textarea {
   -o-animation: rotate_load 0.8s infinite linear;
   animation: rotate_load 0.8s infinite linear;
 }
-
 
 .loading_wrap {
   margin-top: 4rem;
@@ -210,7 +241,7 @@ textarea {
   }
 }
 
-
+/*margin padding*/
 .mar_top_5 {
   margin-top: 0.05rem;
 }
@@ -218,7 +249,10 @@ textarea {
   padding: 0.2rem !important;
 }
 .mar_bot_21{
-  margin-bottom: 2.1rem;
+  margin-bottom: 2.1rem !important;
+}
+.mar_bot_19{
+  margin-bottom: 1.9rem !important;
 }
 .mar_bot_10{
   margin-bottom: 1.1rem;
@@ -254,9 +288,6 @@ textarea {
   margin-bottom: 1.9rem;
 }
 
-.mar_bot_29 {
-  margin-bottom: 1.75rem;
-}
 .mar_bot_11 {
   margin-bottom: 1.1rem;
 }
@@ -264,12 +295,19 @@ textarea {
   margin-bottom: 0.8rem;
   //    background: #e6e6e6;
 }
+.mar_bot_29 {
+  margin-bottom: 1.75rem;
+}
+.mar_bot_145{
+  margin-bottom: 1.45rem;
+}
 .mar_bot_13 {
   margin-bottom: 1.3rem;
 }
 .mar_bot_14 {
   margin-bottom: 1.4rem !important;
 }
+
 .mar_bot_09 {
   margin-bottom: 0.9rem;
 }
@@ -288,16 +326,6 @@ textarea {
 .pad_bot_30 {
   padding: 0.2rem 0.2rem 0.3rem 0.2rem !important;
 }
-.font_28 {
-  font-size: 0.28rem !important;
-}
-.font_size_25 {
-  font-size: 0.25rem;
-}
-.font_size_30 {
-  font-size: 0.3rem;
-}
-
 
 .icon_circle_stroke {
   width: 0.4rem;
@@ -320,26 +348,10 @@ textarea {
   background: url(../images/circle_fff.png) center no-repeat;
   background-size: 100% auto;
 }
-
-
-.small_pink_btn {
-  background: #FF4D6b;
-  display: inline-block;
-  //    width: 1.56rem;
-  padding: 0 0.15rem;
-  text-align: center;
-  color: #fff;
-  font-size: 0.24rem;
-  line-height: 0.4rem;
-  margin-left: 0.2rem;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  &:active{
-    opacity: 0.8;
-  }
+.icon_circle_stroke_disable{
+  background: url(../images/icon_circle_stroke_disable.png) center no-repeat;
+  background-size: 100% auto;
 }
-
-
 .icon_location {
   width: 0.5rem;
   height: 0.5rem;
@@ -425,18 +437,6 @@ textarea {
   }
 }
 
-.tit1 {
-  font-weight: 600;
-  font-size: 0.3rem;
-  padding: 0.2rem 0rem 0.12rem;
-  display: inline-block;
-}
-.tit2 {
-  font-weight: 600;
-  font-size: 0.28rem;
-  display: inline-block;
-}
-
 .bot_hr {
   position: absolute;
   left: 0;
@@ -485,7 +485,7 @@ textarea {
 .post_company_wrap .to_shop_detail:after,
 .post_country_company .to_shop_detail:after,
   .the_card_block .front_side_card:after,
-.order_static_wrap .to_scan_shipment
+.order_static_wrap .to_scan_shipment:after
 {
   content: "";
   width: 0;
@@ -499,6 +499,7 @@ textarea {
 a.cancel_btn,
 .budget_shipment_btn,
 .into_cart_btn,
+.del_order_shopping,
 .sm_pink_btn{
   background: #FF4D6b;
   text-align: center;
@@ -526,16 +527,39 @@ a.cancel_btn {
   width: 100%;
 
 }
+.del_order_shopping,
 .into_cart_btn {
   position: absolute;
   right: 0.1rem;
   top: 0.15rem;
-  min-width: 2.4rem;
-  padding: 0 0.5rem;
+  min-width: 2.0rem;
+  padding: 0 0.4rem;
   font-size: 0rem;
 
 }
+.del_order_shopping{
+  background: #ccc;
+  right: 3rem;
+  color: #fff;
+}
 
+
+.small_pink_btn {
+  background: #FF4D6b;
+  display: inline-block;
+  //    width: 1.56rem;
+  padding: 0 0.15rem;
+  text-align: center;
+  color: #fff;
+  font-size: 0.24rem;
+  line-height: 0.4rem;
+  margin-left: 0.2rem;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  &:active{
+    opacity: 0.8;
+  }
+}
 .sm_pink_btn {
    display: inline-block;
    padding: 0 0.15rem;
@@ -570,7 +594,8 @@ a.cancel_btn {
 .into_cart_btn,
 .to_change_address,
 .cart_opera_list li,
-.small_pink_btn
+.small_pink_btn,
+.del_order_shopping
 {
   -moz-user-select:none;/*火狐*/
   -webkit-user-select:none;/*webkit浏览器*/
@@ -617,7 +642,8 @@ a.cancel_btn {
 .coupon_wrap,
 .sel_more_package .font_27,
 .package_weight label,
-.description_list label
+.description_list label,
+.shentong .sbzj
 {
   .flex_width;
 }
@@ -639,4 +665,10 @@ a.cancel_btn {
     -ms-transform: rotate(360deg);
     -o-transform: rotate(360deg);
   }
+}
+.expand-transition {
+  transition: opacity .3s ease;
+}
+.expand-enter, .expand-leave {
+  opacity: 0;
 }

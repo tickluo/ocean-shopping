@@ -23,7 +23,7 @@ export default {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      /* fetch(params, {
+      /* return fetch(params, {
        method: 'POST',
        /!* credentials: 'include',*!/
        credentials: 'same-origin',

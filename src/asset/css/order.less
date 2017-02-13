@@ -9,7 +9,7 @@
   right: 0 !important;
   height: auto !important;
 }
-
+/*top 固定二级导航*/
 .sec_top_nav {
   width: 100%;
   z-index: 10;
@@ -63,6 +63,7 @@
     left: 0;
   }
 }
+/*单个订单盒子*/
 .order_wrap {
   margin-bottom: 0.12rem;
   border-top: 1px solid #ccc;
@@ -127,7 +128,7 @@
     background: rgba(245,245,245,1);
   }
 }
-
+/*操作订单盒子*/
 .pay_money_wrap {
   text-align: right;
   padding: 0.15rem 0.2rem 0.2rem;
@@ -153,8 +154,7 @@
     line-height: 0.4rem;
   }
 }
-
-//roate loade more
+/*上拉加载更多 旋转图标*/
 .roate_fade_wrap {
   text-align: center;
 }
@@ -169,35 +169,14 @@
   animation: rotate_load 0.8s infinite linear;
 }
 
-.example-title {
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 20px;
-  background-color: #dddddd;
-}
-
 .example-list {
   padding: 4px 4px 0;
   list-style: none;
 }
 
-.example-listitem {
-  height: 50px;
-  line-height: 50px;
-  border: solid 1px #999;
-  border-radius: 2px;
-  margin-bottom: 4px;
-  text-align: center;
-  font-size: 0.26rem;
-}
-
-
 .mint-loadmore-top,
 .mint-loadmore-bottom {
   font-size: 0.26rem;
-  //background: #fff;
-  //padding-top: 0.1rem;
 }
 .mint-loadmore-content{
   transition: transform 0.3s ease;
@@ -249,7 +228,7 @@ bottom {
   color: #666;
   font-size: 0.32rem;
 }
-
+/*top三级导航*/
 .third_top_nav {
   background: #555;
   overflow: hidden;
@@ -297,7 +276,7 @@ bottom {
     }
   }
 }
-
+/*不同状态订单数目*/
 .total_merch_num {
   background: #f6f6f6;
   text-align: center;
@@ -316,7 +295,7 @@ bottom {
   }
 }
 
-
+/*提交转运*/
 .link_transport {
   line-height: 0.4rem;
   text-align: right;
@@ -338,6 +317,7 @@ bottom {
     }
   }
 }
+/*包裹详情*/
 .kd_company {
   border-top: 1px solid #ddd;
   padding: 0.15rem 0.2rem;
@@ -351,7 +331,7 @@ bottom {
   }
 }
 
-
+/*转运公司*/
 .transport_company {
   padding: 0.2rem;
   .border_bot_c;
@@ -365,7 +345,7 @@ bottom {
     margin-top: 0.1rem;
   }
 }
-
+/*添加地址盒子*/
 .about_address_wrap {
   background: #fff;
   margin-bottom: 0.12rem;
@@ -384,7 +364,6 @@ bottom {
   }
   .faq {
     padding: 0.2rem 0.2rem 0rem 0.2rem;
-    //border-bottom: 1px solid #ccc;
   }
   .tit2 {
     margin-top: 0.04rem;
@@ -406,6 +385,7 @@ bottom {
     border-bottom: none;
   }
 }
+/*修改地址*/
 .change_address {
   background: #fff;
   border-top: 1px solid #ccc;
@@ -427,8 +407,9 @@ bottom {
     }
   }
 }
+/*提交转运*/
 .shentong {
-  background: #f9f9f9;
+  background: #f6f6f6;
   padding: 0.15rem 0.2rem;
   box-sizing: border-box;
   font-size: 0.28rem;
@@ -441,6 +422,7 @@ bottom {
     line-height: 0.4rem;
   }
 }
+/*用户添加地址个人信息*/
 .user_address_name {
   font-size: 0.28rem;
   .font_size_30 {
@@ -474,7 +456,7 @@ bottom {
     line-height: 0.42rem;
   }
 }
-
+/*修改地址按钮*/
 .to_change_address {
   display: block;
   background: @color_pink_e4;
@@ -490,6 +472,7 @@ bottom {
     opacity: 0.8;
   }
 }
+/*转运方式*/
 .way_for_transport {
   padding: 0.24rem 0.2rem;
   .border_bot_d;
@@ -503,7 +486,7 @@ bottom {
 
 .way_for_transport_item {
   font-size: 0.3rem;
-  line-height: 0.42rem;
+  //line-height: 0.42rem;
 }
 .advance_tips {
   font-size: 0.25rem;
@@ -524,6 +507,7 @@ bottom {
     background: #fbfbfb;
   }
 }
+/*物流跟踪*/
 .shop_brand_name {
   font-size: 0.28rem;
   display: block;
@@ -546,7 +530,7 @@ bottom {
       #f2f2f2)
   }
 }
-
+/*转运详情*/
 .port_detail {
   .border_top_d;
   padding: 0.15rem 0.2rem;
@@ -570,7 +554,7 @@ bottom {
 .claim_con {
   line-height: 0.37rem;
 }
-
+/*优惠码*/
 .coupon_wrap {
   margin-top: 0.15rem;
   .coupon_right {
@@ -587,7 +571,7 @@ bottom {
     background-size: 76% auto;
   }
 }
-
+/*选择合并包裹*/
 .sel_more_package {
   font-size: 0.27rem;
   -webkit-font-size-adjust: none;
@@ -690,4 +674,100 @@ bottom {
     background: url(../images/icon_rect_gray.png) center no-repeat;
     background-size: 100% auto;
   }
+}
+/*申报总价*/
+    .sz_detail{
+      color: #0079FF;
+      text-align: right;
+    }
+.c_666{
+  color:#666;
+}
+.money_type{
+  background: #eee;
+  width: 3rem;
+  height: 0.64rem;
+  position: relative;
+  border-radius: 0.06rem;
+  overflow: hidden;
+  .inner_abs{
+    background: #888;
+    color: #fff;
+    font-size: 0.25rem;
+    position: absolute;
+    left: 0rem;
+    top:0;
+    width: 0.9rem;
+    text-align: center;
+    height: 0.64rem;
+    line-height: 0.64rem;
+    border-top-left-radius: 0.06rem;
+    border-bottom-left-radius: 0.06rem;
+  }
+}
+.inp_szprice{
+  border:1px solid #f00;
+  margin-left: 1rem;
+  height:0.64rem;
+  box-sizing: border-box;
+  border:none;
+  background: transparent;
+  font-size: 0.25rem;
+}
+.inp_szprice:focus{
+  outline: none;
+}
+/*申报价值*/
+.back_arr{
+  position: absolute;
+  left: 0.2rem;
+  font-size: 0.28rem;
+  color: #0079ff;
+  img{
+    vertical-align: middle;
+    width: 0.2rem;
+    height: auto;
+    margin-top: -0.03rem;
+    margin-right: 0.1rem;
+  }
+}
+.declare_wrap{
+  padding: 0.2rem;
+  background: #fff;
+  font-size: 0.28rem;
+  .simple_info{
+    margin-bottom: 0.3rem;
+  }
+  p{
+    display: inline-block;
+  }
+  h4{
+    line-height: 0.46rem;
+  }
+}
+.declare_tab{
+  border:0.01rem solid #ddd;
+  width: 100%;
+  border-collapse:collapse;
+  margin: 0.2rem 0;
+  td{
+    border:0.01rem solid #ddd;
+    padding:0.1rem 0.1rem;
+  }
+}
+.tip_apy{
+  background: #FF4D6b;
+  color: #fff;
+  font-size: 0.24rem;
+  text-align: center;
+  line-height: 0.6rem;
+  position: fixed;
+  bottom: 2.4rem;
+  width: 100%;
+}
+.over_time{
+  color: #FF4D6b;
+  font-size: 0.25rem;
+  //line-height: 0.5rem;
+  margin-top: 0.1rem;
 }

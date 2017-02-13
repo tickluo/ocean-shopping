@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="shopping_con_box" v-for="shop in shoppingList">
-      <h3 class="shopping_cart_tit">
+      <h3 class="shopping_cart_tit" v-if="shop.GrabAttrs.length > 0">
         <img class="shop_brand_logo" :src="logos[shop.logo]" alt="">
         <span class="shop_brand_name">{{shop.Title}}</span>
       </h3>
@@ -37,7 +37,7 @@
         order: state => state.cart.order,
         cartList: state => state.cart.cartList,
         rates: state => state.cart.rates,
-        removeList: state => state.cart.removeList,
+        noCountList: state => state.cart.noCountList,
         countries: state => state.cart.countries,
         currency: state => state.app.appPersist.Currency
       }
@@ -58,7 +58,7 @@
             return {
               Title: item.Title,
               GrabAttrs: item.GrabAttrs.filter(shopping =>
-                !this.removeList.includes(shopping.Id)
+                !this.noCountList.includes(shopping.Id)
               ),
               rate,
               logo: this.shopLogo(logo)
@@ -77,7 +77,7 @@
               GrabAttrs: []
             })
             item.shopping.forEach(shopping => {
-              if (!this.removeList.includes(shopping.Id)) {
+              if (!this.noCountList.includes(shopping.Id)) {
                 list[list.length - 1].Title = this.cartList[index].Title
                 list[list.length - 1].GrabAttrs
                   .push(this.cartList[index].GrabAttrs.find(cartShopping => cartShopping.Id === shopping))
@@ -92,7 +92,7 @@
             })
             list[list.length - 1].Title = this.cartList[index].Title
             list[list.length - 1].GrabAttrs = this.cartList[index].GrabAttrs
-              .filter(shopping => !this.removeList.includes(shopping.Id))
+              .filter(shopping => !this.noCountList.includes(shopping.Id))
             list[list.length - 1].rate = rate
             list[list.length - 1].logo = this.shopLogo(logo)
           }
@@ -108,12 +108,7 @@
       },
       afterRatePrice (rate, OriginalPrice) {
         return toFloatFixed(
-          toFloatFixed(
-            parseFloat(OriginalPrice * rate),
-            2
-          ) * (1 + this.serviceRate),
-          2
-        )
+          toFloatFixed(parseFloat(OriginalPrice * rate), 2) * (1 + this.serviceRate), 2)
       }
     }
   }

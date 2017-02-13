@@ -38,6 +38,8 @@
   import VLoading from '../../components/v-loading.vue'
   import Empty from '../../components/empty.vue'
   import { CCheckbox } from '../../components'
+  import { timeStamp } from '../../local/config.enum'
+  import { toFloatFixed } from '../../services/util.svc'
   import { getShopInfo } from '../../services/match.svc'
   import { app, cart } from '../../store/action'
 
@@ -64,7 +66,9 @@
         getCartList: cart.getCartList,
         selectAll: cart.selectAll,
         setShoppingRate: cart.setShoppingRate,
-        clearRemoveList: cart.clearRemoveList
+        clearRemoveList: cart.clearRemoveList,
+        clearNoCountList: cart.clearNoCountList,
+        addToNoCount: cart.addToNoCount
       }
     },
     computed: {
@@ -76,12 +80,13 @@
         return this.cartList.length === 0 || shoppingLength === this.removeList.length
       },
       hasSelected () {
-        return this.selectedShopping && this.selectedShopping.length > 0 && !this.isEmpty
-          ? this.selectedShopping.every(item => item.shopping.length === 0)
-          : true
+        return this.selectedShopping
+        && this.selectedShopping.length > 0
+        && this.totalPrice !== 0
+        && !this.isEmpty ? this.selectedShopping.every(item => item.shopping.length === 0) : true
       },
       totalPrice () {
-        return this.selectedTotalPrice ? parseFloat(this.selectedTotalPrice).toFixed(2) : 0
+        return this.selectedTotalPrice ? toFloatFixed((this.selectedTotalPrice), 2) : 0
       },
       serviceRate (){
         return this.currency.ServiceCoefficient || 0
@@ -119,10 +124,19 @@
     route: {
       data () {
         this.clearRemoveList()
+        this.clearNoCountList()
         return this.getCartList()
           .then(() => this.getExchangeRate(''))
           .then((data) => this.setShoppingRate(data.List))
           .then(()=> {
+            const now = new Date().getTime()
+            this.cartList.forEach(list => {
+              list.GrabAttrs.forEach(shopping => {
+                if ((now - Date.parse(new Date(shopping.UpdateTime))) > timeStamp.cart) {
+                  this.addToNoCount(shopping.Id)
+                }
+              })
+            })
             return this.selectAll(true, this.serviceRate)
           })
       }

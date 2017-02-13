@@ -8,8 +8,8 @@
             <h3 class="shopping_tit">{{display.skuSelect && display.skuSelect.Title}}</h3>
             <section class="merch_price_wrap">
               <div class="merch_attr_detail">
-                <span class="color_p">{{currency.CurrencySign}} {{afterRatePrice}}</span>&nbsp;&nbsp;
-                <span class="got_price">( 到手价约{{currency.CurrencySign}} {{afterRatePrice*1 + afterRateFreight*1}}起
+                <span class="color_p">{{currency.CurrencySign}} {{finalPrice}}</span>&nbsp;&nbsp;
+                <span class="got_price">( 到手价约{{currency.CurrencySign}} {{handPrice}}起
                   <img @click="showPriceDescription" class="icon_ask" :src='images.iconAsk'> )
                 </span>
               </div>
@@ -60,6 +60,7 @@
           <p>
             因海外电商的价格及库存实时更新、热销商品存在限购等情况，如出现无货、限购等情况，我们会取消订单并于2个工作日内退款给您。
           </p>
+          <p></p>
           <p>
             由于海淘的特殊性，海外官网发货后，不支持无理由退换货（质量问题除外），介意者请慎重购买，不便之处，敬请谅解。
           </p>
@@ -87,16 +88,16 @@
     </footer>
 
     <!--弹出遮罩-->
-    <div v-if="selAtrLayer || priceDescription" @click="hideAtrPrice" class="pop_wrap_mask" v-disable-tap></div>
+    <div v-if='maskFlag' @click="hideAtrPrice" class="pop_wrap_mask" v-disable-tap></div>
     <!--修改订购单-->
-    <div v-if="selAtrLayer" class="pop_sel_color_size">
+    <div :class='{"pop_height":selAtrLayer}' class="pop_sel_color_size">
       <section class="pop_header" v-disable-tap>
         <div class="s_merch_img">
           <img :src="display.picture" alt="">
         </div>
         <div class="r_sel_attr">
-          <h4>{{currency.CurrencySign}} {{afterRatePrice}}</h4>
-          <div class="has_sel" v-if="shopping.SkuClasses.length > 0">
+          <h4>{{currency.CurrencySign}} {{finalPrice}}</h4>
+          <div class="has_sel" v-if="shopping.SkuClasses && shopping.SkuClasses.length > 0">
             <div class="yixuan">已选 :</div>
             <div class="seled_attr">
               <span>{{currentDisplayOption}}</span>
@@ -107,7 +108,7 @@
            </p>-->
         </div>
       </section>
-      <section class="pop_con">
+      <section class="pop_con" v-prevent-swipe>
         <shopping-sku v-for="item in shopping.SkuClasses"
                       :title="item.TypeName"
                       :id="$index"
@@ -115,7 +116,7 @@
                       :sku="shopping.Skus"
                       :skuclasses="shopping.SkuClasses">
         </shopping-sku>
-        <shopping-cost :price="afterRatePrice"
+        <shopping-cost :price="finalPrice"
                        :currency_sign="currency.CurrencySign"
                        :freight="afterRateFreight"
                        :count="display.count">
@@ -156,7 +157,7 @@
       </section>
     </div>
     <!--海淘到手价说明-->
-    <section v-if="priceDescription" class="price_description" v-disable-tap>
+    <section :class='{"price_description_in":priceDescription}' class="price_description" v-disable-tap>
       <div class="description_tit">海淘商品到手价说明
         <span class="icon_x">
             <img @click="hideAtrPrice" :src='images.iconX'>
@@ -166,10 +167,10 @@
         <li>
           <h4>
             <label>商品价格</label>
-            <span>{{currency.CurrencySign}} {{afterRatePrice}}</span>
+            <span>{{currency.CurrencySign}} {{finalPrice}}</span>
           </h4>
-          <p>规格不同可能售价不同</p>
-          <p class="color_p">该网站需支付服务费，已包含买手使用美卡美私代买的服务费。</p>
+          <p>规格不同可能售价不同{{serviceFeeDes}}</p>
+          <p class="color_p">{{select_currency.RateDescription}}</p>
         </li>
         <li>
           <h4>
@@ -181,17 +182,16 @@
         <li>
           <h4>
             <label>海淘国际运费</label>
-            <span>{{currency.CurrencySign}} {{shippingFee}}</span>
+            <span>预计{{currency.CurrencySign}}{{shippingFee}}或以上</span>
           </h4>
           <p class="color_p">待商品在转运公司入库，由转运公司称重后前来支付。</p>
         </li>
         <li>
           <h4>
             <label>预计到手价</label>
-            <span>{{currency.CurrencySign}} {{afterRatePrice*1 + afterRateFreight*1}}</span>
+            <span>{{currency.CurrencySign}}{{handPrice}}起</span>
           </h4>
-          <p>不含税费，商品税费在清关时根据海关产生，除电子商品
-            外多数商品可选择包税渠道转运。</p>
+          <p>不含税费，商品税费在清关时根据海关产生，除电子商品外多数商品可选择包税渠道转运。</p>
         </li>
       </ul>
     </section>
@@ -206,16 +206,17 @@
   import { cart, app } from '../../store/action'
   import { getDisableSku } from '../../services/sku.svc'
   import { rangeAlgo, mathAlgo } from '../../services/ship.svc'
-  import { parseDomain, getCurrency } from '../../services/util.svc'
+  import { toFloatFixed, parseDomain, getCurrency } from '../../services/util.svc'
   import images from '../../asset/images'
   import logos from '../../asset/web_logo'
 
   export default{
-    props: ['shopping', 'cart_count', 'select_currency', 'modify_shopping', 'type'],
+    props: ['shopping', 'cart_count', 'select_currency', 'modify_shopping', 'type', 'shipping_default'],
     data () {
       return {
         selAtrLayer: false,
         priceDescription: false,
+        maskFlag: false,
         images,
         logos
       }
@@ -229,13 +230,11 @@
       getters: {
         display: state => state.cart.display,
         skuSelect: state => state.cart.display.skuSelect,
-        currency: state => state.app.appPersist.Currency,
-        companySet: state => state.cart.company.companySet
+        currency: state => state.app.appPersist.Currency
       },
       actions: {
         showAlert: app.showAlert,
-        setSubmitLoading: app.setSubmitLoading,
-        getDefaultCompany: cart.getDefaultCompany
+        setSubmitLoading: app.setSubmitLoading
       }
     },
     computed: {
@@ -257,7 +256,7 @@
           cbMsg: '修改成功'
         } :
         {
-          openMsg: '去添加',
+          openMsg: '一键海淘',
           buttonMsg: '加入购物车',
           submitMsg: '正在添加...',
           cbMsg: '添加成功'
@@ -266,6 +265,7 @@
       currentDisplayOption () {
         let skuDes = ''
         this.shopping.SkuClasses.forEach(item => {
+          if (item.SkuProperties.length < 1) return
           skuDes += item.SkuProperties.find(sku => this.skuSelect.PropIds.includes(sku.PropId)).PropertieName + ' '
         })
         return skuDes
@@ -273,14 +273,13 @@
       ServiceCoefficient () {
         return (this.currency && this.currency.ServiceCoefficient) || 0
       },
-      shippingDefault () {
-        if (this.companySet.length > 0) {
-          return this.companySet.find(item => item.CountryId === this.select_currency.CountryId) || null
-        }
-        return null
+      serviceFeeDes () {
+        return this.ServiceCoefficient > 0 ? `，含代买服务费${this.currency.CurrencySign}
+          ${toFloatFixed(this.afterRatePrice * (this.ServiceCoefficient), 2)}`
+          : ''
       },
       shippingFee () {
-        let shippingWay = this.shippingDefault.ShippingCompany.ShippingWayDefault
+        let shippingWay = this.shipping_default.ShippingCompany.ShippingWayDefault
         if (shippingWay.WayType === WayType.Range) {
           return rangeAlgo(this.shopping.Weight, shippingWay.Service, shippingWay.Rate)
         }
@@ -291,7 +290,7 @@
             shippingWay.FirstWeightPrice,
             shippingWay.ContinuedWeight,
             shippingWay.ContinuedWeightPrice
-          ).toFixed(2)
+          )
         }
       },
       shopLogo () {
@@ -302,7 +301,13 @@
       },
       afterRatePrice () {
         return this.select_currency
-          && parseFloat(this.genRate(this.display.skuSelect.Price) * (1 + this.ServiceCoefficient)).toFixed(2)
+          && this.genRate(this.display.skuSelect.Price)
+      },
+      finalPrice () {
+        return toFloatFixed((this.afterRatePrice * (1 + this.ServiceCoefficient)), 2)
+      },
+      handPrice () {
+        return toFloatFixed((this.finalPrice * 1 + this.afterRateFreight * 1 + this.shippingFee * 1), 2)
       },
       afterRateFreight () {
         return this.display.skuSelect && (this.genRate(this.display.skuSelect.Freight) || this.genRate(this.shopping.Freight))
@@ -319,29 +324,30 @@
         window.location.href = site
       },
       showSelAtrLayer(){
+        this.maskFlag = true
         this.selAtrLayer = true
       },
       showPriceDescription(){
+        this.maskFlag = true
         this.priceDescription = true
-        if (!this.shippingDefault) {
-          this.getDefaultCompany([this.select_currency.CountryId])
-            .then(data => {
-            })
-        }
       },
       hideAtrPrice(){
         this.selAtrLayer = false
         this.priceDescription = false
+        setTimeout(() => {
+          this.maskFlag = false
+        }, 200);
       },
       genRate (price) {
-        return parseFloat(this.select_currency.Rate * price).toFixed(2)
+        return toFloatFixed(this.select_currency.Rate * price, 2)
       },
       selectIfBuy (isBuy) {
         this.modify_shopping.IsBuy = isBuy
       },
       genCartInfo () {
         let skuMsg = ''
-        this.shopping.SkuClasses && this.shopping.SkuClasses.forEach((option, index) => {
+        this.shopping.SkuClasses && this.shopping.SkuClasses.length > 0 && this.shopping.SkuClasses.forEach((option, index) => {
+          if (option.SkuProperties.length < 1) return
           let skuRowId = this.display.skuSelect.PropIds.findIndex(item => item[0] === `${index}`)
           skuMsg += `${option.TypeName}:${option.SkuProperties
             .find(item => item.PropId === this.display.skuSelect.PropIds[skuRowId]).PropertieName},`

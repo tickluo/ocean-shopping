@@ -9,20 +9,22 @@
                      :fill_shopping="fillShopping"
                      :select_currency="selectCurrency">
       </shopping-fill>
-      <shopping-modify v-if="type === 'add'"
+      <shopping-select v-if="type === 'add'"
                        :shopping="shoppingView"
                        :type="'add'"
+                       :shipping_default="shippingDefault"
                        :cart_count="cartCount"
                        :select_currency="selectCurrency"
                        :modify_shopping="modifyShopping">
-      </shopping-modify>
-      <shopping-modify v-if="type === 'modify'"
+      </shopping-select>
+      <shopping-select v-if="type === 'modify'"
                        :shopping="shoppingView"
                        :type="'modify'"
+                       :shipping_default="shippingDefault"
                        :cart_count="cartCount"
                        :select_currency="selectCurrency"
                        :modify_shopping="modifyShopping">
-      </shopping-modify>
+      </shopping-select>
     </div>
   </div>
 </template>
@@ -30,7 +32,7 @@
 <script>
   import { cart } from '../../store/action'
   import ShoppingFill from './shopping-fill.vue'
-  import ShoppingModify from './shopping-modify.vue'
+  import ShoppingSelect from './shopping-select.vue'
   import VLoading from '../../components/v-loading.vue'
   import { getDisableSku } from '../../services/sku.svc'
   import { parseDomain } from '../../services/util.svc'
@@ -49,7 +51,7 @@
     },
     components: {
       ShoppingFill,
-      ShoppingModify,
+      ShoppingSelect,
       VLoading
     },
     methods: {
@@ -58,20 +60,28 @@
     },
     computed: {
       skuSelect () {
-        if (!this.shoppingView.Skus) return this.shoppingView
+        if (!this.shoppingView.Skus || this.shoppingView.Skus.length < 1) return this.shoppingView
         const findSelectedSku = this.shoppingView.Skus.find(item => item.Selected)
         return findSelectedSku ? findSelectedSku :
           this.shoppingView.Skus[0]
+      },
+      shippingDefault () {
+        if (this.companySet.length > 0) {
+          return this.companySet.find(item => item.CountryId === this.selectCurrency.CountryId) || null
+        }
+        return null
       }
     },
     vuex: {
       getters: {
         countries: state => state.cart.countries,
-        cartList: state => state.cart.cartList
+        cartList: state => state.cart.cartList,
+        companySet: state => state.cart.company.companySet
       },
       actions: {
         initShoppingDisplay: cart.initShoppingDisplay,
-        setCountryRate: cart.setCountryRate
+        setCountryRate: cart.setCountryRate,
+        getDefaultCompany: cart.getDefaultCompany
       }
     },
     route: {
@@ -160,6 +170,12 @@
             this.isCountryRate = !this.websiteRate || this.websiteRate.Rate <= 0
             if (!this.isCountryRate) this.selectCurrency = this.websiteRate
             else this.selectCurrency = this.countries[0]
+            if (!this.shippingDefault) {
+              return this.getDefaultCompany([this.selectCurrency.CountryId])
+                .then(() => {
+
+                })
+            }
           })
       }
     }

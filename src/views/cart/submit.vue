@@ -99,6 +99,7 @@
 <script>
   import images from '../../asset/images'
   import { CAlert, VLoading } from '../../components'
+  import { toFloatFixed } from '../../services/util.svc'
   import { matchCompanyShop } from '../../services/match.svc'
   import { orders, user, app } from '../../store/action'
 
@@ -115,7 +116,7 @@
     },
     vuex: {
       getters: {
-        totalPrice: state => state.cart.shoppingTotalPrice.toFixed(2),
+        totalPrice: state => toFloatFixed(state.cart.shoppingTotalPrice, 2),
         companySet: state => state.cart.company.companySet,
         selectedShop: state => state.cart.order.selected,
         defaultAddress: state => state.user.defaultAddress

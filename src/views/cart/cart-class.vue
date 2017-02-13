@@ -69,7 +69,7 @@
       toggle () {
         return this.order.selected[this.shop_id].selectShop
       },
-      serviceRate (){
+      serviceRate () {
         return this.currency.ServiceCoefficient || 0
       },
       showTip () {

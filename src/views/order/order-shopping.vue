@@ -36,8 +36,16 @@
             <div class="font_28" v-if="order.Replenishment">{{order.Replenishment.Reason||''}}
               <span class="font-weight_6">+ RMB {{order.Replenishment.Money}}</span>
             </div>
-            <a class="font_size_30 cancel_order_btn" @click.stop="removeOrder(order.Id)">取消订单</a>
-            <a class="font_size_30" @click.stop="payOrder(order.Id)">去付款</a>
+            <div v-if="!outOfTime(order.UpdateTime)">
+              <a class="font_size_30 cancel_order_btn" @click.stop="removeOrder(order.Id)">取消订单</a>
+              <a class="font_size_30" @click.stop="payOrder(order.Id)">去付款</a>
+              <div class="over_time">价格、库存随官网实时变动，请在15分钟内付款。</div>
+            </div>
+            <div v-if="outOfTime(order.UpdateTime)">
+              <a class="font_size_30 cancel_order_btn" @click.stop="delOrder(order.Id)">删除订单</a>
+              <a class="font_size_30" @click.stop="reBuy(order.GrabAttrs)">重新购买</a>
+              <div class="over_time">订单超过15分钟未付款，您需要重新加入购物车。</div>
+            </div>
           </div>
         </article>
       </div>
@@ -71,7 +79,8 @@
   import VLoading from '../../components/v-loading.vue'
   import RoateFade from '../../components/c-fade.vue'
   import Empty from '../../components/empty.vue'
-  import { orders, user, app } from '../../store/action'
+  import { cart, orders, user, app } from '../../store/action'
+  import { timeStamp } from '../../local/config.enum'
   import { OrderStatus, OrderType } from '../../local/state.enum'
 
   export default{
@@ -111,10 +120,15 @@
         showConfirm: app.showConfirm,
         showAlert: app.showAlert,
         cancelOrder: orders.cancelOrder,
+        deleteOrder: orders.deleteOrder,
         setSubmitLoading: app.setSubmitLoading
       }
     },
     methods: {
+      outOfTime (date) {
+        const now = new Date().getTime()
+        return (now - Date.parse(new Date(date))) > timeStamp.order
+      },
       getStateText (state, text) {
         if (text) {
           return `${state}：${text}`
@@ -183,11 +197,64 @@
               })
           }
         })
+      },
+      delOrder(id) {
+        this.showConfirm({
+          tip: '是否删除订单？',
+          button: '删除订单',
+          success: '订单已删除',
+          fail: '删除订单失败',
+          handle: () => {
+            this.setSubmitLoading(true, '正在删除订单...')
+            return this.deleteOrder(id)
+              .then(res => {
+                this.setSubmitLoading(false)
+                return Promise.resolve(res)
+              })
+          }
+        })
+      },
+      reBuy (list) {
+        let flag = false //sign if any shopping didn't add successfully
+        this.setSubmitLoading(true, '重新添加商品...')
+        Promise.all(list.map(item => {
+          return cart.getShopping(item.Url)
+        }))
+          .then(resArr => {
+            let shoppingListTemp = []
+            resArr.forEach((res, index) => {
+              if (res.Success) {
+                let quantity = res.Data.Quantity
+                if (list[index].SkuId !== "" && res.Data.Skus && res.Data.Skus.length > 0) {
+                  let skuShopping = res.Data.Skus.find(shopping => shopping.SkuId === list[index].SkuId)
+                  if (skuShopping) quantity = skuShopping.Quantity
+                  else flag = true
+                }
+                if (quantity <= 0) return flag = true
+                let reAddShopping = Object.assign({}, list[index])
+                reAddShopping.Quantity = quantity > reAddShopping.Quantity ? reAddShopping.Quantity : quantity
+                reAddShopping.Id = 0
+                shoppingListTemp.push(reAddShopping)
+              }
+            })
+            if (shoppingListTemp.length === 0) return Promise.reject('全部商品都已无库存')
+            return Promise.all(shoppingListTemp.map(item => {
+              return cart.addToCart(item)
+            }))
+          })
+          .then(() => {
+            this.setSubmitLoading(false)
+            if (flag) return this.showAlert('部分商品已无库存')
+            this.$router.go({ name: 'cart' })
+          })
+          .catch(err => {
+            this.showAlert(err)
+          })
       }
     },
     route: {
       data () {
-        if (this.orderList.length > 0) return {}
+        /* if (this.orderList.length > 0) return {}*/
         return this.getOrderList(1)
           .then((res)=> {
             this.empty = !!(res.Success && res.List.length === 0)

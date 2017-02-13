@@ -69,6 +69,7 @@
   import VLoading from '../../components/v-loading.vue'
   import { orders } from '../../store/action'
   import displayShopping from '../layout/display-shopping.vue'
+  import { toFloatFixed } from '../../services/util.svc'
 
   export default{
     data(){
@@ -92,7 +93,7 @@
       },
       restCount () {
         if (this.selectCount < this.box.LimitNumber) {
-          return this.box.LimitNumber - this.selectCount
+          return this.box.LimitNumber - this.selectCount - 1
         }
         return 0
       },
@@ -116,7 +117,7 @@
         this.selectIds.forEach(id => {
           let pacTemp = this.packages.find(item=>item.Id === id)
           this.totalWeight += pacTemp.Weight
-          this.totalPrice = parseFloat(this.totalPrice + pacTemp.PackageTotalAmount).toFixed(2) * 1
+          this.totalPrice = toFloatFixed((this.totalPrice + pacTemp.PackageTotalAmount), 2)
         })
       },
       mergePackage () {

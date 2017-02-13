@@ -1,12 +1,14 @@
 <template>
   <div>
     <v-loading v-if="$loadingRouteData"></v-loading>
-    <div v-if="!$loadingRouteData" class="" v-fix-bottom>
+    <div v-if="!$loadingRouteData" class="mar_bot_08" :class="{'mar_bot_145':tranOrderDetail.Replenishment}"
+         v-fix-bottom>
       <article class="order_wrap about_transport">
         <h4 class="order_number">
           <div class="real_number">
             转运: <span class="font-weight_6">{{tranOrderDetail.ShippingNo}}</span>
           </div>
+          <div class="text_align_r">笨鸟海淘</div>
         </h4>
         <h3 class="shopping_cart_tit height_08" v-link="{name:expressRoute}">
           <a class="shop_brand_name flex_width">物流跟踪：{{expressMsg}}</a>
@@ -18,6 +20,7 @@
           <p><label>提交转运时间：</label>{{tranOrderDetail.SubmitTime}}</p>
           <p><label>物流单号：</label><strong>{{tranOrderDetail.TrackingNumber}}</strong></p>
           <p><label>转运重量：</label><strong>{{tranOrderDetail.Weight}}g</strong></p>
+          <p><label>申报总价：</label>{{declareAmount}}</p>
         </section>
         <section class="port_detail">
           <h4 class="tit2">{{tranOrderDetail.RecipientName}}，{{tranOrderDetail.PhoneNumber}}</h4>
@@ -94,6 +97,7 @@
   import displayShopping from '../layout/display-shopping.vue'
   import { orders, user, app } from '../../store/action'
   import { ShipStatus, OrderType } from '../../local/state.enum'
+  import { getCurrency } from '../../services/util.svc'
 
   export default{
     data(){
@@ -120,6 +124,12 @@
         setSubmitLoading: app.setSubmitLoading,
         showAlert: app.showAlert,
         setExpressDetail: orders.setExpressDetail
+      }
+    },
+    computed: {
+      declareAmount () {
+        return `${this.tranOrderDetail.DeclaredTotalAmount}
+                ${getCurrency(this.tranOrderDetail.GrabAttributes[0].OriginalCurrencyCode)}`
       }
     },
     methods: {
@@ -176,9 +186,9 @@
     },
     route: {
       data ({ to: { params: { id } } }) {
-        if (this.tranOrderDetail.Id && this.tranOrderDetail.Id === id * 1) {
-          return {}
-        }
+        /* if (this.tranOrderDetail.Id && this.tranOrderDetail.Id === id * 1) {
+         return {}
+         }*/
         return orders.getTransportDetail(id)
           .then(res => {
             if (res.Success) {

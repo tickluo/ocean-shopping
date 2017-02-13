@@ -108,6 +108,15 @@ const cart = {
         return Promise.reject(res.Message)
       })
   },
+  addToNoCount ({ dispatch }, id) {
+    dispatch(types.ADD_NO_COUNT_SHOPPING, id)
+  },
+  removeFromNoCount ({ dispatch }, id) {
+    dispatch(types.REMOVE_NO_COUNT_SHOPPING, id)
+  },
+  clearNoCountList ({ dispatch }) {
+    dispatch(types.CLEAR_NO_COUNT_SHOPPING)
+  },
   getDefaultCompany ({ dispatch }, countryIds) {
     return cartApi.getDefaultCompany({ CountryIds: countryIds })
       .then(res => {
@@ -173,6 +182,16 @@ const orders = {
       .then(res => {
         if (res.Success) {
           dispatch(types.CANCEL_ORDER, id)
+          return Promise.resolve(res)
+        }
+        return Promise.reject(res.Message)
+      })
+  },
+  deleteOrder ({ dispatch }, id) {
+    return orderApi.deleteOrder({ OrderId: id })
+      .then(res => {
+        if (res.Success) {
+          dispatch(types.DELETE_ORDER, id)
           return Promise.resolve(res)
         }
         return Promise.reject(res.Message)

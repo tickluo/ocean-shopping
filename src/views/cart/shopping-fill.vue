@@ -142,7 +142,7 @@
   import images from '../../asset/images'
   import Faq from '../layout/faq.vue'
   import { cart, app } from '../../store/action'
-  import { getCurrency } from '../../services/util.svc'
+  import { toFloatFixed, getCurrency } from '../../services/util.svc'
 
   export default{
     props: [
@@ -181,7 +181,7 @@
     methods: {
       getCurrency,
       computeRate (price) {
-        return parseFloat((price * this.shoppingRate).toFixed(2) * (1 + this.ServiceCoefficient)).toFixed(2)
+        return toFloatFixed((toFloatFixed(price * this.shoppingRate, 2) * (1 + this.ServiceCoefficient)), 2)
       },
       selectIfBuy (isBuy) {
         this.fill_shopping.isBuy = isBuy

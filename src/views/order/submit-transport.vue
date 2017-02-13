@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
   <div>
     <v-loading v-if="$loadingRouteData"></v-loading>
     <div v-if="!$loadingRouteData" class="mar_bot_29" v-fix-bottom>
@@ -21,29 +21,72 @@
           <input class="fill_other_input" v-model="note" type="text" placeholder="如有其他要求，请在此填写"></section>
         <section class="shentong">
           <div class="need_times">
-            <span class="flex_width font_size_30">由<strong>&nbsp;{{shipInfo.shipName}}&nbsp;</strong>负责转运</span>
-            <span class="text_align_r">{{wayDes}}</span>
+            <span class="flex_width font_size_30">转运公司：<strong>&nbsp;{{shipInfo.shipName}}&nbsp;</strong></span>
+            <!--<span class="text_align_r">{{wayDes}}</span>-->
           </div>
-          <div class="triangle_left">
+          <!--<div class="triangle_left">
             选择转运路线
-          </div>
+          </div>-->
         </section>
         <div class="way_for_transport" v-for="way in shipWay">
           <div class="icon_circle_stroke"
-               :class="{'icon_circle_fill':selectShipWay === way.Id}"
+               :class="{'icon_circle_fill':selectShipWayId === way.Id}"
                @click="selectWay(way.Id,way.ShortDescription)">
             <input type="radio" name="zhuanyun" value="">
           </div>
           <div class="way_for_transport_item">
             {{way.Name}}
           </div>
-          <div class="font-weight_6 font_size_30">
+          <div class="way_for_transport_item font-weight_6 font_size_30">
             RMB {{genMath(way.Id)}}
           </div>
+          <div class="way_for_transport_item text_align_r font_size_25">{{wayDes}}</div>
         </div>
-        <section class="shentong">
+        <!--<section class="shentong">
           <div class="triangle_left">
             转运公司增值服务
+          </div>
+        </section>-->
+        <!--申报总价-->
+        <validator name="declareMoneyValidation">
+          <div v-if="!selectShipWay.IncludeTax">
+            <section class="shentong">
+              <!--申报总价-->
+              <div class="flex_width">
+                <div class="sbzj">申报总价（必填）</div>
+                <a v-link="{name:'cart'}" class="sz_detail">
+                  详细说明 >
+                </a>
+              </div>
+            </section>
+            <section class="way_for_transport pad_20">
+              <div class="way_for_transport_item font_size_25 c_666">
+                按照您填写的金额进行申报
+              </div>
+              <div class="money_type">
+                <span class="inner_abs">{{declareCurrency}}</span>
+                <input class="inp_szprice"
+                       :class="{'err_input':
+                     $declareMoneyValidation.money &&
+                     $declareMoneyValidation.money.modified &&
+                     $declareMoneyValidation.money.invalid}"
+                       v-validate:phone="{
+                     required: { rule: true, message: '请填写申报金额' },
+                     price:{ rule: true, message: '请填写正确的金额格式' }
+                     }"
+                       type="text"
+                       v-model="declareMoney"/>
+              </div>
+            </section>
+          </div>
+        </validator>
+        <section class=" shentong">
+          <!--转运公司增值服务-->
+          <div class="flex_width">
+            <div class="sbzj">转运公司增值服务</div>
+            <a v-link="{name:'cart'}" class="sz_detail">
+              详细说明 >
+            </a>
           </div>
         </section>
         <div class="way_for_transport" v-if="hasBox">
@@ -138,6 +181,7 @@
   import VLoading from '../../components/v-loading.vue'
   import { WayType, PayType } from '../../local/config.enum'
   import { rangeAlgo, mathAlgo } from '../../services/ship.svc'
+  import { toFloatFixed, getCurrency } from '../../services/util.svc'
 
   const getInitData = () => ({
     images,
@@ -147,6 +191,7 @@
     packages: [],
     packageCount: 0,
     wayDes: '',
+    declareMoney: '',
     hasBox: true,
     doBox: false,
     note: ''
@@ -159,7 +204,7 @@
     vuex: {
       getters: {
         defaultAddress: state => state.user.defaultAddress,
-        selectShipWay: state => state.orders.shipOrder.ShippingWayId,
+        selectShipWayId: state => state.orders.shipOrder.ShippingWayId,
         selectShipService: state => state.orders.shipOrder.ExtraServiceIds,
         order: state => state.orders.shipOrder,
         defaultPid: state => state.orders.defaultPid,
@@ -186,6 +231,12 @@
       VLoading
     },
     computed: {
+      selectShipWay () {
+        return this.shipWay.find(item => item.Id === this.selectShipWayId)
+      },
+      declareCurrency () {
+        return getCurrency(this.packages[0].GrabAttrs[0].OriginalCurrencyCode)
+      },
       hasAddress () {
         return this.defaultAddress && this.defaultAddress.Id > 0
       },
@@ -210,11 +261,11 @@
           servicePrice = services[0]
         if (services.length > 1)
           servicePrice = services.reduce((pre, cur) => pre + cur)
-        return parseFloat(
-          this.genMath(this.selectShipWay) * 1 +
+        return toFloatFixed((
+          this.genMath(this.selectShipWayId) * 1 +
           this.boxPrice * (this.doBox ? 1 : 0) +
           servicePrice
-        ).toFixed(2)
+        ), 2)
       }
     },
     methods: {
@@ -258,14 +309,29 @@
             tempShip.FirstWeightPrice,
             tempShip.ContinuedWeight,
             tempShip.ContinuedWeightPrice
-          ).toFixed(2)
+          )
         }
-        // TODO: change to regular alert
-        else alert('没有这种运输算法')
+        else this.showAlert('没有这种运输算法')
       },
       saveTranOrder () {
         if (!this.defaultAddress && !this.defaultAddress.Id) {
           return this.showAlert('请填写收货地址')
+        }
+        if (this.$declareMoneyValidation.invalid) {
+          this.$declareMoneyValidation.errors.forEach(item => {
+            this.$declareMoneyValidation[item.field].modified = true
+
+          })
+          return this.showAlert(this.$declareMoneyValidation.errors[0].message)
+        }
+        let shoppingTotalAmount = 0
+        this.packages.forEach(item => {
+          item.GrabAttrs.forEach(shopping => {
+            shoppingTotalAmount += shopping.OriginalPrice
+          })
+        })
+        if (this.declareMoney <= 0 || this.declareMoney > shoppingTotalAmount) {
+          return this.showAlert(`申报价格必须在0至${shoppingTotalAmount}${this.declareCurrency}之间`)
         }
         let submitOrder = Object.assign({}, this.order)
         submitOrder.PackageIds.push(this.defaultPid)
@@ -275,6 +341,7 @@
         submitOrder.Score = 0
         submitOrder.Coupon = ''
         submitOrder.AddressId = this.defaultAddress.Id
+        submitOrder.DeclaredTotalAmount = this.declareMoney
         submitOrder.Note = this.note
         this.showConfirm({
           tip: '是否支付运单？',

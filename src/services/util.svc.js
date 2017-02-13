@@ -15,9 +15,10 @@ export const getLocalURL = () => {
 
 export const toFloatFixed = (num, s) => {
   const times = Math.pow(10, s)
-  let des = (num * times) + 0.5
-  des = parseInt(des, 10) / times
-  return `${des}`
+  const des = (num * times) + 0.5
+  return parseInt(des, 10) / times
+  /* des = parseInt(des, 10) / times
+  return `${des}`*/
 }
 
 export const parseDomain = (str) => {
